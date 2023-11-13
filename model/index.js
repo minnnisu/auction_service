@@ -1,3 +1,6 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const sql = require("mssql");
 const config = {
   server: process.env.DB_SERVER,
