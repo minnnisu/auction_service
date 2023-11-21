@@ -13,6 +13,7 @@ const passport = require("passport");
 const passportConfig = require("./api/passport");
 const authRouter = require("./api/routes/authRouter");
 const userRouter = require("./api/routes/userRouter");
+const HttpError = require("./error/HttpError");
 
 const app = express();
 const port = 8081;
@@ -51,14 +52,18 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 
 app.use((err, req, res, next) => {
-  console.error(err);
-  if (err.isShowErrPage === true) {
-    return res.render("error.ejs", {
-      err_code: err.status,
-      err_message: err.message,
-    });
+  console.log(err);
+  if (err instanceof HttpError) {
+    if (err.option?.isShowErrPage === true) {
+      return res.render("error.ejs", {
+        err_code: err.status,
+        err_message: err.message,
+      });
+    }
+    return res.status(err.status).json({ message: err.message });
   }
-  return res.status(err.status).send({ message: err.message });
+
+  return res.status(500).json({ message: "server_error" });
 });
 
 app.listen(port, () => {
