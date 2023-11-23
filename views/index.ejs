@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dongguk theater</title>
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+  <body>
+    <h3>메인페이지</h3>
+    <% if (user && user.is_login_status) { %>
+      <a href="/user/profile"><%= user.nickname %></a>
+      <form action="/api/auth/logout" method="post">
+        <button type="submit">로그아웃</button>
+      </form>
+    <% } else { %>
+      <a href="/login">로그인</a>
+      <a href="/signup">회원가입</a>
+    <% } %>
+    </div>
+  </body>
+</html>

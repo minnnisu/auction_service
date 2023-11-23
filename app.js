@@ -11,9 +11,11 @@ const session = require("express-session");
 const SQLiteStore = require("connect-sqlite3")(session);
 const passport = require("passport");
 const passportConfig = require("./api/passport");
-const authRouter = require("./api/routes/authRouter");
-const userRouter = require("./api/routes/userRouter");
 const HttpError = require("./error/HttpError");
+
+const authRouter = require("./api/routes/apis/authRouter");
+const userRouter = require("./api/routes/pages/userRouter");
+const indexRouter = require("./api/routes/pages/indexRouter");
 
 const app = express();
 const port = 8081;
@@ -48,18 +50,30 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use("/", indexRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 
 app.use((err, req, res, next) => {
-  console.log(err);
+  console.error(err);
   if (err instanceof HttpError) {
-    if (err.option?.isShowErrPage === true) {
-      return res.render("error.ejs", {
+    if (
+      err.option?.isShowErrPage === true &&
+      err.option?.isShowCustomeMsg === true
+    ) {
+      return res.status(err.status).render("error.ejs", {
         err_code: err.status,
-        err_message: err.message,
+        err_msg: err.option.CustomeMsg,
       });
     }
+
+    if (err.option?.isShowErrPage === true) {
+      return res.status(err.status).render("error.ejs", {
+        err_code: err.status,
+        err_msg: err.message,
+      });
+    }
+
     return res.status(err.status).json({ message: err.message });
   }
 
