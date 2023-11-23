@@ -3,6 +3,12 @@ const router = express.Router();
 const userController = require("../../../controller/userController");
 const authMiddleware = require("../../middleware/authMiddleware");
 
-router.get("/", authMiddleware.isLoginStatusClosure(), userController.getUser);
+router.get(
+  "/profile",
+  authMiddleware.isLoginStatusClosure({
+    isShowErrPage: true,
+  }),
+  userController.getUser
+);
 
 module.exports = router;

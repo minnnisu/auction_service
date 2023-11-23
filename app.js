@@ -52,7 +52,7 @@ app.use(function (req, res, next) {
 
 app.use("/", indexRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/user", userRouter);
+app.use("/user", userRouter);
 
 app.use((err, req, res, next) => {
   console.error(err);
