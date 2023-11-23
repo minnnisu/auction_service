@@ -25,7 +25,7 @@ exports.localLogin = function (req, res, next) {
         return next(new HttpError(500, "login_error"));
       }
 
-      res.status(200).json({ message: "Sucessfully login" });
+      res.redirect("/");
     });
   })(req, res, next);
 };
@@ -35,14 +35,14 @@ exports.logout = function (req, res, next) {
     if (err) {
       return next(new HttpError(500, "logout_error"));
     }
-    res.status(200).json({ message: "Sucessfully logout" });
+    return res.redirect("/");
   });
 };
 
 exports.signup = async function (req, res, next) {
   try {
     await authService.signup(req.body);
-    res.status(201).json({ message: "Sucessfully signup" });
+    return res.redirect("/");
   } catch (error) {
     next(error);
   }
