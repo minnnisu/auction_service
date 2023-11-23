@@ -2,7 +2,6 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const userModel = require("../../model/userModel");
-const createError = require("http-errors");
 
 module.exports = () => {
   passport.use(
@@ -14,10 +13,14 @@ module.exports = () => {
             return cb(null, user[0]);
           }
 
-          return cb(null, false, createError(401, "not_match_password_error"));
+          return cb(
+            null,
+            false,
+            new HttpError(401, "not_match_password_error")
+          );
         }
 
-        return cb(null, false, createError(401, "not_found_id_error"));
+        return cb(null, false, new HttpError(401, "not_found_id_error"));
       } catch (err) {
         cb(err);
       }

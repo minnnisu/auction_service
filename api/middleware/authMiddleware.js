@@ -1,4 +1,3 @@
-const createError = require("http-errors");
 const HttpError = require("../../error/HttpError");
 
 exports.isLoginStatusClosure = (option = {}) => {

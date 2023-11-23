@@ -4,14 +4,14 @@ const HttpError = require("../error/HttpError");
 
 exports.localLogin = function (req, res, next) {
   if (!req.body.username || !req.body.password) {
-    return next(createError(400, "not_contain_nessary_body"));
+    return next(new HttpError(400, "not_contain_nessary_body"));
   }
 
   passport.authenticate("local", function (err, user, userError) {
     // new LocalStrategy(async function verify(username, password, cb){...}) 이후 작업
     if (err) {
       console.error(err);
-      return next(createError(500, "login_error"));
+      return next(new HttpError(500, "login_error"));
     }
 
     if (!user) {
@@ -22,7 +22,7 @@ exports.localLogin = function (req, res, next) {
     return req.login(user, (err) => {
       if (err) {
         console.error(err);
-        return next(createError(500, "login_error"));
+        return next(new HttpError(500, "login_error"));
       }
 
       res.status(200).json({ message: "Sucessfully login" });
@@ -33,7 +33,7 @@ exports.localLogin = function (req, res, next) {
 exports.logout = function (req, res, next) {
   req.logout(function (err) {
     if (err) {
-      return next(createError(500, "logout_error"));
+      return next(new HttpError(500, "logout_error"));
     }
     res.status(200).json({ message: "Sucessfully logout" });
   });
