@@ -3,7 +3,6 @@ const logger = require("morgan");
 const cors = require("cors");
 const path = require("path");
 const dotenv = require("dotenv");
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const SQLiteStore = require("connect-sqlite3")(session);
@@ -24,8 +23,8 @@ dotenv.config();
 app.set("view engine", "ejs");
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use(logger("dev"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cookieParser());
 app.use(
   session({
