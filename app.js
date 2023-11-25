@@ -4,8 +4,6 @@ const cors = require("cors");
 const path = require("path");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
-const multer = require("multer");
-const form_data = multer();
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const SQLiteStore = require("connect-sqlite3")(session);
@@ -28,7 +26,6 @@ app.use("/", express.static(path.join(__dirname, "public")));
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(form_data.array());
 app.use(cookieParser());
 app.use(
   session({

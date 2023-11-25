@@ -18,5 +18,9 @@
       <a href="/signup">회원가입</a>
     <% } %>
     </div>
+    <form action="/api/auction/item" method="post" enctype="multipart/form-data">
+      <input type="file" name="image" />
+      <button type="submit">제출</button>
+    </form>
   </body>
 </html>

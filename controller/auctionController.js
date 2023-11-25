@@ -1,3 +1,3 @@
 exports.addNewProduction = function (req, res, next) {
-  res.send("메물 등록 API");
+  res.send("이미지 업로드 성공");
 };
