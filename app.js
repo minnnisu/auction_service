@@ -14,6 +14,8 @@ const passportConfig = require("./api/passport");
 const HttpError = require("./error/HttpError");
 
 const authRouter = require("./api/routes/apis/authRouter");
+const auctionApiRouter = require("./api/routes/apis/auctionRouter");
+
 const userRouter = require("./api/routes/pages/userRouter");
 const indexRouter = require("./api/routes/pages/indexRouter");
 
@@ -52,6 +54,7 @@ app.use(function (req, res, next) {
 
 app.use("/", indexRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/auction/item", auctionApiRouter);
 app.use("/user", userRouter);
 
 app.use((err, req, res, next) => {
