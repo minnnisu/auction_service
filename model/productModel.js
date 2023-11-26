@@ -31,3 +31,13 @@ exports.getProducts = async function (filter) {
     return recordset;
   }
 };
+
+exports.getProductById = async function (product_id) {
+  const pool = await poolPromise;
+
+  const { recordset } = await pool.query`SELECT *
+                        FROM products
+                        WHERE product_id = ${product_id};`;
+
+  return recordset;
+};
