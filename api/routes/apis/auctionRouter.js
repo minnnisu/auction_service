@@ -9,8 +9,8 @@ router.post(
   authMiddleware.isLoginStatusClosure({
     isShowErrPage: true,
   }),
-  multerMiddleware.multiUpload.array("images", 10),
-  multerMiddleware.checkFileVaild,
+  multerMiddleware.imageUploader,
+  multerMiddleware.checkImageValid,
   auctionController.addNewProduction
 );
 
