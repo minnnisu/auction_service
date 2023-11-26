@@ -1,26 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dongguk theater</title>
-    <link rel="stylesheet" href="/css/main.css" />
-  </head>
-  <body>
-    <h3>메인페이지</h3>
-    <% if (user && user.is_login_status) { %>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>중고거래 사이트</title>
+  <link rel="stylesheet" href="/css/main.css" />
+  <style>
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      border-bottom: 2px solid #fff;
+    }
+
+    .auth-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .auth-links a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .product {
+      flex-basis: 30%;
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .product img {
+      width: 50%;
+      margin-bottom: 10px;
+      /* Add margin to the bottom of the image */
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Your Website</h1>
+    <div class="auth-links">
+      <% if (user && user.is_login_status) { %>
       <a href="/user/profile"><%= user.nickname %></a>
       <form action="/api/auth/logout" method="post">
         <button type="submit">로그아웃</button>
       </form>
-    <% } else { %>
+      <% } else { %>
       <a href="/login">로그인</a>
       <a href="/signup">회원가입</a>
-    <% } %>
+      <% } %>
     </div>
-    <form action="/api/auction/item" method="post" enctype="multipart/form-data">
-      <input type="file" name="image" />
-      <button type="submit">제출</button>
-    </form>
-  </body>
+  </header>
+  <div class="wrapper">
+    <% for (let i = 0; i < products.length; i++) { %>
+    <div class="product">
+      <img src="<%= products[i].image_url %>" alt="<%= products[i].title %> 이미지">
+      <h2><%= products[i].title %></h2>
+      <p>현재 가격: <%= products[i].current_price %></p>
+      <p>종료 날짜: <%= products[i].termination_date %></p>
+    </div>
+    <% } %>
+  </div>
+</body>
+
 </html>
