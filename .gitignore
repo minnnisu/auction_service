@@ -1,3 +1,5 @@
 /node_modules
 /session
+/public/images
 .env
+test.js
