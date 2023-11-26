@@ -11,7 +11,7 @@ router.post(
   }),
   multerMiddleware.imageUploader,
   multerMiddleware.checkImageValid,
-  auctionController.addNewProduction
+  auctionController.addNewProduct
 );
 
 module.exports = router;
