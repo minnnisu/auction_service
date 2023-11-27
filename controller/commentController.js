@@ -27,3 +27,16 @@ exports.updateComment = async function (req, res, next) {
     next(error);
   }
 };
+
+exports.deleteComment = async function (req, res, next) {
+  try {
+    await commentService.deleteComment({
+      user_id: req.user,
+      comment_id: req.params.comment_id,
+    });
+
+    res.status(201).json({ message: "Successfully delete comment!" });
+  } catch (error) {
+    next(error);
+  }
+};

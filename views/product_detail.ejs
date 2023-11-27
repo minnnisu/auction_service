@@ -85,8 +85,6 @@
       <p><%= comment.timestamp %></p>
       <% if (comment.modify_status === 'updated') { %>
       <p>(수정됨)</p>
-      <% } else if (comment.modify_status === 'deleted') { %>
-      <p>(삭제됨)</p>
       <% } %>
       <button class="show-replies-btn" data-comment-id="<%= comment.comment_id %>">답글</button>
       <div class="replies-container" id="replies-container-<%= comment.comment_id %>"></div>

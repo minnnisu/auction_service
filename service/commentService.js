@@ -25,7 +25,7 @@ exports.updateComment = async function (info) {
   }
 
   const comment = await commentModel.getCommentByCommentId(comment_id);
-  if (comment.length < 1 || comment[0].deleted_at != null) {
+  if (comment.length < 1 || comment[0].is_deleted === 1) {
     throw new HttpError(404, "not_exist_comment_error");
   }
 
@@ -36,4 +36,24 @@ exports.updateComment = async function (info) {
   }
 
   await commentModel.updateCommentByCommentId(comment_id, description);
+};
+
+exports.deleteComment = async function (info) {
+  const { comment_id, user_id } = info;
+  if (comment_id === undefined) {
+    throw new HttpError(400, "not_contain_nessary_params");
+  }
+
+  const comment = await commentModel.getCommentByCommentId(comment_id);
+  if (comment.length < 1 || comment[0].is_deleted === 1) {
+    throw new HttpError(404, "not_exist_comment_error");
+  }
+
+  const register = await commentModel.getNicknameByCommentId(comment_id);
+  const modifier = await userModel.getNicknameByUserId(user_id);
+  if (register != modifier) {
+    throw new HttpError(404, "different_author_error");
+  }
+
+  await commentModel.deleteCommentByCommentId(comment_id);
 };

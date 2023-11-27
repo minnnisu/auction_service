@@ -15,4 +15,10 @@ router.patch(
   commentController.updateComment
 );
 
+router.delete(
+  "/:comment_id",
+  authMiddleware.isLoginStatusClosure(),
+  commentController.deleteComment
+);
+
 module.exports = router;
