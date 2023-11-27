@@ -7,10 +7,20 @@ router.get("/", replyController.getReplies);
 
 router.post(
   "/",
-  authMiddleware.isLoginStatusClosure({
-    isShowErrPage: true,
-  }),
+  authMiddleware.isLoginStatusClosure(),
   replyController.addNewReply
+);
+
+router.patch(
+  "/:reply_id",
+  authMiddleware.isLoginStatusClosure(),
+  replyController.updateReply
+);
+
+router.delete(
+  "/:reply_id",
+  authMiddleware.isLoginStatusClosure(),
+  replyController.deleteReply
 );
 
 module.exports = router;
