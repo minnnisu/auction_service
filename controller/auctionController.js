@@ -23,3 +23,12 @@ exports.getProductPage = async function (req, res, next) {
     next(error);
   }
 };
+
+exports.toggleWishlist = async function (req, res, next) {
+  try {
+    await auctionService.toggleWishlist(req.params.product_id, req.user);
+    res.status(201).json({ message: "Success" });
+  } catch (error) {
+    next(error);
+  }
+};

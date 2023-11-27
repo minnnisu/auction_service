@@ -14,4 +14,10 @@ router.post(
   auctionController.addNewProduct
 );
 
+router.post(
+  "/:product_id/wishlist",
+  authMiddleware.isLoginStatusClosure(),
+  auctionController.toggleWishlist
+);
+
 module.exports = router;

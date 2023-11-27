@@ -3,6 +3,7 @@ const commonModel = require("../model/common");
 const commentModel = require("../model/commentModel");
 const productModel = require("../model/productModel");
 const productImageModel = require("../model/productImageModel");
+const wishlistModel = require("../model/wishlistModel");
 const userModel = require("../model/userModel");
 const { ereaseImageFiles } = require("../module/imageEraser");
 
@@ -57,7 +58,7 @@ exports.addNewProduct = async function (info) {
 
 exports.getProductPage = async function (productId) {
   if (productId === undefined) {
-    throw new HttpError(400, "not_contain_nessary_body");
+    throw new HttpError(400, "not_contain_nessary_params");
   }
 
   const images = await productImageModel.getProductImagesByProductId(productId);
@@ -65,4 +66,17 @@ exports.getProductPage = async function (productId) {
   const comments = await commentModel.getDetailCommentByProductId(productId);
 
   return { images, product, comments };
+};
+
+exports.toggleWishlist = async function (productId, userId) {
+  if (productId === undefined) {
+    throw new HttpError(400, "not_contain_nessary_params");
+  }
+
+  const wishlistItem = await wishlistModel.getWishlist(productId, userId);
+  if (wishlistItem.length > 0) {
+    await wishlistModel.deleteWishlist(productId, userId);
+  } else {
+    await wishlistModel.addWishlist(productId, userId);
+  }
 };

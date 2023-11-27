@@ -5,10 +5,14 @@ const commentController = require("../../../controller/commentController");
 
 router.post(
   "/",
-  authMiddleware.isLoginStatusClosure({
-    isShowErrPage: true,
-  }),
+  authMiddleware.isLoginStatusClosure(),
   commentController.addNewComment
 );
+
+// router.patch(
+//   "/:comment_id",
+//   authMiddleware.isLoginStatusClosure(),
+//   commentController.updateComment
+// );
 
 module.exports = router;

@@ -25,7 +25,7 @@ exports.getSummarizedProducts = async function (filter) {
     (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages WHERE product_id = p.product_id) AS image_url
     FROM products p
     WHERE selling_status = 1
-    ORDER BY favorite_count DESC
+    ORDER BY like_count DESC
     OFFSET ${offset} ROWS
     FETCH NEXT ${PAGE_SIZE} ROWS ONLY;`;
 
@@ -47,7 +47,7 @@ exports.getDetailProductByProductId = async function (product_id) {
   const pool = await poolPromise;
 
   const { recordset } = await pool.query`
-  SELECT product_id, nickname, title, description, current_price, favorite_count, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
+  SELECT product_id, nickname, title, description, current_price, like_count, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
     CASE
         WHEN selling_status = 1 THEN '판매중'
         WHEN sold_status = 1 THEN '판매완료'
