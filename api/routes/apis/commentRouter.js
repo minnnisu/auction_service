@@ -9,10 +9,10 @@ router.post(
   commentController.addNewComment
 );
 
-// router.patch(
-//   "/:comment_id",
-//   authMiddleware.isLoginStatusClosure(),
-//   commentController.updateComment
-// );
+router.patch(
+  "/:comment_id",
+  authMiddleware.isLoginStatusClosure(),
+  commentController.updateComment
+);
 
 module.exports = router;

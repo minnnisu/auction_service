@@ -18,7 +18,7 @@ exports.getCommentByCommentId = async function (comment_id) {
   return recordset;
 };
 
-exports.getDetailCommentByProductId = async function (product_id) {
+exports.getDetailCommentByProductId = async function (productId) {
   const pool = await poolPromise;
 
   const { recordset } = await pool.query`
@@ -34,7 +34,22 @@ exports.getDetailCommentByProductId = async function (product_id) {
         ELSE 'normal'
     END AS modify_status
   FROM comments
-  WHERE product_id = ${product_id};`;
+  WHERE product_id = ${productId};`;
 
   return recordset;
+};
+
+exports.getNicknameByCommentId = async function (commentId) {
+  const pool = await poolPromise;
+
+  const { recordset } =
+    await pool.query`SELECT nickname FROM comments WHERE comment_id = ${commentId}`;
+
+  return recordset[0].nickname;
+};
+
+exports.updateCommentByCommentId = async function (commentId, description) {
+  const pool = await poolPromise;
+
+  await pool.query`UPDATE comments SET description = ${description}, updated_at = CURRENT_TIMESTAMP WHERE comment_id = ${commentId}`;
 };
