@@ -13,6 +13,7 @@ exports.addNewComment = async function (info) {
   if (product.length < 1) {
     throw new HttpError(404, "not_exist_product_error");
   }
+
   const nickname = await userModel.getNicknameByUserId(user_id);
 
   await commentModel.addNewComment({ ...info, nickname });
@@ -25,7 +26,7 @@ exports.updateComment = async function (info) {
   }
 
   const comment = await commentModel.getCommentByCommentId(comment_id);
-  if (comment.length < 1 || comment[0].is_deleted === 1) {
+  if (comment.length < 1 || comment[0].is_deleted === true) {
     throw new HttpError(404, "not_exist_comment_error");
   }
 
@@ -45,7 +46,7 @@ exports.deleteComment = async function (info) {
   }
 
   const comment = await commentModel.getCommentByCommentId(comment_id);
-  if (comment.length < 1 || comment[0].is_deleted === 1) {
+  if (comment.length < 1 || comment[0].is_deleted === true) {
     throw new HttpError(404, "not_exist_comment_error");
   }
 
