@@ -6,10 +6,10 @@ exports.addNewProduct = async function (productInfo) {
 
   const termination_date_o = new Date(termination_date);
 
-  try {
-    const pool = await poolPromise;
-    const transaction = await pool.transaction().begin();
+  const pool = await poolPromise;
+  const transaction = await pool.transaction().begin();
 
+  try {
     const { recordset } = await transaction.request()
       .query`INSERT INTO products(nickname, title, description, min_price, termination_date) VALUES
         (${nickname}, ${title}, ${description}, ${min_price}, ${termination_date_o.toISOString()}); SELECT SCOPE_IDENTITY() AS id;`;
