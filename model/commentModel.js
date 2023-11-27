@@ -1,11 +1,11 @@
 const { poolPromise } = require("./index");
 
 exports.addNewComment = async function (info) {
-  const { product_id, user_id, description } = info;
+  const { product_id, nickname, description } = info;
 
   const pool = await poolPromise;
-  await pool.query`INSERT INTO comments (product_id, user_id, description) VALUES
-                    (${product_id}, ${user_id}, ${description});`;
+  await pool.query`INSERT INTO comments (product_id, nickname, description) VALUES
+                    (${product_id}, ${nickname}, ${description});`;
 };
 
 exports.getCommentByCommentId = async function (comment_id) {
@@ -22,7 +22,7 @@ exports.getDetailCommentByProductId = async function (product_id) {
   const pool = await poolPromise;
 
   const { recordset } = await pool.query`
-  SELECT comment_id, user_id, description,
+  SELECT comment_id, nickname, description,
     CASE 
         WHEN deleted_at IS NOT NULL THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, deleted_at), 120)
         WHEN created_at < updated_at THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, updated_at), 120)

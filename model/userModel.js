@@ -15,6 +15,13 @@ exports.getUser = async function (id) {
   return recordset;
 };
 
+exports.getNicknameByUserId = async function (userId) {
+  const pool = await poolPromise;
+  const { recordset } =
+    await pool.query`SELECT nickname FROM users WHERE user_id = ${userId}`;
+  return recordset[0].nickname;
+};
+
 exports.checkIdDuplication = async function (id) {
   const pool = await poolPromise;
   const { recordset } =

@@ -1,75 +1,147 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상품 페이지</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            padding: 20px;
-        }
-        .product-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .product-images {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .product-images img {
-            width: 70%;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-        .comments-container {
-            margin-top: 20px;
-        }
-        .comment {
-            background-color: #f0f0f0;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 페이지</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
+    .product-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-header h1 {
+      flex: 1;
+    }
+
+    .product-header p {
+      margin-left: 10px;
+    }
+
+    .product-images {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .product-images img {
+      width: 50%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .comment {
+      background-color: #f0f0f0;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    .replies-container {
+      margin-top: 10px;
+      display: none;
+      /* 초기에는 답글 숨김 */
+    }
+
+    .show-replies-btn {
+      cursor: pointer;
+      color: blue;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container product-container">
-        <h3><%= product[0].title %></h3>
-        <p><%= product[0].description %></p>
-        <p>현재 가격: <%= product[0].current_price %></p>
-        <p>상태: <%= product[0].status %></p>
-        <p>종료 날짜: <%= product[0].termination_date %></p>
+  <div class="container product-container">
+    <h3><%= product[0].title %></h3>
+    <p><%= product[0].nickname %></p>
+    <p>관심 수: <%= product[0].favorite_count %></p>
+    <p>현재 입찰가: <%= product[0].current_price %></p>
+    <p>상태: <%= product[0].status %></p>
+    <p>종료 날짜: <%= product[0].termination_date %></p>
 
-        <div class="product-images">
-            <% images.forEach((image, index) => { %>
-                <img src="<%= image.image_url %>" alt="제품 이미지">
-            <% }); %>
-        </div>
-
-        <h2>댓글</h2>
-        <div class="comments-container">
-            <% comments.forEach(comment => { %>
-                <div class="comment">
-                    <strong><%= comment.user_id %></strong>
-                    <% if (comment.modify_status === 'updated') { %>
-                        <span>(수정됨)</span>
-                    <% } %> 
-                    <span><%= comment.timestamp %></span>
-                    <p><%= comment.description %></p>
-                </div>
-            <% }); %>
-        </div>
+    <div class="product-images">
+      <% images.forEach((image, index) => { %>
+      <img src="<%= image.image_url %>" alt="제품 이미지">
+      <% }); %>
     </div>
-    <!-- Bootstrap JS and dependencies (if needed) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <h2>댓글</h2>
+    <% comments.forEach(comment => { %>
+    <div class="comment">
+      <strong><%= comment.nickname %></strong>
+      <p><%= comment.description %></p>
+      <p><%= comment.timestamp %></p>
+      <% if (comment.modify_status === 'updated') { %>
+      <p>(수정됨)</p>
+      <% } else if (comment.modify_status === 'deleted') { %>
+      <p>(삭제됨)</p>
+      <% } %>
+      <button class="show-replies-btn" data-comment-id="<%= comment.comment_id %>">답글</button>
+      <div class="replies-container" id="replies-container-<%= comment.comment_id %>"></div>
+    </div>
+    <% }); %>
+  </div>
+
+  <!-- Bootstrap JS and dependencies (if needed) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const showRepliesButtons = document.querySelectorAll('.show-replies-btn');
+
+      showRepliesButtons.forEach(button => {
+        button.addEventListener('click', async function() {
+          const commentId = button.dataset.commentId;
+          const repliesContainer = document.getElementById(`replies-container-${commentId}`);
+
+          // 현재 답글 컨테이너의 표시 여부 확인
+          const isRepliesVisible = repliesContainer.style.display === 'block';
+
+          // 토글 기능 - 표시되어 있으면 숨기고, 그렇지 않으면 보이게 함
+          repliesContainer.style.display = isRepliesVisible ? 'none' : 'block';
+
+          // 답글이 표시되어 있지 않으면 서버에서 답글을 가져와서 표시
+          if (!isRepliesVisible) {
+            try {
+              const response = await fetch(`http://localhost:8081/api/auction/item/comment/reply?cid=${commentId}`);
+              const data = await response.json();
+
+              // 답글을 화면에 표시
+              if (data.replies && data.replies.length > 0) {
+                const repliesHTML = data.replies.map(reply => `
+                                    <div class="reply">
+                                        <strong>${reply.nickname}</strong>
+                                        <p>${reply.description}</p>
+                                        <p>${reply.timestamp}</p>
+                                        ${reply.modify_status === 'updated' ? '<p>(수정됨)</p>' : ''}
+                                    </div>
+                                `).join('');
+
+                repliesContainer.innerHTML = repliesHTML;
+              } else {
+                repliesContainer.innerHTML = '<p>답글이 없습니다.</p>';
+              }
+            } catch (error) {
+              console.error('Error fetching replies:', error);
+            }
+          }
+        });
+      });
+    });
+  </script>
 </body>
+
 </html>

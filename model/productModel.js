@@ -47,7 +47,7 @@ exports.getDetailProductByProductId = async function (product_id) {
   const pool = await poolPromise;
 
   const { recordset } = await pool.query`
-  SELECT product_id, user_id, title, description, current_price, favorite_count, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
+  SELECT product_id, nickname, title, description, current_price, favorite_count, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
     CASE
         WHEN selling_status = 1 THEN '판매중'
         WHEN sold_status = 1 THEN '판매완료'

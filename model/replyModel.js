@@ -1,11 +1,12 @@
 const { poolPromise } = require("./index");
 
 exports.addNewReply = async function (info) {
-  const { user_id, comment_id, description } = info;
+  const { nickname, comment_id, description } = info;
+  console.log(info);
 
   const pool = await poolPromise;
-  await pool.query`INSERT INTO replies (comment_id, user_id, description) VALUES
-                    (${comment_id}, ${user_id}, ${description});`;
+  await pool.query`INSERT INTO replies (comment_id, nickname, description) VALUES
+                    (${comment_id}, ${nickname}, ${description});`;
 };
 
 exports.getRepliesByCommentId = async function (commnetId) {
@@ -19,7 +20,7 @@ exports.getRepliesByCommentId = async function (commnetId) {
 exports.getDetailRepliesByCommentId = async function (commnetId) {
   const pool = await poolPromise;
   const { recordset } = await pool.query`
-    SELECT reply_id, user_id, description,
+    SELECT reply_id, nickname, description,
       CASE 
           WHEN deleted_at IS NOT NULL THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, deleted_at), 120)
           WHEN created_at < updated_at THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, updated_at), 120)

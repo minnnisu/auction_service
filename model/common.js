@@ -1,7 +1,7 @@
 const { poolPromise } = require("./index");
 
 exports.addNewProduct = async function (productInfo) {
-  const { user_id, title, description, min_price, termination_date, images } =
+  const { nickname, title, description, min_price, termination_date, images } =
     productInfo;
 
   const termination_date_o = new Date(termination_date);
@@ -11,8 +11,8 @@ exports.addNewProduct = async function (productInfo) {
     const transaction = await pool.transaction().begin();
 
     const { recordset } = await transaction.request()
-      .query`INSERT INTO products(user_id, title, description, min_price, termination_date) VALUES
-        (${user_id}, ${title}, ${description}, ${min_price}, ${termination_date_o.toISOString()}); SELECT SCOPE_IDENTITY() AS id;`;
+      .query`INSERT INTO products(nickname, title, description, min_price, termination_date) VALUES
+        (${nickname}, ${title}, ${description}, ${min_price}, ${termination_date_o.toISOString()}); SELECT SCOPE_IDENTITY() AS id;`;
 
     for (const image of images) {
       await transaction

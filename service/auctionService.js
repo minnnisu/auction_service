@@ -3,6 +3,7 @@ const commonModel = require("../model/common");
 const commentModel = require("../model/commentModel");
 const productModel = require("../model/productModel");
 const productImageModel = require("../model/productImageModel");
+const userModel = require("../model/userModel");
 const { ereaseImageFiles } = require("../module/imageEraser");
 
 function checkTerminateDateVaild(time) {
@@ -28,7 +29,7 @@ exports.addNewProduct = async function (info) {
   });
 
   try {
-    const { title, description, min_price, termination_date } = info;
+    const { user_id, title, description, min_price, termination_date } = info;
     if (
       title === undefined ||
       description === undefined ||
@@ -42,7 +43,12 @@ exports.addNewProduct = async function (info) {
       throw new HttpError(400, "termination_date_error");
     }
 
-    await commonModel.addNewProduct({ ...info, images: filenames });
+    const nickname = await userModel.getNicknameByUserId(user_id);
+    await commonModel.addNewProduct({
+      ...info,
+      nickname: nickname,
+      images: filenames,
+    });
   } catch (error) {
     ereaseImageFiles("public/images/", filenames);
     throw error;
