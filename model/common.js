@@ -22,6 +22,12 @@ exports.addNewProduct = async function (productInfo) {
         );
     }
 
+    await transaction
+      .request()
+      .query(
+        `INSERT INTO productStatus(product_id) VALUES (${recordset[0].id});`
+      );
+
     await transaction.commit();
   } catch (err) {
     if (transaction && transaction._acquiredConnection) {

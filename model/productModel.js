@@ -10,7 +10,7 @@ exports.getSummarizedProducts = async function (filter) {
     const { recordset } =
       await pool.query`SELECT product_id, title, current_price, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages WHERE product_id = p.product_id) AS image_url
     FROM products p
-    WHERE selling_status = 1
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '판매중')
     ORDER BY created_at DESC
     OFFSET ${offset} ROWS
     FETCH NEXT ${PAGE_SIZE} ROWS ONLY;
@@ -24,7 +24,7 @@ exports.getSummarizedProducts = async function (filter) {
       await pool.query`SELECT product_id, title, current_price, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, 
     (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages WHERE product_id = p.product_id) AS image_url
     FROM products p
-    WHERE selling_status = 1
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '판매중')
     ORDER BY like_count DESC
     OFFSET ${offset} ROWS
     FETCH NEXT ${PAGE_SIZE} ROWS ONLY;`;
@@ -48,11 +48,7 @@ exports.getDetailProductByProductId = async function (product_id) {
 
   const { recordset } = await pool.query`
   SELECT product_id, nickname, title, description, current_price, like_count, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
-    CASE
-        WHEN selling_status = 1 THEN '판매중'
-        WHEN sold_status = 1 THEN '판매완료'
-        ELSE '거래중지'
-    END AS status,
+    (SELECT status FROM productStatus WHERE product_id = p.product_id) AS status,
     CASE 
         WHEN created_at < updated_at THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, updated_at), 120)
         ELSE CONVERT(VARCHAR, DATEADD(HOUR, 9, created_at), 120)
@@ -61,7 +57,7 @@ exports.getDetailProductByProductId = async function (product_id) {
         WHEN created_at < updated_at THEN 'updated'
         ELSE 'normal'
     END AS modify_status
-  FROM products
+  FROM products p
   WHERE product_id = ${product_id}`;
 
   return recordset;
