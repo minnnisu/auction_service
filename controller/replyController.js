@@ -13,3 +13,12 @@ exports.addNewReply = async function (req, res, next) {
     next(error);
   }
 };
+
+exports.getReplies = async function (req, res, next) {
+  try {
+    const replies = await replyService.getReplies(req.query.cid);
+    res.status(200).json({ replies });
+  } catch (error) {
+    next(error);
+  }
+};

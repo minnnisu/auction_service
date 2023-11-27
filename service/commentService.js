@@ -8,7 +8,7 @@ exports.addNewComment = async function (info) {
     throw new HttpError(400, "not_contain_nessary_body");
   }
 
-  const product = await productModel.getProductById(product_id);
+  const product = await productModel.getProductByProductId(product_id);
   if (product.length < 1) {
     throw new HttpError(404, "not_exist_product_error");
   }

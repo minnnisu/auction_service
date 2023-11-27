@@ -12,3 +12,14 @@ exports.addNewProduct = async function (req, res, next) {
     next(error);
   }
 };
+
+exports.getProductPage = async function (req, res, next) {
+  try {
+    const productPost = await auctionService.getProductPage(
+      req.params.product_id
+    );
+    res.render("product_detail", productPost);
+  } catch (error) {
+    next(error);
+  }
+};

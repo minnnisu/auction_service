@@ -85,7 +85,7 @@
     <% for (let i = 0; i < products.length; i++) { %>
     <div class="product">
       <img src="<%= products[i].image_url %>" alt="<%= products[i].title %> 이미지">
-      <h2><%= products[i].title %></h2>
+      <a href="auction/item/<%= products[i].product_id %>"><%= products[i].title %></a>
       <p>현재 가격: <%= products[i].current_price %></p>
       <p>종료 날짜: <%= products[i].termination_date %></p>
     </div>

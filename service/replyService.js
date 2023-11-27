@@ -8,10 +8,19 @@ exports.addNewReply = async function (info) {
     throw new HttpError(400, "not_contain_nessary_body");
   }
 
-  const comment = await commentModel.getCommentById(comment_id);
+  const comment = await commentModel.getCommentByCommentId(comment_id);
   if (comment.length < 1) {
     throw new HttpError(404, "not_exist_comment_error");
   }
 
   await replyModel.addNewReply(info);
+};
+
+exports.getReplies = async function (commentId) {
+  if (commentId === undefined) {
+    throw new HttpError(400, "not_contain_nessary_body");
+  }
+
+  const replies = await replyModel.getDetailRepliesByCommentId(commentId);
+  return replies;
 };

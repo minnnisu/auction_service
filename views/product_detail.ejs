@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 페이지</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .product-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .product-images {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .product-images img {
+            width: 70%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .comments-container {
+            margin-top: 20px;
+        }
+        .comment {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container product-container">
+        <h3><%= product[0].title %></h3>
+        <p><%= product[0].description %></p>
+        <p>현재 가격: <%= product[0].current_price %></p>
+        <p>상태: <%= product[0].status %></p>
+        <p>종료 날짜: <%= product[0].termination_date %></p>
+
+        <div class="product-images">
+            <% images.forEach((image, index) => { %>
+                <img src="<%= image.image_url %>" alt="제품 이미지">
+            <% }); %>
+        </div>
+
+        <h2>댓글</h2>
+        <div class="comments-container">
+            <% comments.forEach(comment => { %>
+                <div class="comment">
+                    <strong><%= comment.user_id %></strong>
+                    <% if (comment.modify_status === 'updated') { %>
+                        <span>(수정됨)</span>
+                    <% } %> 
+                    <span><%= comment.timestamp %></span>
+                    <p><%= comment.description %></p>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+    <!-- Bootstrap JS and dependencies (if needed) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

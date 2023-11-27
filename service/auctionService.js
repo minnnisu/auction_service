@@ -1,5 +1,8 @@
 const HttpError = require("../error/HttpError");
 const commonModel = require("../model/common");
+const commentModel = require("../model/commentModel");
+const productModel = require("../model/productModel");
+const productImageModel = require("../model/productImageModel");
 const { ereaseImageFiles } = require("../module/imageEraser");
 
 function checkTerminateDateVaild(time) {
@@ -44,4 +47,16 @@ exports.addNewProduct = async function (info) {
     ereaseImageFiles("public/images/", filenames);
     throw error;
   }
+};
+
+exports.getProductPage = async function (productId) {
+  if (productId === undefined) {
+    throw new HttpError(400, "not_contain_nessary_body");
+  }
+
+  const images = await productImageModel.getProductImagesByProductId(productId);
+  const product = await productModel.getDetailProductByProductId(productId);
+  const comments = await commentModel.getDetailCommentByProductId(productId);
+
+  return { images, product, comments };
 };

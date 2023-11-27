@@ -15,7 +15,7 @@ exports.getMainPage = async function (id, query) {
     filter["page"] = 1;
   }
 
-  const products = await productModel.getProducts(filter);
+  const products = await productModel.getSummarizedProducts(filter);
   const responeData = { products };
   if (id !== undefined) {
     const user = await userModel.getUser(id);
