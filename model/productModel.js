@@ -10,7 +10,7 @@ exports.getSummarizedProducts = async function (filter) {
     const { recordset } =
       await pool.query`SELECT product_id, title, current_price, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages WHERE product_id = p.product_id) AS image_url
     FROM products p
-    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '판매중')
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
     ORDER BY created_at DESC
     OFFSET ${offset} ROWS
     FETCH NEXT ${PAGE_SIZE} ROWS ONLY;
@@ -24,7 +24,7 @@ exports.getSummarizedProducts = async function (filter) {
       await pool.query`SELECT product_id, title, current_price, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, 
     (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages WHERE product_id = p.product_id) AS image_url
     FROM products p
-    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '판매중')
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
     ORDER BY like_count DESC
     OFFSET ${offset} ROWS
     FETCH NEXT ${PAGE_SIZE} ROWS ONLY;`;

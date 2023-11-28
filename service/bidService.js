@@ -17,7 +17,7 @@ exports.suggestBidAmount = async function (info) {
     throw new HttpError(404, "not_exist_product_error");
   }
 
-  if (productStatus[0].status !== "판매중") {
+  if (productStatus[0].status !== "진행중") {
     throw new HttpError(404, "unable_to_restrict_bid_error");
   }
 
@@ -41,6 +41,10 @@ exports.cancelBid = async function (info) {
 
   const originalBid = await bidModel.getBidByBidId(bid_id);
 
+  if (originalBid.length < 1) {
+    throw new HttpError(404, "not_exist_bid_error");
+  }
+
   if (originalBid[0].is_canceled) {
     throw new HttpError(400, "already_canceled_bid_error");
   }
@@ -56,7 +60,7 @@ exports.cancelBid = async function (info) {
     throw new HttpError(404, "not_exist_product_error");
   }
 
-  if (productStatus[0].status !== "판매중") {
+  if (productStatus[0].status !== "진행중") {
     throw new HttpError(404, "unable_to_restrict_bid_error");
   }
 
