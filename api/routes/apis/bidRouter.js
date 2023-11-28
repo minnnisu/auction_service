@@ -9,10 +9,10 @@ router.post(
   bidController.suggestBidAmount
 );
 
-// router.post(
-//   "/",
-//   authMiddleware.isLoginStatusClosure(),
-//   bidController.suggestBidAmount
-// );
+router.post(
+  "/:bid_id",
+  authMiddleware.isLoginStatusClosure(),
+  bidController.cancelBid
+);
 
 module.exports = router;
