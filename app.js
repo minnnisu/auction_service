@@ -11,8 +11,9 @@ const HttpError = require("./error/HttpError");
 
 const authRouter = require("./api/routes/apis/authRouter");
 const auctionApiRouter = require("./api/routes/apis/auctionRouter");
-const commentRouter = require("./api/routes/apis/commentRouter");
-const replyRouter = require("./api/routes/apis/replyRouter");
+const bidApiRouter = require("./api/routes/apis/bidRouter");
+const commentApiRouter = require("./api/routes/apis/commentRouter");
+const replyApiRouter = require("./api/routes/apis/replyRouter");
 
 const userRouter = require("./api/routes/pages/userRouter");
 const indexRouter = require("./api/routes/pages/indexRouter");
@@ -52,8 +53,9 @@ app.use(function (req, res, next) {
 
 app.use("/api/auth", authRouter);
 app.use("/api/auction/item", auctionApiRouter);
-app.use("/api/auction/item/comment", commentRouter);
-app.use("/api/auction/item/comment/reply", replyRouter);
+app.use("/api/auction/item/bid", bidApiRouter);
+app.use("/api/auction/item/comment", commentApiRouter);
+app.use("/api/auction/item/comment/reply", replyApiRouter);
 
 app.use("/", indexRouter);
 app.use("/user", userRouter);

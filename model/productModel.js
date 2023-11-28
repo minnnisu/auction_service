@@ -62,3 +62,13 @@ exports.getDetailProductByProductId = async function (product_id) {
 
   return recordset;
 };
+
+exports.getPriceByProductId = async function (productId) {
+  const pool = await poolPromise;
+
+  const { recordset } = await pool.query`SELECT min_price, current_price
+                        FROM products
+                        WHERE product_id = ${productId};`;
+
+  return recordset;
+};
