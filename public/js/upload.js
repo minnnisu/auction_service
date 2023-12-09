@@ -34,15 +34,25 @@ function removeImage(img) {
   preview.removeChild(img.parentNode);
 }
 
-async function uploadImages() {
+async function registerProduct() {
   const formData = new FormData();
   const preview = document.getElementById("imagePreview");
+
+  const title = document.getElementById("title_input").value;
+  const description = document.getElementById("description_input").value;
+  const min_price = document.getElementById("min_price_input").value;
+  const termination_date = document.getElementById(
+    "terminate_time_input"
+  ).value;
 
   for (const imgContainer of preview.childNodes) {
     formData.append("images", imgContainer.childNodes[0].imageFile);
   }
 
-  console.log(formData.get("images"));
+  formData.append("title", title);
+  formData.append("description", description);
+  formData.append("min_price", min_price);
+  formData.append("termination_date", termination_date);
 
   const response = await fetch("http://localhost:8081/api/auction/item", {
     method: "POST",
