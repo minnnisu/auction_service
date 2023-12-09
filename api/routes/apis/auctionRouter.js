@@ -20,4 +20,10 @@ router.post(
   auctionController.toggleWishlist
 );
 
+router.patch(
+  "/:product_id/stop",
+  authMiddleware.isLoginStatusClosure(),
+  auctionController.cancelAuction
+);
+
 module.exports = router;

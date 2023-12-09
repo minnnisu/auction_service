@@ -2,6 +2,7 @@ const HttpError = require("../error/HttpError");
 const commonModel = require("../model/common");
 const commentModel = require("../model/commentModel");
 const productModel = require("../model/productModel");
+const productStatusModel = require("../model/productStatusModel");
 const productImageModel = require("../model/productImageModel");
 const wishlistModel = require("../model/wishlistModel");
 const userModel = require("../model/userModel");
@@ -79,4 +80,33 @@ exports.toggleWishlist = async function (productId, userId) {
   } else {
     await wishlistModel.addWishlist(productId, userId);
   }
+};
+
+exports.cancelAuction = async function (productId, userId) {
+  if (productId === undefined) {
+    throw new HttpError(400, "not_contain_nessary_params");
+  }
+
+  const product = await productModel.getDetailProductByProductId(productId);
+  if (product.length < 1) {
+    throw new HttpError(400, "not_exist_product_error");
+  }
+
+  const nickname = await userModel.getNicknameByUserId(userId);
+  if (nickname.length < 1) {
+    throw new HttpError(400, "not_exist_user_error");
+  }
+
+  console.log(nickname);
+  console.log(product[0].nickname);
+
+  if (nickname !== product[0].nickname) {
+    throw new HttpError(400, "different_register_error");
+  }
+
+  if (product[0].status !== "진행중") {
+    throw new HttpError(404, "unable_to_restrict_auction_error");
+  }
+
+  await productStatusModel.changeProductStatusByProdctId(productId, "철회");
 };

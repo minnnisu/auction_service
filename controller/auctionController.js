@@ -27,7 +27,16 @@ exports.getProductPage = async function (req, res, next) {
 exports.toggleWishlist = async function (req, res, next) {
   try {
     await auctionService.toggleWishlist(req.params.product_id, req.user);
-    res.status(201).json({ message: "Success" });
+    res.status(201).json({ message: "Success!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.cancelAuction = async function (req, res, next) {
+  try {
+    await auctionService.cancelAuction(req.params.product_id, req.user);
+    res.status(201).json({ message: "Successfully cancel auction!" });
   } catch (error) {
     next(error);
   }
