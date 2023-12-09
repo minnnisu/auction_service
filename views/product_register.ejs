@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('include/head') %>
+  <link rel="stylesheet" href="/css/main.css">
+  <title>상품 등록 페이지</title>
+</head>
+
+<body>
+  <%- include('include/header') %>
+  <input type="file" id="imageInput" multiple onchange="addImages()" />
+  <button onclick="uploadImages()">이미지 업로드</button>
+
+  <div id="imagePreview"></div>
+  <div id="result"></div>
+  <script src="/js/upload.js"></script>
+</body>
+
+</html>

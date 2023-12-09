@@ -1,6 +1,17 @@
 const HttpError = require("../error/HttpError");
 const auctionService = require("../service/auctionService");
 
+exports.getProductRegisterPage = async function (req, res, next) {
+  try {
+    res.render("product_register", {
+      header: req.headerData,
+    });
+  } catch (error) {
+    console.log(error);
+    next(new HttpError(500, "server_error", { isShowErrPage: true }));
+  }
+};
+
 exports.addNewProduct = async function (req, res, next) {
   try {
     await auctionService.addNewProduct({

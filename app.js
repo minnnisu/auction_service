@@ -18,6 +18,7 @@ const replyApiRouter = require("./api/routes/apis/replyRouter");
 const userRouter = require("./api/routes/pages/userRouter");
 const indexRouter = require("./api/routes/pages/indexRouter");
 const auctionRouter = require("./api/routes/pages/auctionRouter");
+const { getHeaderData } = require("./api/middleware/headerMiddleware");
 
 const app = express();
 const port = 8081;
@@ -60,6 +61,13 @@ app.use("/api/auction/item/comment/reply", replyApiRouter);
 app.use("/", indexRouter);
 app.use("/user", userRouter);
 app.use("/auction/item", auctionRouter);
+
+app.use(getHeaderData);
+
+app.use(async function (req, res, next) {
+  console.log(req.headerData);
+  res.status(404).render("error404", { header: req.headerData });
+});
 
 app.use((err, req, res, next) => {
   console.error(err);

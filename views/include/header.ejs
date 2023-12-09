@@ -1,0 +1,25 @@
+<!-- 헤더 -->
+<div id="header">
+  <div id="header_wrap">
+    <img src="/logo/logo.png" width="60" height="60">
+    <nav>
+      <ul id="header_content">
+        <form onsubmit="submitForm(event)">
+          <input class="search_input" type="text" placeholder="물품을 검색해보세요.">
+          <button type="submit" class="search_button">검색하기</button>
+        </form>
+        <% if (header && header.user && header.user.is_login_status) { %>
+        <a href="/user/profile">
+          <%= header.user.nickname %>
+        </a>
+        <form action="/api/auth/logout" method="post">
+          <button type="submit">로그아웃</button>
+        </form>
+        <% } else { %>
+        <a href="/login">로그인</a>
+        <a href="/signup">회원가입</a>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+</div>
