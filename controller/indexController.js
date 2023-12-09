@@ -3,8 +3,8 @@ const indexService = require("../service/indexService");
 
 exports.getMainPage = async function (req, res, next) {
   try {
-    const reponseDate = await indexService.getMainPage(req.user, req.query);
-    res.render("index", { ...reponseDate });
+    const products = await indexService.getMainPage(req.user, req.query);
+    res.render("index", { header: req.headerData, products });
   } catch (error) {
     console.log(error);
     next(new HttpError(500, "server_error", { isShowErrPage: true }));
@@ -13,9 +13,7 @@ exports.getMainPage = async function (req, res, next) {
 
 exports.getLoginPage = async function (req, res, next) {
   try {
-    const reponseDate = await indexService.getLoginPage(req.user);
-    // res.json({ ...reponseDate });
-    res.render("login", { ...reponseDate });
+    res.render("login", { header: req.headerData });
   } catch (error) {
     console.log(error);
     next(new HttpError(500, "server_error", { isShowErrPage: true }));
@@ -24,9 +22,7 @@ exports.getLoginPage = async function (req, res, next) {
 
 exports.getSignUpPage = async function (req, res, next) {
   try {
-    const reponseDate = await indexService.getSignupPage(req.user);
-    // res.json({ ...reponseDate });
-    res.render("signup", { ...reponseDate });
+    res.render("signup", { header: req.headerData });
   } catch (error) {
     console.log(error);
     next(new HttpError(500, "server_error", { isShowErrPage: true }));

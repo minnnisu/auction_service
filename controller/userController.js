@@ -3,7 +3,7 @@ const userService = require("../service/userService");
 exports.getUser = async function (req, res, next) {
   try {
     const user = await userService.getUser(req.user);
-    return res.render("my_page", { user });
+    return res.render("my_page", { header: req.headerData, user });
   } catch (err) {
     if (err instanceof HttpError) {
       err.option = { isShowErrPage: true };

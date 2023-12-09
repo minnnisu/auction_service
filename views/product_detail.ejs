@@ -63,16 +63,16 @@
 
 <body>
   <div class="container product-container">
-    <h3><%= product[0].title %></h3>
-    <p><%= product[0].nickname %></p>
-    <p><%= product[0].description %></p>
-    <p>관심 수: <%= product[0].like_count %></p>
-    <p>현재 입찰가: <%= product[0].current_price %></p>
-    <p>상태: <%= product[0].status %></p>
-    <p>종료 날짜: <%= product[0].termination_date %></p>
+    <h3><%= product.productInfo.title %></h3>
+    <p><%= product.productInfo.nickname %></p>
+    <p><%= product.productInfo.description %></p>
+    <p>관심 수: <%= product.productInfo.like_count %></p>
+    <p>현재 입찰가: <%= product.productInfo.current_price %></p>
+    <p>상태: <%= product.productInfo.status %></p>
+    <p>종료 날짜: <%= product.productInfo.termination_date %></p>
 
     <div class="product-images">
-      <% images.forEach((image, index) => { %>
+      <% product.images.forEach((image, index) => { %>
       <img src="<%= image.image_url %>" alt="제품 이미지">
       <% }); %>
     </div>

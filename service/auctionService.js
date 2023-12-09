@@ -63,10 +63,14 @@ exports.getProductPage = async function (productId) {
   }
 
   const images = await productImageModel.getProductImagesByProductId(productId);
-  const product = await productModel.getDetailProductByProductId(productId);
+  const productInfo = await productModel.getDetailProductByProductId(productId);
+  if (productInfo.length < 1) {
+    throw new HttpError(404, "not_exist_product_error");
+  }
+
   const comments = await commentModel.getDetailCommentByProductId(productId);
 
-  return { images, product, comments };
+  return { product: { images, productInfo: productInfo[0] }, comments };
 };
 
 exports.toggleWishlist = async function (productId, userId) {

@@ -16,37 +16,6 @@ exports.getMainPage = async function (id, query) {
   }
 
   const products = await productModel.getSummarizedProducts(filter);
-  const responeData = { products };
-  if (id !== undefined) {
-    const user = await userModel.getUser(id);
-    responeData["user"] = { is_login_status: true, nickname: user[0].nickname };
-  } else {
-    responeData["user"] = { is_login_status: false };
-  }
 
-  return responeData;
-};
-
-exports.getLoginPage = async function (id) {
-  const responeData = {};
-  if (id !== undefined) {
-    const user = await userModel.getUser(id);
-    responeData["user"] = { is_login_status: true, nickname: user[0].nickname };
-  } else {
-    responeData["user"] = { is_login_status: false };
-  }
-
-  return responeData;
-};
-
-exports.getSignupPage = async function (id) {
-  const responeData = {};
-  if (id !== undefined) {
-    const user = await userModel.getUser(id);
-    responeData["user"] = { is_login_status: true, nickname: user[0].nickname };
-  } else {
-    responeData["user"] = { is_login_status: false };
-  }
-
-  return responeData;
+  return products;
 };
