@@ -30,15 +30,14 @@ exports.signup = async function (userInfo) {
     throw new HttpError(400, "not_contain_nessary_body");
   }
 
-  const {
-    id,
-    password,
-    checkedPassword,
-    username,
-    nickname,
-    email,
-    telephone,
-  } = userInfo;
+  const id = userInfo.id.trim();
+  const password = userInfo.password.trim();
+  const checkedPassword = userInfo.checkedPassword.trim();
+  const { username, nickname, email, telephone } = userInfo;
+
+  if (id === "") {
+    throw new HttpError(409, "id_duplication_error");
+  }
 
   if (await userModel.checkIdDuplication(id)) {
     throw new HttpError(409, "id_duplication_error");
@@ -93,6 +92,10 @@ exports.checkId = async function (id) {
     throw new HttpError(400, "not_contain_nessary_body");
   }
 
+  if (id.trim() === "") {
+    throw new HttpError(409, "nickname_duplication_error");
+  }
+
   if (await userModel.checkIdDuplication(id)) {
     throw new HttpError(409, "id_duplication_error");
   }
@@ -101,6 +104,10 @@ exports.checkId = async function (id) {
 exports.checkNickname = async function (nickname) {
   if (nickname === undefined) {
     throw new HttpError(400, "not_contain_nessary_body");
+  }
+
+  if (nickname.trim() === "") {
+    throw new HttpError(409, "nickname_duplication_error");
   }
 
   if (await userModel.checkNicknameDuplication(nickname)) {
