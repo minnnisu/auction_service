@@ -3,43 +3,86 @@
 
 <head>
   <%- include('include/head') %>
-    <link rel="stylesheet" href="/css/main.css">
-    <title>상품 등록</title>
+    <link rel="stylesheet" href="/css/product_register.css">
+    <title>상품등록</title>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+      .material-symbols-outlined {
+        color: #5a5a5a;
+        font-variation-settings:
+          'FILL' 1,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+      }
+
+      .delete_btn.material-symbols-outlined {
+        color: #5a5a5a;
+        font-size: 1rem;
+        font-variation-settings:
+          'FILL' 1,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+      }
+    </style>
 </head>
 
 <body>
   <%- include('include/header') %>
     <div class="product_register_container">
-      <div class="header_container">
+      <div class="container header_container">
         <div class="header_title">매물 등록</div>
       </div>
-      <div class="product_title_container">
-        <div class="product_title">제목</div>
+      <div class="container product_title_container">
+        <div class="title product_title">제목</div>
         <input type="text" id="title_input">
       </div>
-      <div class="product_description_container">
-        <div class="product_description">본문</div>
-        <textarea id="description_input"></textarea>
-      </div>
-      <div class="image_uploader">
-        <input type="file" id="imageInput" multiple onchange="addImages()" />
-
-      </div>
-      <div class="product_min_price_container">
-        <div class="product_min_price">최소 입찰가</div>
-        <input type="number" id="min_price_input">
-      </div>
-      <div class="product_terminate_time_container">
-        <div class="product_terminate_time">경매 종료시간</div>
-        <input type="datetime-local" id="terminate_time_input">
+      <div class="container product_description_container">
+        <div class="title product_description">본문</div>
+        <textarea id="description_input" placeholder="- 상품명(브랜드)
+- 구매 시기
+- 사용 기간
+- 하자 여부
+* 실제 촬영한 사진과 함께 상세 정보를 입력해주세요."></textarea>
       </div>
 
-      <div id="imagePreview"></div>
+      <div class="pt_row">
+        <div class="product_terminate_time_wrapper">
+          <div class="container product_min_price_container">
+            <div class="title product_min_price">최소 입찰가</div>
+            <input type="number" id="min_price_input" placeholder="12000">
+          </div>
+        </div>
+        <div class="product_terminate_time_wrapper">
+          <div class="container product_terminate_time_container">
+            <div class="title product_terminate_time">경매 종료시간</div>
+            <input type="datetime-local" id="terminate_time_input">
+          </div>
+        </div>
+      </div>
+
+      <div class="container image_uploader_container">
+        <div class="title image_uploader_title">상품 이미지</div>
+        <div id="imagePreview">
+          <div class="upload_btn_wrapper" onclick="selectProductImg()">
+            <span class="material-symbols-outlined">
+              photo_camera
+            </span>
+            <input type="file" id="imageInput" multiple onchange="addImages()" />
+          </div>
+        </div>
+      </div>
+      <div class="container footer_container">
+        <button class="submit_btn" onclick="registerProduct()">등록</button>
+      </div>
     </div>
 
-    <button onclick="registerProduct()">등록</button>
 
-    <script src="/js/upload.js"></script>
+    <script src="/js/product_register.js"></script>
 </body>
 
 </html>

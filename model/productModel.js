@@ -3,7 +3,7 @@ const { poolPromise } = require("./index");
 exports.getSummarizedProducts = async function (filter) {
   const pool = await poolPromise;
 
-  const PAGE_SIZE = 9;
+  const PAGE_SIZE = 5;
   const offset = (filter.page - 1) * PAGE_SIZE;
 
   if (filter.sort === "latest") {

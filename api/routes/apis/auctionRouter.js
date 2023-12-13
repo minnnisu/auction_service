@@ -6,9 +6,7 @@ const multerMiddleware = require("../../middleware/multerMiddleware");
 
 router.post(
   "/",
-  authMiddleware.isLoginStatusClosure({
-    isShowErrPage: true,
-  }),
+  authMiddleware.isLoginStatusClosure(),
   multerMiddleware.imageUploader,
   multerMiddleware.checkImageValid,
   auctionController.addNewProduct

@@ -46,11 +46,13 @@ exports.addNewProduct = async function (info) {
     }
 
     const nickname = await userModel.getNicknameByUserId(user_id);
-    await commonModel.addNewProduct({
+    const newProductId = await commonModel.addNewProduct({
       ...info,
       nickname: nickname,
       images: filenames,
     });
+
+    return newProductId;
   } catch (error) {
     ereaseImageFiles("public/images/", filenames);
     throw error;

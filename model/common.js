@@ -29,6 +29,8 @@ exports.addNewProduct = async function (productInfo) {
       );
 
     await transaction.commit();
+
+    return recordset[0].id; // 상품 아이디 반환
   } catch (err) {
     if (transaction && transaction._acquiredConnection) {
       await transaction.rollback();

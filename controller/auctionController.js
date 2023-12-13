@@ -14,12 +14,12 @@ exports.getProductRegisterPage = async function (req, res, next) {
 
 exports.addNewProduct = async function (req, res, next) {
   try {
-    await auctionService.addNewProduct({
+    const productId = await auctionService.addNewProduct({
       ...req.body,
       images: req.files,
       user_id: req.user,
     });
-    res.status(201).json({ message: "Successfully create new product post!" });
+    res.status(201).json({ product_id: productId });
   } catch (error) {
     next(error);
   }
