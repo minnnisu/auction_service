@@ -8,18 +8,39 @@ const wishlistModel = require("../model/wishlistModel");
 const userModel = require("../model/userModel");
 const { ereaseImageFiles } = require("../module/imageEraser");
 
-function checkTerminateDateVaild(time) {
-  const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+function checkTitleVaild(title) {
+  if (title.trim() === "") {
+    throw new HttpError(422, "no_title_error");
+  }
+}
 
-  if (!iso8601Regex.test(time)) {
-    return false;
+function checkDescriptionVaild(description) {
+  if (description.trim() === "") {
+    throw new HttpError(422, "no_description_error");
+  }
+}
+
+function checkMinPriceValid(min_price) {
+  if (min_price.trim() === "") {
+    throw new HttpError(422, "no_min_price_error");
   }
 
-  const currentTime = new Date();
-  const targetTime = new Date(time);
+  if (isNaN(Number(Number(min_price)))) {
+    throw new HttpError(422, "not_valid_formatted_min_price_error");
+  }
+}
 
-  if (currentTime > targetTime) {
-    return false;
+function checkTerminationDateVaild(termination_date) {
+  const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+  if (!iso8601Regex.test(termination_date)) {
+    throw new HttpError(422, "not_valid_formatted_termination_date_error");
+  }
+
+  const currentTimeObj = new Date();
+  const TerminationTimeObj = new Date(termination_date);
+
+  if (currentTimeObj > TerminationTimeObj) {
+    throw new HttpError(400, "termination_date_error");
   }
 
   return true;
@@ -41,9 +62,10 @@ exports.addNewProduct = async function (info) {
       throw new HttpError(400, "not_contain_nessary_body");
     }
 
-    if (!checkTerminateDateVaild(termination_date)) {
-      throw new HttpError(400, "termination_date_error");
-    }
+    checkTitleVaild(title);
+    checkDescriptionVaild(description);
+    checkMinPriceValid(min_price);
+    checkTerminationDateVaild(termination_date);
 
     const nickname = await userModel.getNicknameByUserId(user_id);
     const newProductId = await commonModel.addNewProduct({
