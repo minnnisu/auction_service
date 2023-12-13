@@ -47,7 +47,7 @@ exports.getDetailProductByProductId = async function (product_id) {
   const pool = await poolPromise;
 
   const { recordset } = await pool.query`
-  SELECT product_id, nickname, title, description, current_price, like_count, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
+  SELECT product_id, nickname, title, description, current_price, like_count, min_price,  CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
     (SELECT status FROM productStatus WHERE product_id = p.product_id) AS status,
     CASE 
         WHEN created_at < updated_at THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, updated_at), 120)

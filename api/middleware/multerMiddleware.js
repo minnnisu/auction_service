@@ -44,9 +44,9 @@ exports.imageUploader = function (req, res, next) {
 };
 
 exports.checkImageValid = function (req, res, next) {
-  if (!req.files || req.files.length === 0) {
-    return next(new HttpError(400, "no_files_uploaded"));
-  }
+  // if (!req.files || req.files.length === 0) {
+  //   return next(new HttpError(400, "no_files_uploaded"));
+  // }
 
   next();
 };

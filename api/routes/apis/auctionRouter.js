@@ -12,10 +12,24 @@ router.post(
   auctionController.addNewProduct
 );
 
+router.patch(
+  "/:product_id",
+  authMiddleware.isLoginStatusClosure(),
+  multerMiddleware.imageUploader,
+  multerMiddleware.checkImageValid,
+  auctionController.updateProduct
+);
+
 router.post(
   "/:product_id/wishlist",
   authMiddleware.isLoginStatusClosure(),
   auctionController.toggleWishlist
+);
+
+router.get(
+  "/:product_id/images",
+  authMiddleware.isLoginStatusClosure(),
+  auctionController.getProductImages
 );
 
 router.patch(

@@ -76,14 +76,16 @@ app.use((err, req, res, next) => {
       err.option?.isShowErrPage === true &&
       err.option?.isShowCustomeMsg === true
     ) {
-      return res.status(err.status).render("error.ejs", {
+      return res.status(err.status).render("error", {
+        header: req.headerData,
         err_code: err.status,
         err_msg: err.option.CustomeMsg,
       });
     }
 
     if (err.option?.isShowErrPage === true) {
-      return res.status(err.status).render("error.ejs", {
+      return res.status(err.status).render("error", {
+        header: req.headerData,
         err_code: err.status,
         err_msg: err.message,
       });

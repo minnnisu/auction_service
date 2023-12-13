@@ -1,4 +1,55 @@
 const MAX_IMAGE_COUNT = 10;
+const PRODUCT_ID = window.location.pathname.split("/")[3];
+
+// 서버에 등록된 이미지 중 삭제할 이미지들
+const targetDeleteImages = [];
+
+window.onload = async function () {
+  try {
+    const response = await fetch(
+      `http://localhost:8081/api/auction/item/${PRODUCT_ID}/images`
+    );
+
+    if (!response.ok) {
+      window.location.href = "/";
+      return alert("상품 정보를 불러오는 과정에서 오류가 발생하였습니다.");
+    }
+
+    const data = await response.json();
+
+    const preview = document.getElementById("imagePreview");
+    for (const image of data.productImages) {
+      const previewImage = document.createElement("img");
+      previewImage.className = "preview_image";
+      previewImage.src = image.image_url;
+      previewImage.isSaved = true;
+      previewImage.imageName = image.image_name;
+
+      const deleteBtnWrapper = document.createElement("button");
+      deleteBtnWrapper.className = "delete_btn_wrapper";
+
+      const deleteBtn = document.createElement("span");
+      deleteBtn.className = "delete_btn material-symbols-outlined";
+      deleteBtn.textContent = "close";
+      deleteBtnWrapper.appendChild(deleteBtn);
+
+      deleteBtnWrapper.onclick = function () {
+        removeImage(previewImage);
+      };
+
+      const previewImageContainer = document.createElement("div");
+      previewImageContainer.className = "preview_image_container";
+      previewImageContainer.appendChild(previewImage);
+      previewImageContainer.appendChild(deleteBtnWrapper);
+
+      preview.appendChild(previewImageContainer);
+    }
+  } catch (error) {
+    // window.location.href = "/";
+    console.error(error);
+    return alert("상품 정보를 불러오는 과정에서 오류가 발생하였습니다.");
+  }
+};
 
 function selectProductImg() {
   var inputElement = document.getElementById("imageInput");
@@ -9,7 +60,6 @@ function selectProductImg() {
 
 function addImages() {
   const input = document.getElementById("imageInput");
-
   const files = input.files;
   const preview = document.getElementById("imagePreview");
 
@@ -26,6 +76,7 @@ function addImages() {
       const previewImage = document.createElement("img");
       previewImage.className = "preview_image";
       previewImage.src = e.target.result;
+      previewImage.isSaved = false;
       previewImage.imageFile = file;
 
       const deleteBtnWrapper = document.createElement("button");
@@ -54,11 +105,14 @@ function addImages() {
 
 function removeImage(previewImage) {
   const preview = document.getElementById("imagePreview");
+  if (previewImage.isSaved) {
+    targetDeleteImages.push(previewImage.imageName);
+  }
   preview.removeChild(previewImage.parentNode);
 }
 
 function checkProductDataInputValid(data) {
-  const { title, description, minPrice, terminationDate, imageCount } = data;
+  const { title, description, terminationDate, imageCount } = data;
 
   if (title === "") {
     throw new Error("제목을 입력해주세요.");
@@ -66,10 +120,6 @@ function checkProductDataInputValid(data) {
 
   if (description.trim() === "") {
     throw new Error("본문을 입력해주세요.");
-  }
-
-  if (minPrice === "") {
-    throw new Error("최소입찰가를 입력해주세요.");
   }
 
   if (terminationDate === "") {
@@ -88,38 +138,41 @@ function checkProductDataInputValid(data) {
   }
 }
 
-async function registerProduct() {
+async function editProduct() {
   const formData = new FormData();
   const preview = document.getElementById("imagePreview");
 
   const title = document.getElementById("title_input").value.trim(); // 앞, 뒤 공백 제거
   const description = document.getElementById("description_input").value;
-  const minPrice = document.getElementById("min_price_input").value;
   const terminationDate = document.getElementById("terminate_time_input").value;
 
   try {
     checkProductDataInputValid({
       title,
       description,
-      minPrice,
       terminationDate,
       imageCount: preview.childNodes.length - 3,
     });
 
     for (let i = 3; i < preview.childNodes.length; i++) {
       const imgContainer = preview.childNodes[i];
-      formData.append("images", imgContainer.childNodes[0].imageFile);
+      if (!imgContainer.childNodes[0].isSaved) {
+        formData.append("images", imgContainer.childNodes[0].imageFile);
+      }
     }
 
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("min_price", minPrice);
     formData.append("termination_date", terminationDate);
+    formData.append("target_delete_image", JSON.stringify(targetDeleteImages));
 
-    const response = await fetch("http://localhost:8081/api/auction/item", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      `http://localhost:8081/api/auction/item/${PRODUCT_ID}`,
+      {
+        method: "PATCH",
+        body: formData,
+      }
+    );
 
     const data = await response.json();
 
@@ -129,11 +182,13 @@ async function registerProduct() {
         return alert("로그인이 필요합니다.");
       }
 
-      return alert("상품을 등록하는 중 오류가 발생하였습니다");
+      return alert("상품 정보를 수정하는 동안 오류가 발생하였습니다");
     }
 
-    window.location.href = `/auction/item/${data.product_id}`;
+    window.location.href = `/auction/item/${PRODUCT_ID}`;
   } catch (error) {
-    return alert(error.message || "상품을 등록하는 중 오류가 발생하였습니다");
+    return alert(
+      error.message || "상품 정보를 수정하는 동안 오류가 발생하였습니다"
+    );
   }
 }

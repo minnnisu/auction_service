@@ -7,8 +7,56 @@ exports.getProductRegisterPage = async function (req, res, next) {
       header: req.headerData,
     });
   } catch (error) {
+    if (error instanceof HttpError) {
+      return next(error);
+    }
+    return next(new HttpError(500, "server_error", { isShowErrPage: true }));
+  }
+};
+
+exports.getProductEditPage = async function (req, res, next) {
+  try {
+    const product = await auctionService.getProductEditPage(
+      req.params.product_id,
+      req.user
+    );
+    res.render("product_edit", {
+      header: req.headerData,
+      ...product,
+    });
+  } catch (error) {
     console.log(error);
-    next(new HttpError(500, "server_error", { isShowErrPage: true }));
+    if (error instanceof HttpError) {
+      return next(error);
+    }
+    return next(new HttpError(500, "server_error", { isShowErrPage: true }));
+  }
+};
+
+exports.getProductPage = async function (req, res, next) {
+  try {
+    const productPost = await auctionService.getProductPage(
+      req.params.product_id
+    );
+    res.render("product_detail", {
+      header: req.headerData,
+      ...productPost,
+    });
+  } catch (error) {
+    console.log(error);
+    if (error instanceof HttpError) {
+      return next(error);
+    }
+    return next(new HttpError(500, "server_error", { isShowErrPage: true }));
+  }
+};
+
+exports.toggleWishlist = async function (req, res, next) {
+  try {
+    await auctionService.toggleWishlist(req.params.product_id, req.user);
+    res.status(201).json({ message: "Success!" });
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -25,25 +73,26 @@ exports.addNewProduct = async function (req, res, next) {
   }
 };
 
-exports.getProductPage = async function (req, res, next) {
+exports.updateProduct = async function (req, res, next) {
   try {
-    const productPost = await auctionService.getProductPage(
-      req.params.product_id
-    );
-    res.render("product_detail", {
-      header: req.headerData,
-      ...productPost,
+    await auctionService.updateProduct({
+      ...req.body,
+      product_id: req.params.product_id,
+      images: req.files,
+      user_id: req.user,
     });
+    res.status(201).json({ message: "Successfully update product!" });
   } catch (error) {
-    console.log(error);
-    next(new HttpError(500, "server_error", { isShowErrPage: true }));
+    next(error);
   }
 };
 
-exports.toggleWishlist = async function (req, res, next) {
+exports.getProductImages = async function (req, res, next) {
   try {
-    await auctionService.toggleWishlist(req.params.product_id, req.user);
-    res.status(201).json({ message: "Success!" });
+    const productImages = await auctionService.getProductImages(
+      req.params.product_id
+    );
+    res.status(200).json({ productImages });
   } catch (error) {
     next(error);
   }
