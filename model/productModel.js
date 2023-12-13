@@ -72,3 +72,12 @@ exports.getPriceByProductId = async function (productId) {
 
   return recordset;
 };
+
+exports.deleteProductByProductId = async function (productId) {
+  const pool = await poolPromise;
+
+  const { recordset } =
+    await pool.query`DELETE FROM products WHERE product_id = ${productId};`;
+
+  return recordset;
+};

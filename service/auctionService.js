@@ -139,6 +139,44 @@ exports.updateProduct = async function (info) {
   }
 };
 
+exports.deleteProduct = async function (info) {
+  try {
+    const { product_id, user_id } = info;
+
+    if (isNaN(Number(product_id))) {
+      throw new HttpError(404, "not_exist_product_error");
+    }
+
+    const product = await productModel.getDetailProductByProductId(product_id);
+    if (product.length < 1) {
+      throw new HttpError(404, "not_exist_product_error");
+    }
+
+    const nickname = await userModel.getNicknameByUserId(user_id);
+    if (nickname.length < 1) {
+      throw new HttpError(400, "not_exist_user_error");
+    }
+
+    if (nickname !== product[0].nickname) {
+      throw new HttpError(400, "different_register_error");
+    }
+
+    const productImages = await productImageModel.getProductImageByProductId(
+      product_id
+    );
+    const filteredProductImages = productImages.map(
+      (productImage) => productImage.image_name
+    );
+
+    await productModel.deleteProductByProductId(product_id);
+
+    ereaseImageFiles("public/images/", filteredProductImages);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 exports.getProductPage = async function (productId) {
   if (isNaN(Number(productId))) {
     throw new HttpError(404, "not_exist_product_error", {
@@ -171,14 +209,13 @@ exports.getProductImages = async function (productId) {
     throw new HttpError(404, "not_exist_product_error");
   }
 
-  const productInfo = await productModel.getPriceByProductId(productId);
+  const productInfo = await productModel.getProductByProductId(productId);
   if (productInfo.length < 1) {
     throw new HttpError(404, "not_exist_product_error");
   }
 
-  const productImages = await productImageModel.getProductImageByProductId(
-    productId
-  );
+  const productImages =
+    await productImageModel.getProductImageAndUrlByProductId(productId);
 
   return productImages;
 };

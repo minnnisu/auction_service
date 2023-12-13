@@ -87,6 +87,18 @@ exports.updateProduct = async function (req, res, next) {
   }
 };
 
+exports.deleteProduct = async function (req, res, next) {
+  try {
+    await auctionService.deleteProduct({
+      product_id: req.params.product_id,
+      user_id: req.user,
+    });
+    res.status(201).json({ message: "Successfully update product!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getProductImages = async function (req, res, next) {
   try {
     const productImages = await auctionService.getProductImages(

@@ -20,6 +20,12 @@ router.patch(
   auctionController.updateProduct
 );
 
+router.delete(
+  "/:product_id",
+  authMiddleware.isLoginStatusClosure(),
+  auctionController.deleteProduct
+);
+
 router.post(
   "/:product_id/wishlist",
   authMiddleware.isLoginStatusClosure(),
