@@ -74,18 +74,22 @@
   font-weight: 700;
 }
 
-.card_wrap {
-  width: 757px;
+.card_container {
+  max-width: 1500px;
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
   margin: 0 auto;
   margin-top: 40px;
 }
 
-.card {
-  width: 223px;
+.card_wrap {
+  width: 300px;
   margin-bottom: 56px;
+}
+
+.card {
+  width: 250px;
+  margin: 0 auto;
   display: block;
 }
 
@@ -95,12 +99,11 @@
   position: relative;
   overflow: hidden;
   border-radius: 12px;
-  background-color: #f8f9fa;
-  box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.15);
   box-sizing: border-box;
 }
 
 .card_photo img {
+  text-align: center;
   width: 250px;
   height: 250px;
   object-fit: cover;
@@ -111,25 +114,45 @@
 }
 
 .card_title {
+  display: inline-block;
+  overflow: hidden;
+  margin-bottom: 5px;
+  line-height: 1.5;
   font-size: 16px;
   letter-spacing: -0.02px;
-  color: #212529;
-  overflow: hidden;
+  color: #212121;
   white-space: nowrap;
   text-overflow: ellipsis;
-  margin-bottom: 4px;
-  line-height: 1.5;
-  font-weight: normal;
+  text-decoration: none;
 }
 
-.card_price {
-  font-size: 15px;
+.card_row2,
+.card_row3,
+.card_row4 {
+  margin-bottom: 5px;
+}
+
+.card_current_price {
+  font-size: 16px;
   font-weight: 700;
+  color: #212121;
   line-height: 1.5;
-  margin-bottom: 4px;
 }
 
-.card_count {
+.card_count,
+.card_bar,
+.card_created_at {
+  display: inline-block;
+  margin-right: 3px;
   color: #868e96;
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.card_termination_date {
+  display: inline-block;
+  margin-right: 3px;
+  color: #868e96;
+  font-size: 14px;
+  line-height: 1.5;
 }

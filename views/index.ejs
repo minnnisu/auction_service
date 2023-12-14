@@ -3,58 +3,73 @@
 
 <head>
   <%- include('include/head') %>
-  <link rel="stylesheet" href="/css/main.css">
-  <title>메인페이지</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <title>메인페이지</title>
 </head>
 
 <body>
   <%- include('include/header') %>
-  <!-- 바디 -->
-  <main>
-    <!-- 배너 -->
-    <div id="banner">
-      <div id="banner_content">
-        <h1 class="bigText">믿을 수 있는<br>중고 경매 플랫폼</h1>
-        <span class="smallText">사과마켓과 함께<br>안전하고 상쾌한 거래 되세요.</span>
-        <div class="cover_img">
-          <span class="img_frame">
-            <img class="bannerimg" src="/banner/bannerimg.png">
-          </span>
+    <!-- 바디 -->
+    <main>
+      <!-- 배너 -->
+      <div id="banner">
+        <div id="banner_content">
+          <h1 class="bigText">믿을 수 있는<br>중고 경매 플랫폼</h1>
+          <span class="smallText">사과마켓과 함께<br>안전하고 상쾌한 거래 되세요.</span>
+          <div class="cover_img">
+            <span class="img_frame">
+              <img class="bannerimg" src="/banner/bannerimg.png">
+            </span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- 본문 -->
-    <section class="article_list">
-      <h1 class="article_list_title"> 중고거래 매물 </h1>
-      <div class="card_wrap">
-        <!-- 9번 상품 -->
+      <!-- 본문 -->
+      <section class="article_list">
+        <h1 class="article_list_title"> 중고거래 매물 </h1>
+        <div class="card_container">
+          <!-- 9번 상품 -->
 
-        <% for (let i=0; i < products.length; i++) { %>
-        <article class="card">
-          <a class="card_link">
-            <div class="card_photo">
-              <img src="<%= products[i].image_url %>" alt="<%= products[i].title %> 이미지">
+          <% for (let i=0; i < products.length; i++) { %>
+            <div class="card_wrap">
+              <article class="card">
+                <a class="card_link">
+                  <div class="card_photo">
+                    <img src="<%= products[i].image_url %>" alt="<%= products[i].title %> 이미지">
+                  </div>
+                  <div class="card_desc">
+                    <a class="card_title" href="auction/item/<%= products[i].product_id %>">
+                      <%= products[i].title %>
+                    </a>
+                    <div class="card_row2">
+                      <span class="card_current_price">
+                        <%= products[i].current_price %>원
+                      </span>
+                    </div>
+                    <div class="card_row3">
+                      <span class="card_count">
+                        관심 <%= products[i].like_count %>
+                      </span>
+                      <span class="card_bar">
+                        |
+                      </span>
+                      <span class="card_created_at">
+                        <%= products[i].created_at %>
+                      </span>
+                    </div>
+                    <div class="card_row3">
+                      <span class="card_termination_date">
+                        마감 <%= products[i].termination_date %>
+                      </span>
+                    </div>
+                </a>
+              </article>
             </div>
-            <div class="card_desc">
-              <a href="auction/item/<%= products[i].product_id %>">
-                <%= products[i].title %>
-              </a>
-              <p>
-                <%= products[i].current_price %>
-              </p>
-
-              <div class="card_count">
-                <p>
-                  <%= products[i].termination_date %>
-                </p>
-              </div>
-          </a>
-        </article>
-        <% } %>
-      </div>
-    </section>
-  </main>
+            <% } %>
+        </div>
+      </section>
+    </main>
+    <script src="/js/index.js"></script>
 </body>
 
 </html>

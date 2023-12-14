@@ -3,12 +3,19 @@ const { poolPromise } = require("./index");
 exports.getSummarizedProducts = async function (filter) {
   const pool = await poolPromise;
 
-  const PAGE_SIZE = 5;
+  const PAGE_SIZE = 10;
   const offset = (filter.page - 1) * PAGE_SIZE;
 
   if (filter.sort === "latest") {
-    const { recordset } =
-      await pool.query`SELECT product_id, title, current_price, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages WHERE product_id = p.product_id) AS image_url
+    const { recordset } = await pool.query`SELECT 
+      product_id, 
+      title,
+      current_price,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, 
+      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages 
+        WHERE product_id = p.product_id) AS image_url,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, created_at), 120) AS created_at,
+      like_count
     FROM products p
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
     ORDER BY created_at DESC
@@ -20,9 +27,15 @@ exports.getSummarizedProducts = async function (filter) {
   }
 
   if (filter.sort === "popular") {
-    const { recordset } =
-      await pool.query`SELECT product_id, title, current_price, CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, 
-    (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages WHERE product_id = p.product_id) AS image_url
+    const { recordset } = await pool.query`SELECT 
+      product_id, 
+      title,
+      current_price,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, 
+      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages 
+        WHERE product_id = p.product_id) AS image_url,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, created_at), 120) AS created_at,
+      like_count
     FROM products p
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
     ORDER BY like_count DESC
