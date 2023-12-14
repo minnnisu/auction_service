@@ -1,13 +1,20 @@
 const { poolPromise } = require("./index");
 
-exports.getSummarizedProducts = async function (filter) {
+exports.getSummarizedProducts = async function (filter, pageSize) {
   const pool = await poolPromise;
 
-  const PAGE_SIZE = 10;
-  const offset = (filter.page - 1) * PAGE_SIZE;
+  const offset = (filter.page - 1) * pageSize;
+
+  const { recordset: totalProductCount } = await pool.query`
+  SELECT 
+    COUNT(*) AS cnt
+  FROM products p
+  WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')`;
+
+  let query = "";
 
   if (filter.sort === "latest") {
-    const { recordset } = await pool.query`SELECT 
+    query = `SELECT 
       product_id, 
       title,
       current_price,
@@ -20,14 +27,12 @@ exports.getSummarizedProducts = async function (filter) {
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
     ORDER BY created_at DESC
     OFFSET ${offset} ROWS
-    FETCH NEXT ${PAGE_SIZE} ROWS ONLY;
+    FETCH NEXT ${pageSize} ROWS ONLY;
     `;
-
-    return recordset;
   }
 
   if (filter.sort === "popular") {
-    const { recordset } = await pool.query`SELECT 
+    query = `SELECT 
       product_id, 
       title,
       current_price,
@@ -40,10 +45,12 @@ exports.getSummarizedProducts = async function (filter) {
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
     ORDER BY like_count DESC
     OFFSET ${offset} ROWS
-    FETCH NEXT ${PAGE_SIZE} ROWS ONLY;`;
-
-    return recordset;
+    FETCH NEXT ${pageSize} ROWS ONLY;`;
   }
+
+  const { recordset: products } = await pool.query(query);
+
+  return { totalProductCount, products };
 };
 
 exports.getProductByProductId = async function (product_id) {

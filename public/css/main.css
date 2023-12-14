@@ -156,3 +156,23 @@
   font-size: 14px;
   line-height: 1.5;
 }
+
+.current_page {
+  background-color: rgb(255, 179, 154);
+}
+
+.pagination_container a {
+  color: #3b3b3b;
+  text-decoration: none;
+}
+
+.prev_page.disabled,
+.next_page.disabled {
+  pointer-events: none; /* This makes the link unclickable */
+  color: rgb(
+    132,
+    132,
+    132
+  ); /* You can use any color to indicate it's disabled */
+  text-decoration: none; /* Optionally remove underline */
+}

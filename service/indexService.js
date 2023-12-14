@@ -55,27 +55,26 @@ function convertCurrentPrice(amount) {
   return formattedAmount;
 }
 
-function pagination(reqPage) {
-  const TOTAL_POST_COUNT = 100; // 전체 게시물 갯수
-  const PAGE_UNIT = 5; // 한 페이지 당 게시물 갯수
-  const GROUP_UNIT = 5; // 그룹 당 페이지 갯수
+function pagination(totalProductCount, pageUnit, groupUnit, reqPage) {
   const metaData = {
+    totalProductCount,
     group: {
-      prevGroup: null,
-      nextGroup: null,
+      prevGroupPage: null,
+      nextGroupPage: null,
     },
     page: {
       startPage: null,
+      currentPage: reqPage,
       endPage: null,
     },
   };
 
   let totalPage = null; // 전체 페이지 개수
 
-  if (TOTAL_POST_COUNT === 0) {
+  if (totalProductCount === 0) {
     totalPage = 1;
   } else {
-    totalPage = Math.ceil(TOTAL_POST_COUNT / PAGE_UNIT);
+    totalPage = Math.ceil(totalProductCount / pageUnit);
   }
 
   if (reqPage > totalPage || reqPage < 1) {
@@ -86,36 +85,35 @@ function pagination(reqPage) {
   // 10 ~ 19 => Group2
   // 20 ~ 29 => Group3
 
-  const lastestGroup = Math.floor((totalPage - 1) / GROUP_UNIT); // 마지막 그룹
-  const currentGroup = Math.floor((reqPage - 1) / GROUP_UNIT); // 현재 그룹
+  const lastestGroup = Math.floor((totalPage - 1) / groupUnit); // 마지막 그룹
+  const currentGroup = Math.floor((reqPage - 1) / groupUnit); // 현재 그룹
 
   if (currentGroup > lastestGroup) {
     throw new Error("존재하지 않는 페이지입니다");
   }
 
   if (currentGroup - 1 === -1) {
-    metaData["group"]["prevGroup"] = null;
+    metaData["group"]["prevGroupPage"] = null;
   } else {
-    metaData["group"]["prevGroup"] = currentGroup - 1;
+    metaData["group"]["prevGroupPage"] = groupUnit * currentGroup;
   }
 
   if (currentGroup + 1 > lastestGroup) {
-    metaData["group"]["nextGroup"] = null;
+    metaData["group"]["nextGroupPage"] = null;
   } else {
-    metaData["group"]["nextGroup"] = currentGroup + 1;
+    metaData["group"]["nextGroupPage"] =
+      groupUnit * currentGroup + groupUnit + 1;
   }
 
   if (currentGroup == lastestGroup) {
-    console.log(`${GROUP_UNIT * currentGroup + 1} ~ ${totalPage}`);
-
-    metaData["page"]["startPage"] = GROUP_UNIT * currentGroup + 1;
+    metaData["page"]["startPage"] = groupUnit * currentGroup + 1;
     metaData["page"]["endPage"] = totalPage;
     return metaData;
   }
 
-  metaData["page"]["startPage"] = GROUP_UNIT * currentGroup + 1;
-  metaData["page"]["endPage"] = GROUP_UNIT * currentGroup + GROUP_UNIT;
-  return { metaData };
+  metaData["page"]["startPage"] = groupUnit * currentGroup + 1;
+  metaData["page"]["endPage"] = groupUnit * currentGroup + groupUnit;
+  return metaData;
 }
 
 exports.getMainPage = async function (id, query) {
@@ -132,12 +130,26 @@ exports.getMainPage = async function (id, query) {
     filter["page"] = 1;
   }
 
-  const products = await productModel.getSummarizedProducts(filter);
+  const PAGE_UNIT = 2; // 한 페이지 당 게시물 갯수
+  const GROUP_UNIT = 3; // 그룹 당 페이지 갯수
 
-  return products.map((product) => ({
+  // totalProductCount - 전체 게시물 갯수
+  const { totalProductCount, products } =
+    await productModel.getSummarizedProducts(filter, PAGE_UNIT);
+
+  const metaData = pagination(
+    totalProductCount[0].cnt,
+    PAGE_UNIT,
+    GROUP_UNIT,
+    Number(filter.page)
+  );
+
+  const filteredProducts = products.map((product) => ({
     ...product,
     created_at: convertCreatedAt(product.created_at),
     termination_date: convertTerminationTime(product.termination_date),
     current_price: convertCurrentPrice(product.current_price),
   }));
+
+  return { metaData, products: filteredProducts };
 };
