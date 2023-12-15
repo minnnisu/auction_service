@@ -114,15 +114,16 @@
 }
 
 .card_title {
+  width: 100%;
   display: inline-block;
-  overflow: hidden;
   margin-bottom: 5px;
   line-height: 1.5;
   font-size: 16px;
   letter-spacing: -0.02px;
   color: #212121;
-  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   text-decoration: none;
 }
 

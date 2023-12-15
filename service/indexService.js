@@ -1,7 +1,8 @@
-const userModel = require("../model/userModel");
 const productModel = require("../model/productModel");
+const PAGE_UNIT = 3; // 한 페이지 당 게시물 갯수
+const GROUP_UNIT = 10; // 그룹 당 페이지 갯수
 
-function convertCreatedAt(time) {
+function formatCreatedAt(time) {
   const postDate = new Date(time);
   const currentDate = new Date();
   const timeDifference = currentDate - postDate;
@@ -34,7 +35,7 @@ function convertCreatedAt(time) {
   return formattedTime;
 }
 
-function convertTerminationTime(time) {
+function formatTerminationTime(time) {
   const date = new Date(time);
   const formattedDate =
     date.getFullYear() +
@@ -50,7 +51,7 @@ function convertTerminationTime(time) {
   return formattedDate;
 }
 
-function convertCurrentPrice(amount) {
+function formatCurrentPrice(amount) {
   const formattedAmount = amount.toLocaleString("ko-KR");
   return formattedAmount;
 }
@@ -116,26 +117,39 @@ function pagination(totalProductCount, pageUnit, groupUnit, reqPage) {
   return metaData;
 }
 
-exports.getMainPage = async function (id, query) {
-  const filter = {};
-  if (query.sort && query.sort === "popular") {
-    filter["sort"] = "popular";
-  } else {
-    filter["sort"] = "latest";
-  }
+function filterProduct(products) {
+  return products.map((product) => ({
+    ...product,
+    created_at: formatCreatedAt(product.created_at),
+    termination_date: formatTerminationTime(product.termination_date),
+    current_price: formatCurrentPrice(product.current_price),
+  }));
+}
 
+exports.getMainPage = async function () {
+  const products = await productModel.getMainPage();
+  const filteredPopularProducts = filterProduct(products.popularProducts);
+  const filteredLatestProducts = filterProduct(products.latestProducts);
+
+  return {
+    popularProducts: filteredPopularProducts,
+    latestProducts: filteredLatestProducts,
+  };
+};
+
+exports.getPopularPage = async function (query) {
+  const filter = {};
   if (query.page) {
     filter["page"] = query.page;
   } else {
     filter["page"] = 1;
   }
 
-  const PAGE_UNIT = 2; // 한 페이지 당 게시물 갯수
-  const GROUP_UNIT = 3; // 그룹 당 페이지 갯수
-
   // totalProductCount - 전체 게시물 갯수
-  const { totalProductCount, products } =
-    await productModel.getSummarizedProducts(filter, PAGE_UNIT);
+  const { totalProductCount, products } = await productModel.getPopularPage(
+    filter,
+    PAGE_UNIT
+  );
 
   const metaData = pagination(
     totalProductCount[0].cnt,
@@ -144,12 +158,35 @@ exports.getMainPage = async function (id, query) {
     Number(filter.page)
   );
 
-  const filteredProducts = products.map((product) => ({
-    ...product,
-    created_at: convertCreatedAt(product.created_at),
-    termination_date: convertTerminationTime(product.termination_date),
-    current_price: convertCurrentPrice(product.current_price),
-  }));
+  metaData.url = `http://localhost:8081/popular/?page=`;
 
+  const filteredProducts = filterProduct(products);
+  return { metaData, products: filteredProducts };
+};
+
+exports.getLatestPage = async function (query) {
+  const filter = {};
+  if (query.page) {
+    filter["page"] = query.page;
+  } else {
+    filter["page"] = 1;
+  }
+
+  // totalProductCount - 전체 게시물 갯수
+  const { totalProductCount, products } = await productModel.getPopularPage(
+    filter,
+    PAGE_UNIT
+  );
+
+  const metaData = pagination(
+    totalProductCount[0].cnt,
+    PAGE_UNIT,
+    GROUP_UNIT,
+    Number(filter.page)
+  );
+
+  metaData.url = `http://localhost:8081/latest/?page=`;
+
+  const filteredProducts = filterProduct(products);
   return { metaData, products: filteredProducts };
 };

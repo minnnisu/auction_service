@@ -1,25 +1,87 @@
 const { poolPromise } = require("./index");
 
-exports.getSummarizedProducts = async function (filter, pageSize) {
+exports.getMainPage = async function () {
   const pool = await poolPromise;
 
-  const offset = (filter.page - 1) * pageSize;
-
-  const { recordset: totalProductCount } = await pool.query`
-  SELECT 
-    COUNT(*) AS cnt
-  FROM products p
-  WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')`;
-
-  let query = "";
-
-  if (filter.sort === "latest") {
-    query = `SELECT 
+  const { recordset: latestProducts } = await pool.query(`
+    SELECT TOP 5 
       product_id, 
       title,
       current_price,
       CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, 
       (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages 
+        WHERE product_id = p.product_id) AS image_url,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, created_at), 120) AS created_at,
+      like_count
+    FROM products p
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
+    ORDER BY like_count`);
+
+  const { recordset: popularProducts } = await pool.query(`
+    SELECT TOP 5
+      product_id, 
+      title,
+      current_price,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, 
+      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages 
+        WHERE product_id = p.product_id) AS image_url,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, created_at), 120) AS created_at,
+      like_count
+    FROM products p
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
+    ORDER BY created_at`);
+
+  return { latestProducts, popularProducts };
+};
+
+exports.getPopularPage = async function (filter, pageSize) {
+  const pool = await poolPromise;
+
+  const offset = (filter.page - 1) * pageSize;
+
+  const { recordset: totalProductCount } = await pool.query`
+    SELECT
+      COUNT(*) AS cnt
+    FROM products p
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')`;
+
+  const { recordset: products } = await pool.query(`
+    SELECT
+      product_id,
+      title,
+      current_price,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
+      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages
+        WHERE product_id = p.product_id) AS image_url,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, created_at), 120) AS created_at,
+      like_count
+    FROM products p
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
+    ORDER BY like_count DESC
+    OFFSET ${offset} ROWS
+    FETCH NEXT ${pageSize} ROWS ONLY;`);
+
+  return { totalProductCount, products };
+};
+
+exports.getPopularPage = async function (filter, pageSize) {
+  const pool = await poolPromise;
+
+  const offset = (filter.page - 1) * pageSize;
+
+  const { recordset: totalProductCount } = await pool.query`
+  SELECT
+    COUNT(*) AS cnt
+  FROM products p
+  WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')`;
+
+  const { recordset: products } = await pool.query(`
+    SELECT
+      product_id,
+      title,
+      current_price,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
+      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages
         WHERE product_id = p.product_id) AS image_url,
       CONVERT(VARCHAR, DATEADD(HOUR, 9, created_at), 120) AS created_at,
       like_count
@@ -28,27 +90,7 @@ exports.getSummarizedProducts = async function (filter, pageSize) {
     ORDER BY created_at DESC
     OFFSET ${offset} ROWS
     FETCH NEXT ${pageSize} ROWS ONLY;
-    `;
-  }
-
-  if (filter.sort === "popular") {
-    query = `SELECT 
-      product_id, 
-      title,
-      current_price,
-      CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date, 
-      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages 
-        WHERE product_id = p.product_id) AS image_url,
-      CONVERT(VARCHAR, DATEADD(HOUR, 9, created_at), 120) AS created_at,
-      like_count
-    FROM products p
-    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
-    ORDER BY like_count DESC
-    OFFSET ${offset} ROWS
-    FETCH NEXT ${pageSize} ROWS ONLY;`;
-  }
-
-  const { recordset: products } = await pool.query(query);
+  `);
 
   return { totalProductCount, products };
 };
