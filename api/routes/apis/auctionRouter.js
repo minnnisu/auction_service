@@ -26,6 +26,10 @@ router.delete(
   auctionController.deleteProduct
 );
 
+router.get("/:product_id/price", auctionController.getProductPrice);
+
+router.get("/:product_id/bid", auctionController.getProductBidList);
+
 router.post(
   "/:product_id/wishlist",
   authMiddleware.isLoginStatusClosure(),

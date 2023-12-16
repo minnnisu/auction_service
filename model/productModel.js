@@ -3,7 +3,7 @@ const { poolPromise } = require("./index");
 exports.getMainPage = async function () {
   const pool = await poolPromise;
 
-  const { recordset: latestProducts } = await pool.query(`
+  const { recordset: latestProducts } = await pool.query`
     SELECT TOP 5 
       product_id, 
       title,
@@ -15,9 +15,9 @@ exports.getMainPage = async function () {
       like_count
     FROM products p
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
-    ORDER BY like_count`);
+    ORDER BY like_count`;
 
-  const { recordset: popularProducts } = await pool.query(`
+  const { recordset: popularProducts } = await pool.query`
     SELECT TOP 5
       product_id, 
       title,
@@ -29,7 +29,7 @@ exports.getMainPage = async function () {
       like_count
     FROM products p
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
-    ORDER BY created_at`);
+    ORDER BY created_at`;
 
   return { latestProducts, popularProducts };
 };
@@ -45,7 +45,7 @@ exports.getPopularPage = async function (filter, pageSize) {
     FROM products p
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')`;
 
-  const { recordset: products } = await pool.query(`
+  const { recordset: products } = await pool.query`
     SELECT
       product_id,
       title,
@@ -59,7 +59,7 @@ exports.getPopularPage = async function (filter, pageSize) {
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
     ORDER BY like_count DESC
     OFFSET ${offset} ROWS
-    FETCH NEXT ${pageSize} ROWS ONLY;`);
+    FETCH NEXT ${pageSize} ROWS ONLY;`;
 
   return { totalProductCount, products };
 };
@@ -75,7 +75,7 @@ exports.getPopularPage = async function (filter, pageSize) {
   FROM products p
   WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')`;
 
-  const { recordset: products } = await pool.query(`
+  const { recordset: products } = await pool.query`
     SELECT
       product_id,
       title,
@@ -90,7 +90,7 @@ exports.getPopularPage = async function (filter, pageSize) {
     ORDER BY created_at DESC
     OFFSET ${offset} ROWS
     FETCH NEXT ${pageSize} ROWS ONLY;
-  `);
+  `;
 
   return { totalProductCount, products };
 };
@@ -98,7 +98,19 @@ exports.getPopularPage = async function (filter, pageSize) {
 exports.getProductByProductId = async function (product_id) {
   const pool = await poolPromise;
 
-  const { recordset } = await pool.query`SELECT *
+  const { recordset } = await pool.query`
+                        SELECT *
+                        FROM products
+                        WHERE product_id = ${product_id};`;
+
+  return recordset;
+};
+
+exports.getProductPriceByProductId = async function (product_id) {
+  const pool = await poolPromise;
+
+  const { recordset } = await pool.query`
+                        SELECT min_price, current_price
                         FROM products
                         WHERE product_id = ${product_id};`;
 
@@ -109,7 +121,15 @@ exports.getDetailProductByProductId = async function (product_id) {
   const pool = await poolPromise;
 
   const { recordset } = await pool.query`
-  SELECT product_id, nickname, title, description, current_price, like_count, min_price,  CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
+  SELECT 
+    product_id, 
+    nickname, 
+    title, 
+    description, 
+    current_price, 
+    like_count, 
+    min_price, 
+    CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
     (SELECT status FROM productStatus WHERE product_id = p.product_id) AS status,
     CASE 
         WHEN created_at < updated_at THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, updated_at), 120)

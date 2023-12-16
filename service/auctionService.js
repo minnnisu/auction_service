@@ -6,6 +6,7 @@ const productStatusModel = require("../model/productStatusModel");
 const productImageModel = require("../model/productImageModel");
 const wishlistModel = require("../model/wishlistModel");
 const userModel = require("../model/userModel");
+const bidModel = require("../model/bidModel");
 const { ereaseImageFiles } = require("../module/imageEraser");
 
 function checkTitleVaild(title) {
@@ -44,6 +45,69 @@ function checkTerminationDateVaild(termination_date) {
   }
 
   return true;
+}
+
+function formatCreatedAt(time) {
+  const postDate = new Date(time);
+  const currentDate = new Date();
+  const timeDifference = currentDate - postDate;
+  const seconds = Math.floor(timeDifference / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  function formatTimeAgo(value, unit) {
+    return value + unit + " 전";
+  }
+
+  let formattedTime;
+  if (seconds < 60) {
+    formattedTime = formatTimeAgo(seconds, "초");
+  } else if (minutes < 60) {
+    formattedTime = formatTimeAgo(minutes, "분");
+  } else if (hours < 24) {
+    formattedTime = formatTimeAgo(hours, "시간");
+  } else if (days < 30) {
+    formattedTime = formatTimeAgo(days, "일");
+  } else if (months < 12) {
+    formattedTime = formatTimeAgo(months, "달");
+  } else {
+    formattedTime = formatTimeAgo(years, "년");
+  }
+
+  return formattedTime;
+}
+
+function formatTerminationTime(time) {
+  const date = new Date(time);
+  const formattedDate =
+    date.getFullYear() +
+    "-" +
+    ("0" + (date.getMonth() + 1)).slice(-2) +
+    "-" +
+    ("0" + date.getDate()).slice(-2) +
+    " " +
+    ("0" + date.getHours()).slice(-2) +
+    ":" +
+    ("0" + date.getMinutes()).slice(-2);
+
+  return formattedDate;
+}
+
+function formatCurrentPrice(amount) {
+  const formattedAmount = amount.toLocaleString("ko-KR");
+  return formattedAmount;
+}
+
+function filterProduct(products) {
+  return products.map((product) => ({
+    ...product,
+    timestamp: formatCreatedAt(product.timestamp),
+    termination_date: formatTerminationTime(product.termination_date),
+    current_price: formatCurrentPrice(product.current_price),
+  }));
 }
 
 exports.addNewProduct = async function (info) {
@@ -195,13 +259,28 @@ exports.getProductPage = async function (productId) {
     });
   }
 
+  const filteredProductInfo = filterProduct(productInfo);
+
   const images = await productImageModel.getProductImageURLByProductId(
     productId
   );
 
   const comments = await commentModel.getDetailCommentByProductId(productId);
 
-  return { product: { images, productInfo: productInfo[0] }, comments };
+  return { product: { images, productInfo: filteredProductInfo[0] }, comments };
+};
+
+exports.getProductPrice = async function (productId) {
+  if (isNaN(Number(productId))) {
+    throw new HttpError(404, "not_exist_product_error");
+  }
+
+  const productPrice = await productModel.getProductPriceByProductId(productId);
+  if (productPrice.length < 1) {
+    throw new HttpError(404, "not_exist_product_error");
+  }
+
+  return productPrice[0];
 };
 
 exports.getProductImages = async function (productId) {
@@ -303,4 +382,32 @@ exports.cancelAuction = async function (productId, userId) {
   }
 
   await productStatusModel.changeProductStatusByProdctId(productId, "철회");
+};
+
+exports.getProductBidList = async function (productId, userId) {
+  if (productId === undefined) {
+    throw new HttpError(400, "not_contain_nessary_params");
+  }
+
+  const product = await productModel.getProductByProductId(productId);
+  if (product.length < 1) {
+    throw new HttpError(400, "not_exist_product_error");
+  }
+
+  const bidList = await bidModel.getBidProductId(productId, userId);
+
+  let topBidId = null;
+  for (let i = 0; i < bidList.length; i++) {
+    if (!bidList[i].is_canceled) {
+      topBidId = bidList[i].bid_id;
+      break;
+    }
+  }
+
+  const filteredBidList = bidList.map((bid) => ({
+    ...bid,
+    price: formatCurrentPrice(bid.price),
+  }));
+
+  return { topBidId, bidList: filteredBidList };
 };

@@ -32,6 +32,50 @@ exports.getBidByBidId = async function (bidId) {
   return recordset;
 };
 
+exports.getBidProductId = async function (productId, userId) {
+  let result = "";
+  const pool = await poolPromise;
+
+  if (userId !== undefined) {
+    result = await pool.query`
+    SELECT 
+      b.bid_id,
+      b.product_id,
+      u.nickname,
+      b.price,
+      b.is_canceled,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, b.created_at), 120) AS created_at,
+      CASE 
+        WHEN b.user_id = ${userId} THEN 1
+        ELSE 0
+      END AS is_my_bid,
+      CASE
+        WHEN p.status = '진행중' THEN 1
+        ELSE 0
+      END AS editable
+    FROM bids b 
+        LEFT OUTER JOIN productStatus p ON b.product_id = p.product_id 
+        LEFT OUTER JOIN users u ON b.user_id = u.user_id 
+    WHERE b.product_id = ${productId}
+    ORDER BY created_at DESC;`;
+  } else {
+    result = await pool.query`
+    SELECT 
+      b.bid_id,
+      b.product_id,
+      u.nickname,
+      b.price,
+      b.is_canceled,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, b.created_at), 120) AS created_at,
+      (SELECT 0) AS is_my_bid,
+      (SELECT 0) AS editable
+    FROM bids b INNER JOIN users u ON b.user_id = u.user_id WHERE product_id = ${productId}
+    ORDER BY created_at DESC;`;
+  }
+
+  return result.recordset;
+};
+
 exports.deleteBid = async function (bidId, productId) {
   const pool = await poolPromise;
   const transaction = await pool.transaction().begin();

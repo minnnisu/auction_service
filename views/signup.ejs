@@ -3,39 +3,42 @@
 
 <head>
   <%- include('include/head') %>
-  <title>Login</title>
+    <title>Login</title>
 </head>
 
 <body>
   <%- include('include/header') %>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
 
-  <form action="/signup" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="id" name="id" required>
+    <form action="/signup" method="post">
+      <label for="username">Username:</label>
+      <input type="text" id="id" name="id" required>
+      <button onclick="checkId()">아이디 중복확인</button>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
 
-    <label for="password">Repeat password:</label>
-    <input type="password" id="checkedPassword" name="checkedPassword" required>
+      <label for="password">Repeat password:</label>
+      <input type="password" id="checkedPassword" name="checkedPassword" required>
 
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
 
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
 
-    <label for="telephone">Telephone:</label>
-    <input type="tel" id="telephone" name="telephone" required>
+      <label for="telephone">Telephone:</label>
+      <input type="tel" id="telephone" name="telephone" required>
 
-    <button type="submit">Sign Up</button>
-  </form>
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <script src="/js/signup.js"></script>
 </body>
 
 </html>

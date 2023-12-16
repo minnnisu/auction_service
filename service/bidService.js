@@ -1,10 +1,11 @@
 const productStatusModel = require("../model/productStatusModel");
 const bidModel = require("../model/bidModel");
 const productModel = require("../model/productModel");
+const userModel = require("../model/userModel");
 const HttpError = require("../error/HttpError");
 
 exports.suggestBidAmount = async function (info) {
-  const { product_id, price } = info;
+  const { product_id, user_id, price } = info;
 
   if (product_id === undefined || price === undefined) {
     throw new HttpError(400, "not_contain_nessary_params");
@@ -21,11 +22,21 @@ exports.suggestBidAmount = async function (info) {
     throw new HttpError(404, "unable_to_restrict_bid_error");
   }
 
-  const prices = await productModel.getPriceByProductId(product_id);
-  if (prices[0].min_price > price) {
+  const product = await productModel.getProductByProductId(product_id);
+
+  const nickname = await userModel.getNicknameByUserId(user_id);
+  if (nickname.length < 1) {
+    throw new HttpError(400, "not_exist_user_error");
+  }
+
+  if (nickname === product[0].nickname) {
+    throw new HttpError(400, "owner_cannot_bid_error");
+  }
+
+  if (product[0].min_price > price) {
     throw new HttpError(404, "below_min_bid_error");
   }
-  if (prices[0].current_price >= price) {
+  if (product[0].current_price >= price) {
     throw new HttpError(404, "below_current_bid_error");
   }
 
