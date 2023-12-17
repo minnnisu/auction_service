@@ -15,16 +15,22 @@ exports.addNewReply = async function (info) {
   }
 
   const nickname = await userModel.getNicknameByUserId(user_id);
+  if (nickname.length < 1) {
+    throw new HttpError(400, "not_exist_user_error");
+  }
 
   await replyModel.addNewReply({ ...info, nickname });
 };
 
-exports.getReplies = async function (commentId) {
+exports.getReplies = async function (commentId, userId) {
   if (commentId === undefined) {
     throw new HttpError(400, "not_contain_nessary_body");
   }
 
-  const replies = await replyModel.getDetailRepliesByCommentId(commentId);
+  const replies = await replyModel.getDetailRepliesByCommentId(
+    commentId,
+    userId
+  );
   return replies;
 };
 
@@ -41,6 +47,10 @@ exports.updateReply = async function (info) {
 
   const register = await replyModel.getNicknameByReplyId(reply_id);
   const modifier = await userModel.getNicknameByUserId(user_id);
+  if (modifier.length < 1) {
+    throw new HttpError(400, "not_exist_user_error");
+  }
+
   if (register != modifier) {
     throw new HttpError(404, "different_author_error");
   }
@@ -61,6 +71,10 @@ exports.deleteReply = async function (info) {
 
   const register = await replyModel.getNicknameByReplyId(reply_id);
   const modifier = await userModel.getNicknameByUserId(user_id);
+  if (modifier.length < 1) {
+    throw new HttpError(400, "not_exist_user_error");
+  }
+
   if (register != modifier) {
     throw new HttpError(404, "different_author_error");
   }

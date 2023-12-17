@@ -15,6 +15,9 @@ exports.addNewComment = async function (info) {
   }
 
   const nickname = await userModel.getNicknameByUserId(user_id);
+  if (nickname.length < 1) {
+    throw new HttpError(400, "not_exist_user_error");
+  }
 
   await commentModel.addNewComment({ ...info, nickname });
 };
@@ -32,6 +35,10 @@ exports.updateComment = async function (info) {
 
   const register = await commentModel.getNicknameByCommentId(comment_id);
   const modifier = await userModel.getNicknameByUserId(user_id);
+  if (modifier.length < 1) {
+    throw new HttpError(400, "not_exist_user_error");
+  }
+
   if (register != modifier) {
     throw new HttpError(404, "different_author_error");
   }
@@ -52,6 +59,10 @@ exports.deleteComment = async function (info) {
 
   const register = await commentModel.getNicknameByCommentId(comment_id);
   const modifier = await userModel.getNicknameByUserId(user_id);
+  if (modifier.length < 1) {
+    throw new HttpError(400, "not_exist_user_error");
+  }
+
   if (register != modifier) {
     throw new HttpError(404, "different_author_error");
   }

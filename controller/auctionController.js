@@ -36,7 +36,8 @@ exports.getProductEditPage = async function (req, res, next) {
 exports.getProductPage = async function (req, res, next) {
   try {
     const productPost = await auctionService.getProductPage(
-      req.params.product_id
+      req.params.product_id,
+      req.user
     );
     res.render("product_detail", {
       header: req.headerData,

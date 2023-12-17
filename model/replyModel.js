@@ -25,9 +25,29 @@ exports.getReplyByReplyId = async function (replyId) {
   return recordset;
 };
 
-exports.getDetailRepliesByCommentId = async function (commentId) {
+exports.getDetailRepliesByCommentId = async function (commentId, userId) {
   const pool = await poolPromise;
-  const { recordset } = await pool.query`
+  let result = null;
+  if (userId !== undefined) {
+    result = await pool.query`
+    SELECT r.reply_id, r.nickname, r.description,
+      CASE 
+          WHEN r.created_at < r.updated_at THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, r.updated_at), 120)
+          ELSE CONVERT(VARCHAR, DATEADD(HOUR, 9, r.created_at), 120)
+      END AS timestamp,
+      CASE 
+          WHEN r.created_at < r.updated_at THEN 'updated'
+          ELSE 'normal'
+      END AS modify_status,
+      CASE 
+            WHEN u.user_id = ${userId} THEN 1
+            ELSE 0
+      END AS is_my_reply,
+      is_deleted
+    FROM replies r INNER JOIN users u ON r.nickname = u.nickname
+    WHERE r.comment_id = ${commentId};`;
+  } else {
+    result = await pool.query`
     SELECT reply_id, nickname, description,
       CASE 
           WHEN created_at < updated_at THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, updated_at), 120)
@@ -39,8 +59,9 @@ exports.getDetailRepliesByCommentId = async function (commentId) {
       END AS modify_status
     FROM replies
     WHERE comment_id = ${commentId};`;
+  }
 
-  return recordset;
+  return result.recordset;
 };
 
 exports.getNicknameByReplyId = async function (replyId) {
