@@ -117,32 +117,63 @@ exports.getProductPriceByProductId = async function (product_id) {
   return recordset;
 };
 
-exports.getDetailProductByProductId = async function (product_id) {
+exports.getDetailProductByProductId = async function (product_id, userId) {
   const pool = await poolPromise;
 
-  const { recordset } = await pool.query`
-  SELECT 
-    product_id, 
-    nickname, 
-    title, 
-    description, 
-    current_price, 
-    like_count, 
-    min_price, 
-    CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
-    (SELECT status FROM productStatus WHERE product_id = p.product_id) AS status,
-    CASE 
-        WHEN created_at < updated_at THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, updated_at), 120)
-        ELSE CONVERT(VARCHAR, DATEADD(HOUR, 9, created_at), 120)
-    END AS timestamp,
-    CASE
-        WHEN created_at < updated_at THEN 'updated'
-        ELSE 'normal'
-    END AS modify_status
-  FROM products p
-  WHERE product_id = ${product_id}`;
+  let result = null;
 
-  return recordset;
+  if (userId !== undefined) {
+    result = await pool.query`
+    SELECT 
+      p.product_id, 
+      p.nickname, 
+      p.title, 
+      p.description, 
+      p.current_price, 
+      p.like_count, 
+      p.min_price, 
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.termination_date), 120) AS termination_date,
+      (SELECT status FROM productStatus WHERE product_id = p.product_id) AS status,
+      CASE 
+          WHEN p.created_at < p.updated_at THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, p.updated_at), 120)
+          ELSE CONVERT(VARCHAR, DATEADD(HOUR, 9, p.created_at), 120)
+      END AS timestamp,
+      CASE
+          WHEN p.created_at < p.updated_at THEN 'updated'
+          ELSE 'normal'
+      END AS modify_status,
+      CASE 
+        WHEN u.user_id = ${userId} THEN 1
+        ELSE 0
+      END AS is_my_product
+    FROM products p INNER JOIN users u ON p.nickname = u.nickname
+    WHERE p.product_id = ${product_id}`;
+  } else {
+    result = await pool.query`
+    SELECT 
+      product_id, 
+      nickname, 
+      title, 
+      description, 
+      current_price, 
+      like_count, 
+      min_price, 
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, termination_date), 120) AS termination_date,
+      (SELECT status FROM productStatus WHERE product_id = p.product_id) AS status,
+      CASE 
+          WHEN created_at < updated_at THEN CONVERT(VARCHAR, DATEADD(HOUR, 9, updated_at), 120)
+          ELSE CONVERT(VARCHAR, DATEADD(HOUR, 9, created_at), 120)
+      END AS timestamp,
+      CASE
+          WHEN created_at < updated_at THEN 'updated'
+          ELSE 'normal'
+      END AS modify_status,
+      (SELECT 0) AS is_my_product
+    FROM products p
+    WHERE product_id = ${product_id}`;
+  }
+
+  return result.recordset;
 };
 
 exports.getPriceByProductId = async function (productId) {

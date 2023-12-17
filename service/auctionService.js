@@ -250,7 +250,10 @@ exports.getProductPage = async function (productId, userId) {
     });
   }
 
-  const productInfo = await productModel.getDetailProductByProductId(productId);
+  const productInfo = await productModel.getDetailProductByProductId(
+    productId,
+    userId
+  );
   if (productInfo.length < 1) {
     throw new HttpError(404, "not_exist_product_error", {
       isShowErrPage: true,

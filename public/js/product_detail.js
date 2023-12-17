@@ -1,14 +1,25 @@
 const PRODUCT_ID = window.location.pathname.split("/")[3];
 
-// 드롭다운 토글 함수
-function toggleDropdown() {
+document.addEventListener("click", function (event) {
   console.log("실행");
-  const dropdown = document.getElementById("productDropdown");
-  if (dropdown.style.display === "none" || dropdown.style.display === "") {
-    dropdown.style.display = "block";
-  } else {
-    dropdown.style.display = "none";
+
+  const dropdownContent = document.querySelector(".dropdown-content");
+
+  // 클릭된 요소가 드롭다운 버튼이 아니면 드롭다운을 닫음
+  if (!event.target.matches(".dropdown")) {
+    if (dropdownContent.classList.contains("show")) {
+      dropdownContent.classList.remove("show");
+    }
   }
+});
+
+function toggleDropdown(event) {
+  console.log("실행");
+  const dropdownContent = document.querySelector(".dropdown-content");
+
+  // 드롭다운이 열려있으면 닫고, 닫혀있으면 열기
+  dropdownContent.classList.toggle("show");
+  event.stopPropagation();
 }
 
 async function openBidListModal() {
@@ -736,6 +747,48 @@ async function deleteReply(btn) {
 
     window.location.reload();
     return alert("답글이 삭제되었습니다.");
+  } catch (error) {
+    return alert("예상치 못한 에러가 발생하였습니다.");
+  }
+}
+
+function editProduct() {
+  window.location.href = `/auction/item/${PRODUCT_ID}/edit`;
+}
+
+async function deleteProduct() {
+  try {
+    const response = await fetch(
+      `http://localhost:8081/api/auction/item/${PRODUCT_ID}`,
+      { method: "DELETE" }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      if (data.message === "not_login_status_access_error") {
+        window.location.href = "/login";
+        return alert("로그인이 필요한 서비스입니다.");
+      }
+
+      if (data.message === "not_exist_product_error") {
+        return alert("존재하지 않는 상품입니다.");
+      }
+
+      if (data.message === "not_exist_user_error") {
+        window.location.href = "/";
+        return alert("존재하지 않은 계정입니다.");
+      }
+
+      if (data.message === "different_register_error") {
+        return alert("상품 등록자만 상품을 삭제할 수 있습니다.");
+      }
+
+      return alert("예상치 못한 에러가 발생하였습니다.");
+    }
+
+    window.location.href = "/";
+    return alert("상품이 삭제되었습니다.");
   } catch (error) {
     return alert("예상치 못한 에러가 발생하였습니다.");
   }
