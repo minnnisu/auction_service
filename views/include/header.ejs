@@ -9,15 +9,19 @@
           <button type="submit" class="search_button">검색하기</button>
         </form>
         <% if (header && header.user && header.user.is_login_status) { %>
-        <a href="/user/profile">
+        <a class="header_menu" href="/user/profile">
           <%= header.user.nickname %>
         </a>
         <form action="/api/auth/logout" method="post">
           <button type="submit">로그아웃</button>
         </form>
         <% } else { %>
-        <a href="/login">로그인</a>
-        <a href="/signup">회원가입</a>
+        <li>
+          <a class="header_menu" href="/login">로그인</a>
+        </li>
+        <li>
+          <a class="header_menu" href="/signup">회원가입</a>
+        </li>
         <% } %>
       </ul>
     </nav>

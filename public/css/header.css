@@ -133,7 +133,7 @@ table {
 
 #header_wrap {
   height: 100%;
-  width: 1270px;
+  width: 1000px;
   margin: auto;
   display: flex;
   flex-direction: row;
@@ -156,19 +156,16 @@ table {
 }
 
 .header_menu {
-  margin-left: 50px;
+  margin-left: 20px;
   width: 100px;
   font-style: normal;
   font-weight: 700;
   font-size: large;
-}
-
-.header_menu a {
   color: #333;
   text-decoration: none;
 }
 
-.header_menu a:hover {
+.header_menu:hover {
   color: #fa5858;
 }
 
