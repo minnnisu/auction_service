@@ -241,7 +241,7 @@ exports.deleteProduct = async function (info) {
   }
 };
 
-exports.getProductPage = async function (productId) {
+exports.getProductPage = async function (productId, userId) {
   if (isNaN(Number(productId))) {
     throw new HttpError(404, "not_exist_product_error", {
       isShowErrPage: true,
@@ -265,7 +265,10 @@ exports.getProductPage = async function (productId) {
     productId
   );
 
-  const comments = await commentModel.getDetailCommentByProductId(productId);
+  const comments = await commentModel.getDetailCommentByProductId(
+    productId,
+    userId
+  );
 
   return { product: { images, productInfo: filteredProductInfo[0] }, comments };
 };
