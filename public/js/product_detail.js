@@ -245,6 +245,38 @@ async function suggestBid() {
     return alert("예상치 못한 에러가 발생하였습니다.");
   }
 }
+//이미지 슬라이드
+const product_image_slider = document.querySelector(".product_image_slider"); //전체 슬라이드 컨테이너
+const slideImg = document.querySelectorAll(".product_image_slider li"); //모든 슬라이드들
+let currentSlide = 0; //현재 슬라이드 index
+const slideCount = slideImg.length; // 슬라이드 개수
+const prev = document.querySelector(".prev"); //이전 버튼
+const next = document.querySelector(".next"); //다음 버튼
+const slideWidth = 750; //한개의 슬라이드 넓이
+const slideMargin = 100; //슬라이드간의 margin 값
+
+product_image_slider.style.width =
+  (slideWidth + slideMargin) * slideCount + "px";
+
+function moveSlide(num) {
+  product_image_slider.style.left = -num * 850 + "px";
+  currentSlide = num;
+}
+
+prev.addEventListener("click", function () {
+  next.style.visibility = "visible";
+  if (currentSlide !== 0) {
+    moveSlide(currentSlide - 1);
+  }
+});
+
+next.addEventListener("click", function () {
+  prev.style.visibility = "visible";
+  if (currentSlide !== slideCount - 1) {
+    moveSlide(currentSlide + 1);
+  }
+});
+ 
 
 // comment
 

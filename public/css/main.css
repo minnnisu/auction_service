@@ -74,6 +74,23 @@
   font-weight: 600;
 }
 
+.article_list_more{
+  width:100%;
+  padding-bottom: 40px;
+  text-align: center;
+  border-bottom: solid 1px #E6E6E6;
+}
+
+.article_list_more_text{
+  font-size: 16px;
+  font-weight: 600;
+  color:#212121;
+}
+
+.article_list_more_text:hover{
+  color:#fa5858;
+}
+
 .card_container {
   max-width: 1500px;
   display: flex;
@@ -159,12 +176,28 @@
 }
 
 .current_page {
-  background-color: rgb(255, 179, 154);
+  color: #fa5858;
+  text-decoration:none;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
-.pagination_container a {
-  color: #3b3b3b;
-  text-decoration: none;
+.page {
+  color: #212121;
+  text-decoration:none;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.pagination_container {
+  display:flex; 
+  justify-content: center;
+  font-size:16px;
+  font-weight: 600;
+}
+
+.pages{
+
 }
 
 .prev_page.disabled,

@@ -24,12 +24,10 @@
         </div>
       </div>
 
-      <!-- 본문 -->
+      <!-- 인기 상품 -->
       <section class="article_list">
         <h1 class="article_list_title"> 인기 상품 </h1>
-        <a href="http://localhost:8081/popular">더보기</a>
         <div class="card_container">
-          <!-- 9번 상품 -->
           <% products.popularProducts.map((product)=> { %>
             <div class="card_wrap">
               <article class="card">
@@ -68,13 +66,16 @@
             <% }) %>
         </div>
       </section>
+      <div class="article_list_more"> 
+        <a class="article_list_more_text" href="http://localhost:8081/popular">인기상품 더 보기</a>
+      </div>
+      
+      <!-- 최신 상품 -->
       <section class="article_list">
         <div>
           <h1 class="article_list_title"> 최신 상품 </h1>
-          <a href="http://localhost:8081/latest">더보기</a>
         </div>
         <div class="card_container">
-          <!-- 9번 상품 -->
           <% products.latestProducts.map((product)=> { %>
             <div class="card_wrap">
               <article class="card">
@@ -113,6 +114,9 @@
             <% }) %>
         </div>
       </section>
+      <div class="article_list_more"> 
+        <a class="article_list_more_text" href="http://localhost:8081/latest">최신상품 더 보기</a>
+      </div>
     </main>
     <script src="/js/index.js"></script>
 </body>

@@ -142,7 +142,6 @@ table {
 }
 
 #header_content {
-  margin-right: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
