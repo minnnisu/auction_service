@@ -16,8 +16,8 @@ exports.changeProductStatusByProdctId = async function (productId, status) {
     newStatus = "진행중";
   }
 
-  if (status === "완료") {
-    newStatus = "완료";
+  if (status === "종료") {
+    newStatus = "종료";
   }
 
   if (status === "철회") {
@@ -37,6 +37,41 @@ exports.changeProductStatusByProdctId = async function (productId, status) {
 
   const { recordset } =
     await pool.query`UPDATE productStatus SET status = ${newStatus} WHERE product_id = ${productId}`;
+
+  return recordset;
+};
+
+exports.updateTimeOverProduct = async function () {
+  const pool = await poolPromise;
+  await pool.query`
+    UPDATE productStatus
+    SET status = '유찰'
+    WHERE product_id IN (
+      SELECT p.product_id
+      FROM products p INNER JOIN productStatus ps ON p.product_id = ps.product_id
+      WHERE ps.status = '진행중' AND termination_date < GETDATE() AND p.current_price = 0);`;
+
+  await pool.query`
+    UPDATE productStatus
+    SET status = '종료'
+    WHERE product_id IN (
+      SELECT p.product_id
+      FROM products p INNER JOIN productStatus ps ON p.product_id = ps.product_id
+      WHERE ps.status = '진행중' AND termination_date < GETDATE() AND p.current_price != 0);`;
+};
+
+exports.getActiveAuctionItemInfo = async function () {
+  const pool = await poolPromise;
+
+  const { recordset } = await pool.query`
+    SELECT 
+      p.product_id, 
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.termination_date), 120) AS termination_date,
+      p.current_price
+    FROM products p 
+      INNER JOIN productStatus ps 
+      ON p.product_id = ps.product_id
+    WHERE ps.status = '진행중' AND termination_date > GETDATE();`;
 
   return recordset;
 };

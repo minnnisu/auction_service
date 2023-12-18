@@ -8,6 +8,7 @@ const SQLiteStore = require("connect-sqlite3")(session);
 const passport = require("passport");
 const passportConfig = require("./api/passport");
 const HttpError = require("./error/HttpError");
+const scheduler = require("./schedule/scheduler");
 
 const authRouter = require("./api/routes/apis/authRouter");
 const auctionApiRouter = require("./api/routes/apis/auctionRouter");
@@ -99,4 +100,5 @@ app.use((err, req, res, next) => {
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
+  scheduler.startServer();
 });
