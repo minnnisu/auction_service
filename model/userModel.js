@@ -43,3 +43,154 @@ exports.checkNicknameDuplication = async function (nickname) {
   }
   return false;
 };
+
+exports.getUserSellPage = async function (filter, pageSize, nickname) {
+  const pool = await poolPromise;
+
+  const offset = (filter.page - 1) * pageSize;
+
+  const { recordset: totalProductCount } = await pool.query`
+    SELECT
+      COUNT(*) AS cnt
+    FROM (SELECT * FROM products WHERE nickname = ${nickname}) p 
+      LEFT JOIN currentPriceView cp ON p.product_id = cp.product_id
+      LEFT JOIN wishlistCountView wc ON p.product_id = wc.product_id`;
+
+  const { recordset: products } = await pool.query`
+    SELECT
+      p.product_id, 
+      p.title,
+      cp.current_price,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.termination_date), 120) AS termination_date, 
+      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages 
+      WHERE product_id = p.product_id) AS image_url,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.created_at), 120) AS created_at,
+      CASE 
+      WHEN wc.like_count IS NULL THEN 0
+      ELSE wc.like_count
+      END AS like_count
+    FROM (SELECT * FROM products WHERE nickname = ${nickname}) p 
+      LEFT JOIN currentPriceView cp ON p.product_id = cp.product_id
+      LEFT JOIN wishlistCountView wc ON p.product_id = wc.product_id
+    ORDER BY p.created_at DESC
+    OFFSET ${offset} ROWS
+    FETCH NEXT ${pageSize} ROWS ONLY;`;
+
+  return { totalProductCount, products };
+};
+
+exports.getUserBidPage = async function (filter, pageSize, userId) {
+  const pool = await poolPromise;
+
+  const offset = (filter.page - 1) * pageSize;
+
+  const { recordset: totalProductCount } = await pool.query`
+    SELECT
+      COUNT(*) AS cnt
+    FROM 
+      (SELECT * FROM bids WHERE user_id = '7xi6qizi') b
+          LEFT JOIN products p ON b.product_id = p.product_id
+          LEFT JOIN currentPriceView cp ON b.product_id = cp.product_id
+          LEFT JOIN wishlistCountView wc ON b.product_id = wc.product_id`;
+
+  const { recordset: products } = await pool.query`
+    SELECT
+      p.product_id, 
+      p.title,
+      cp.current_price,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.termination_date), 120) AS termination_date, 
+      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages 
+      WHERE product_id = p.product_id) AS image_url,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.created_at), 120) AS created_at,
+      CASE 
+      WHEN wc.like_count IS NULL THEN 0
+      ELSE wc.like_count
+      END AS like_count    
+    FROM 
+      (SELECT * FROM bids WHERE user_id = ${userId}) b
+          LEFT JOIN products p ON b.product_id = p.product_id
+          LEFT JOIN currentPriceView cp ON b.product_id = cp.product_id
+          LEFT JOIN wishlistCountView wc ON b.product_id = wc.product_id
+    ORDER BY p.created_at DESC 
+    OFFSET ${offset} ROWS
+    FETCH NEXT ${pageSize} ROWS ONLY;`;
+
+  return { totalProductCount, products };
+};
+
+exports.getUserSuccessfulBidPage = async function (filter, pageSize, userId) {
+  const pool = await poolPromise;
+
+  const offset = (filter.page - 1) * pageSize;
+
+  const { recordset: totalProductCount } = await pool.query`
+    SELECT
+      COUNT(*) AS cnt
+    FROM  
+      (SELECT * FROM successfulBidView WHERE user_id = ${userId}) sb
+          LEFT JOIN products p ON sb.product_id = p.product_id
+          LEFT JOIN currentPriceView cp ON sb.product_id = cp.product_id
+          LEFT JOIN wishlistCountView wc ON sb.product_id = wc.product_id`;
+
+  const { recordset: products } = await pool.query`
+    SELECT
+      p.product_id, 
+      p.title,
+      cp.current_price,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.termination_date), 120) AS termination_date, 
+      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages 
+      WHERE product_id = p.product_id) AS image_url,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.created_at), 120) AS created_at,
+      CASE 
+      WHEN wc.like_count IS NULL THEN 0
+      ELSE wc.like_count
+      END AS like_count    
+    FROM  
+      (SELECT * FROM successfulBidView WHERE user_id = ${userId}) sb
+          LEFT JOIN products p ON sb.product_id = p.product_id
+          LEFT JOIN currentPriceView cp ON sb.product_id = cp.product_id
+          LEFT JOIN wishlistCountView wc ON sb.product_id = wc.product_id
+    ORDER BY p.created_at DESC 
+    OFFSET ${offset} ROWS
+    FETCH NEXT ${pageSize} ROWS ONLY;`;
+
+  return { totalProductCount, products };
+};
+
+exports.getUserWishlistPage = async function (filter, pageSize, userId) {
+  const pool = await poolPromise;
+
+  const offset = (filter.page - 1) * pageSize;
+
+  const { recordset: totalProductCount } = await pool.query`
+    SELECT
+      COUNT(*) AS cnt
+      FROM 
+        (SELECT * FROM wishlists WHERE user_id = ${userId}) wl 
+          LEFT JOIN products p ON wl.product_id = p.product_id
+          LEFT JOIN currentPriceView cp ON wl.product_id = cp.product_id
+          LEFT JOIN wishlistCountView wc ON wl.product_id = wc.product_id`;
+
+  const { recordset: products } = await pool.query`
+    SELECT
+      p.product_id, 
+      p.title,
+      cp.current_price,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.termination_date), 120) AS termination_date, 
+      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages 
+      WHERE product_id = p.product_id) AS image_url,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.created_at), 120) AS created_at,
+      CASE 
+      WHEN wc.like_count IS NULL THEN 0
+      ELSE wc.like_count
+      END AS like_count
+    FROM (SELECT * FROM wishlists WHERE user_id = ${userId}) wl 
+      LEFT JOIN products p ON wl.product_id = p.product_id
+      LEFT JOIN currentPriceView cp ON wl.product_id = cp.product_id
+      LEFT JOIN wishlistCountView wc ON wl.product_id = wc.product_id
+    ORDER BY p.created_at DESC
+    OFFSET ${offset} ROWS
+    FETCH NEXT ${pageSize} ROWS ONLY;`;
+
+  return { totalProductCount, products };
+};
