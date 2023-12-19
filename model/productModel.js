@@ -218,3 +218,42 @@ exports.deleteProductByProductId = async function (productId) {
 
   return recordset;
 };
+
+exports.getSearchPage = async function (filter, pageSize) {
+  const pool = await poolPromise;
+
+  const offset = (filter.page - 1) * pageSize;
+
+  console.log(offset);
+
+  const { recordset: totalProductCount } = await pool.query`
+    SELECT
+      COUNT(*) AS cnt
+    FROM products p
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')`;
+
+  const { recordset: products } = await pool.query`
+    SELECT
+      p.product_id, 
+      p.title,
+      cp.current_price,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.termination_date), 120) AS termination_date, 
+      (SELECT TOP 1 'http://localhost:8081/images/' + image_name FROM productImages 
+        WHERE product_id = p.product_id) AS image_url,
+      CONVERT(VARCHAR, DATEADD(HOUR, 9, p.created_at), 120) AS created_at,
+      CASE 
+        WHEN wc.like_count IS NULL THEN 0
+        ELSE wc.like_count
+      END AS like_count
+    FROM products p
+      LEFT JOIN currentPriceView cp ON p.product_id = cp.product_id
+      LEFT JOIN wishlistCountView wc ON p.product_id = wc.product_id
+    WHERE p.product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중') 
+      AND p.title LIKE ${`%${filter.query}%`} 
+    ORDER BY like_count DESC
+    OFFSET ${offset} ROWS
+    FETCH NEXT ${pageSize} ROWS ONLY;
+  `;
+
+  return { totalProductCount, products };
+};

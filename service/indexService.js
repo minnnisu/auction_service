@@ -1,3 +1,4 @@
+const HttpError = require("../error/HttpError");
 const productModel = require("../model/productModel");
 const PAGE_UNIT = 10; // 한 페이지 당 게시물 갯수
 const GROUP_UNIT = 10; // 그룹 당 페이지 갯수
@@ -189,4 +190,43 @@ exports.getLatestPage = async function (query) {
 
   const filteredProducts = filterProduct(products);
   return { metaData, products: filteredProducts };
+};
+
+exports.getSearchPage = async function (query) {
+  if (query.query === undefined || query.query.trim() === "") {
+    throw new HttpError(404, "not_exist_product_error", {
+      isShowErrPage: true,
+      isShowCustomeMsg: true,
+      CustomeMsg: "잘못된 요청입니다.",
+    });
+  }
+
+  const filter = { ...query };
+  console.log(`query: ${query.query}`);
+
+  if (query.page) {
+    filter["page"] = query.page;
+  } else {
+    filter["page"] = 1;
+  }
+
+  const { totalProductCount, products } = await productModel.getSearchPage(
+    filter,
+    PAGE_UNIT
+  );
+
+  const metaData = pagination(
+    totalProductCount[0].cnt,
+    PAGE_UNIT,
+    GROUP_UNIT,
+    Number(filter.page)
+  );
+
+  metaData.url = `http://localhost:8081/search/?query=${filter.query}&page=`;
+
+  const filteredProducts = filterProduct(products);
+  return {
+    metaData: { ...metaData, query: filter.query },
+    products: filteredProducts,
+  };
 };
