@@ -1,5 +1,5 @@
 const productModel = require("../model/productModel");
-const PAGE_UNIT = 3; // 한 페이지 당 게시물 갯수
+const PAGE_UNIT = 10; // 한 페이지 당 게시물 갯수
 const GROUP_UNIT = 10; // 그룹 당 페이지 갯수
 
 function formatCreatedAt(time) {
@@ -173,7 +173,7 @@ exports.getLatestPage = async function (query) {
   }
 
   // totalProductCount - 전체 게시물 갯수
-  const { totalProductCount, products } = await productModel.getPopularPage(
+  const { totalProductCount, products } = await productModel.getLatestPage(
     filter,
     PAGE_UNIT
   );

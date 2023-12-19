@@ -3,7 +3,7 @@ const { poolPromise } = require("./index");
 exports.getMainPage = async function () {
   const pool = await poolPromise;
 
-  const { recordset: latestProducts } = await pool.query`
+  const { recordset: popularProducts } = await pool.query`
     SELECT TOP 5 
       product_id, 
       title,
@@ -15,9 +15,9 @@ exports.getMainPage = async function () {
       like_count
     FROM products p
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
-    ORDER BY like_count`;
+    ORDER BY like_count DESC`;
 
-  const { recordset: popularProducts } = await pool.query`
+  const { recordset: latestProducts } = await pool.query`
     SELECT TOP 5
       product_id, 
       title,
@@ -29,7 +29,7 @@ exports.getMainPage = async function () {
       like_count
     FROM products p
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
-    ORDER BY created_at`;
+    ORDER BY created_at DESC`;
 
   return { latestProducts, popularProducts };
 };
@@ -64,7 +64,7 @@ exports.getPopularPage = async function (filter, pageSize) {
   return { totalProductCount, products };
 };
 
-exports.getPopularPage = async function (filter, pageSize) {
+exports.getLatestPage = async function (filter, pageSize) {
   const pool = await poolPromise;
 
   const offset = (filter.page - 1) * pageSize;

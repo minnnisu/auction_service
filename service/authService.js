@@ -66,7 +66,6 @@ exports.signup = async function (userInfo) {
   ];
 
   const { isValid, message } = checkPatterndValid(patternCheckList);
-  console.log(isValid);
   if (!isValid) {
     throw new HttpError(422, message);
   }
