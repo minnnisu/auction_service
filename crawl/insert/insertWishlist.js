@@ -33,7 +33,7 @@ async function addWishlist(users, i) {
         FROM users
         ORDER BY NEWID();`;
 
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 100000; i++) {
     await addWishlist(users, i);
   }
 })();

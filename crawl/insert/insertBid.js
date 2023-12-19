@@ -1,17 +1,22 @@
 const { poolPromise } = require("../../model");
 const { suggestBidAmount } = require("../../service/bidService");
 
-async function addBid() {
+async function addBid(users, i) {
   try {
     const pool = await poolPromise;
-    const { recordset: user } = await pool.query`SELECT TOP 1 user_id
-        FROM users
-        ORDER BY NEWID();`;
+    const user_id = users[Math.floor(i / 5000)].user_id;
+    console.log(i);
 
-    const { recordset: product } =
-      await pool.query`SELECT TOP 1 product_id, current_price, min_price
-    FROM products
-    ORDER BY NEWID();`;
+    const { recordset: product } = await pool.query`
+      SELECT TOP 1 
+        p.product_id, 
+        p.min_price,
+        cp.current_price
+      FROM products p
+        LEFT JOIN currentPriceView cp ON p.product_id = cp.product_id
+        LEFT JOIN productStatus ps ON p.product_id = ps.product_id
+      WHERE ps.status = '진행중'
+      ORDER BY NEWID();`;
 
     let price = 0;
 
@@ -24,7 +29,7 @@ async function addBid() {
 
     await suggestBidAmount({
       product_id: product[0].product_id,
-      user_id: user[0].user_id,
+      user_id,
       price,
     });
   } catch (error) {
@@ -33,12 +38,13 @@ async function addBid() {
 }
 
 (async () => {
-  async function asyncLoop() {
-    for (let i = 0; i < 10000; i++) {
-      console.log(i);
-      await addBid();
-    }
-  }
+  const pool = await poolPromise;
+  const { recordset: users } = await pool.query`
+  SELECT TOP 5000 user_id
+  FROM users
+  ORDER BY NEWID();`;
 
-  await asyncLoop();
+  for (let i = 0; i < 900000; i++) {
+    await addBid(users, i);
+  }
 })();

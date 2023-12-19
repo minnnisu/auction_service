@@ -3,8 +3,9 @@ const fs = require("fs");
 
 const filePath = "crawl/user/user.json";
 
-async function signup(user) {
+async function signup(user, index) {
   try {
+    console.log(index);
     await authService.signup(user);
   } catch (error) {
     console.log(error);
@@ -19,8 +20,7 @@ fs.readFile(filePath, "utf8", async (err, data) => {
 
   const users = JSON.parse(data);
   const promises = users.map(async (user, index) => {
-    console.log(index);
-    await signup(user);
+    await signup(user, index);
   });
 
   await Promise.all(promises);

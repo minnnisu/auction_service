@@ -3,7 +3,7 @@ const { addNewProduct } = require("../../model/common");
 const fs = require("fs");
 
 const userJsonPath = "crawl/user/user.json";
-const productJsonPath = "crawl/product/product.json";
+const productJsonPath = "crawl/product/product2.json";
 
 async function addProduct(product, index) {
   try {
@@ -52,8 +52,6 @@ fs.readFile(productJsonPath, "utf8", async (err, data) => {
       console.error("파일 읽기 에러:", err);
       return;
     }
-
-    const users = JSON.parse(data);
 
     const promises = products.map(async (product, index) => {
       await addProduct(product, index);

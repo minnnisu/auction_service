@@ -41,16 +41,19 @@ def crawl(url) :
     else:
         print('웹 페이지를 다운로드하는데 실패했습니다. 상태 코드:', response.status_code)
 
-for i in range(1,126):
+for i in range(51,125):
     # 크롤링할 웹 페이지 URL
-    url = f'https://web.joongna.com/search?page={i}&category=7'
-    crawl(url)
+    url = f'https://web.joongna.com/search?page={i}&category=2'
+    try:
+        crawl(url)
+    except:
+        pass
     
 # 딕셔너리를 JSON 형식으로 변환하여 파일에 저장 (ensure_ascii=False 추가)
 json_data = json.dumps(products, indent=2, ensure_ascii=False)
 
 # 파일에 쓰기 (encoding='utf-8' 추가)
-with open("crawl/product/product.json", "w", encoding='utf-8') as json_file:
+with open("crawl/product/product3.json", "w", encoding='utf-8') as json_file:
     json_file.write(json_data)
 
 print("JSON 데이터가 파일에 저장되었습니다.")
