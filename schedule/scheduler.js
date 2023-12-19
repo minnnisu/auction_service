@@ -45,12 +45,15 @@ async function startServer() {
 
 async function registerScheduleCallback(productId) {
   try {
-    const product = await productModel.getProductByProductId(productId);
-    if (product.length < 1) {
+    const productPrice = await productModel.getProductPriceByProductId(
+      productId
+    );
+    if (productPrice.length < 1) {
       console.error(`Accessing a Non-existent Product: ${productId}`);
       return;
     }
-    if (product[0].current_price === 0) {
+
+    if (productPrice[0].current_price === 0) {
       await productStatusModel.changeProductStatusByProdctId(productId, "유찰");
     } else {
       await productStatusModel.changeProductStatusByProdctId(productId, "종료");
@@ -70,7 +73,7 @@ function register(productId, terminationDate) {
     });
 
     jobs[`product_${productId}`] = newJob;
-    console.log(`The schedule has been registered: ${productId}`);
+    console.error(`The schedule has been registered: ${productId}`);
   } catch (error) {
     console.error(`fail to register the schedule: ${productId}`);
     throw new HttpError(500, "server_error");
@@ -93,6 +96,7 @@ function update(productId, terminationDate) {
     cancel(productId);
     register(productId, terminationDate);
   } catch (error) {
+    console.log(error);
     throw new HttpError(500, "server_error");
   }
 }

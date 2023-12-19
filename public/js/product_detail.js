@@ -545,7 +545,7 @@ async function showReflies(btn) {
         ""
       );
     } else {
-      replyItems = `<p class="no_comment">답글이 없습니다.</p>`;
+      replyItems = `<p class="no_reply">답글이 없습니다.</p>`;
     }
     replyList.innerHTML = replyItems;
     repliesContainer.appendChild(replyList);

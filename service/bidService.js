@@ -75,5 +75,5 @@ exports.cancelBid = async function (info) {
     throw new HttpError(404, "unable_to_restrict_bid_error");
   }
 
-  await bidModel.deleteBid(bid_id, originalBid[0].product_id);
+  await bidModel.deleteBid(bid_id);
 };

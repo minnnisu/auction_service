@@ -48,16 +48,20 @@ exports.updateTimeOverProduct = async function () {
     SET status = '유찰'
     WHERE product_id IN (
       SELECT p.product_id
-      FROM products p INNER JOIN productStatus ps ON p.product_id = ps.product_id
-      WHERE ps.status = '진행중' AND termination_date < GETDATE() AND p.current_price = 0);`;
+      FROM products p 
+        LEFT JOIN productStatus ps ON p.product_id = ps.product_id
+        LEFT JOIN currentPriceView cp ON p.product_id = cp.product_id
+      WHERE ps.status = '진행중' AND termination_date < GETDATE() AND cp.current_price = 0);`;
 
   await pool.query`
     UPDATE productStatus
     SET status = '종료'
     WHERE product_id IN (
       SELECT p.product_id
-      FROM products p INNER JOIN productStatus ps ON p.product_id = ps.product_id
-      WHERE ps.status = '진행중' AND termination_date < GETDATE() AND p.current_price != 0);`;
+      FROM products p 
+        LEFT JOIN productStatus ps ON p.product_id = ps.product_id
+        LEFT JOIN currentPriceView cp ON p.product_id = cp.product_id
+      WHERE ps.status = '진행중' AND termination_date < GETDATE() AND cp.current_price != 0);`;
 };
 
 exports.getActiveAuctionItemInfo = async function () {
@@ -67,10 +71,10 @@ exports.getActiveAuctionItemInfo = async function () {
     SELECT 
       p.product_id, 
       CONVERT(VARCHAR, DATEADD(HOUR, 9, p.termination_date), 120) AS termination_date,
-      p.current_price
+      cp.current_price
     FROM products p 
-      INNER JOIN productStatus ps 
-      ON p.product_id = ps.product_id
+      LEFT JOIN productStatus ps ON p.product_id = ps.product_id
+      LEFT JOIN currentPriceView cp ON p.product_id = cp.product_id
     WHERE ps.status = '진행중' AND termination_date > GETDATE();`;
 
   return recordset;

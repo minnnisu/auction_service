@@ -554,6 +554,11 @@
   margin: 10px 0 0 25px;
 }
 
+.no_reply {
+  font-size: 14px;
+  margin-top: 20px;
+}
+
 .reply_input_wrapper {
   display: flex;
   border: 1px solid #868e96;

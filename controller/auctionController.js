@@ -58,7 +58,6 @@ exports.getProductBidList = async function (req, res, next) {
       req.params.product_id,
       req.user
     );
-    console.log(bid);
     res.json(bid);
   } catch (error) {
     next(error);
