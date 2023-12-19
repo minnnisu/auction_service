@@ -66,3 +66,20 @@ exports.getSignUpPage = async function (req, res, next) {
     next(new HttpError(500, "server_error", { isShowErrPage: true }));
   }
 };
+
+exports.getSearchPage = async function (req, res, next) {
+  try {
+    const { metaData, products } = await indexService.getSearchPage(req.query);
+    res.render("search_page", {
+      header: req.headerData,
+      metaData,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    if (error instanceof HttpError) {
+      return next(error);
+    }
+    return next(new HttpError(500, "server_error", { isShowErrPage: true }));
+  }
+};

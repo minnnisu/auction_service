@@ -17,6 +17,12 @@ router.get(
 );
 
 router.get(
+  "/search",
+  headerMiddleware.getHeaderData,
+  indexController.getSearchPage
+);
+
+router.get(
   "/login",
   headerMiddleware.getHeaderData,
   authMiddleware.isLogoutStatusClosure({

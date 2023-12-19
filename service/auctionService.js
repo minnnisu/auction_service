@@ -7,6 +7,7 @@ const productImageModel = require("../model/productImageModel");
 const wishlistModel = require("../model/wishlistModel");
 const userModel = require("../model/userModel");
 const bidModel = require("../model/bidModel");
+const scheduler = require("../schedule/scheduler");
 const { ereaseImageFiles } = require("../module/imageEraser");
 
 function checkTitleVaild(title) {
@@ -138,6 +139,8 @@ exports.addNewProduct = async function (info) {
       images: filenames,
     });
 
+    scheduler.register(newProductId, termination_date);
+
     return newProductId;
   } catch (error) {
     ereaseImageFiles("public/images/", filenames);
@@ -195,6 +198,8 @@ exports.updateProduct = async function (info) {
       target_delete_image: JSON.parse(info.target_delete_image),
     });
 
+    scheduler.update(product_id, termination_date);
+
     ereaseImageFiles("public/images/", JSON.parse(info.target_delete_image));
   } catch (error) {
     console.log(error);
@@ -234,6 +239,8 @@ exports.deleteProduct = async function (info) {
 
     await productModel.deleteProductByProductId(product_id);
 
+    scheduler.cancel(product_id);
+
     ereaseImageFiles("public/images/", filteredProductImages);
   } catch (error) {
     console.log(error);
@@ -250,7 +257,10 @@ exports.getProductPage = async function (productId, userId) {
     });
   }
 
-  const productInfo = await productModel.getDetailProductByProductId(productId);
+  const productInfo = await productModel.getDetailProductByProductId(
+    productId,
+    userId
+  );
   if (productInfo.length < 1) {
     throw new HttpError(404, "not_exist_product_error", {
       isShowErrPage: true,

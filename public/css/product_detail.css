@@ -1,6 +1,44 @@
-.dropdown_overlay {
-  display: none;
+/* 스타일링을 위한 CSS */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
 }
+
+.more_btn {
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 100px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 12px 0 rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+  z-index: 1;
+}
+
+.dropdown-content.show {
+  display: block;
+}
+
+.dropdown-content .dropdown_item {
+  color: #212529;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+/* .dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+} */
 
 .modal {
   display: none;
@@ -322,12 +360,11 @@
   display: flex;
   font-size: 14px;
   align-items: center;
+  color: #353535;
 }
 
-.right_wrapper {
-  color: #353535;
-  display: flex;
-  align-items: center;
+.right_wrapper .status {
+  padding: 0 5px;
 }
 
 .right_wrapper .bid {
@@ -340,6 +377,7 @@
   display: inline-block;
   border-radius: 7px;
   box-sizing: border-box;
+  font-size: 14px;
 }
 
 .right_wrapper .bid:hover {
@@ -595,6 +633,11 @@
 
 .reflies_container {
   margin: 10px 0 0 25px;
+}
+
+.no_reply {
+  font-size: 14px;
+  margin-top: 20px;
 }
 
 .reply_input_wrapper {
