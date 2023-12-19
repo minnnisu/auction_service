@@ -39,7 +39,7 @@ exports.getDetailCommentByProductId = async function (productId, userId) {
             ELSE 0
         END AS is_my_comment,
         is_deleted
-      FROM comments c INNER JOIN users u ON c.nickname = u.nickname
+      FROM comments c LEFT JOIN users u ON c.nickname = u.nickname
       WHERE c.product_id = ${productId};`;
   } else {
     result = await pool.query`

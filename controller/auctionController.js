@@ -39,6 +39,8 @@ exports.getProductPage = async function (req, res, next) {
       req.params.product_id,
       req.user
     );
+
+    console.log(productPost);
     res.render("product_detail", {
       header: req.headerData,
       ...productPost,

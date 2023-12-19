@@ -22,6 +22,51 @@ exports.getNicknameByUserId = async function (userId) {
   return recordset[0].nickname;
 };
 
+exports.updateUser = async function (userUpdateInfo, userId) {
+  const { username, nickname, email, telephone } = userUpdateInfo;
+
+  const pool = await poolPromise;
+  await pool.query`
+      UPDATE users
+      SET 
+        username = ${username},
+        nickname = ${nickname},
+        email = ${email},
+        telephone = ${telephone}
+      WHERE user_id = ${userId}`;
+};
+
+exports.deleteUser = async function (userId) {
+  const pool = await poolPromise;
+  const transaction = await pool.transaction().begin();
+
+  try {
+    await transaction.request().query`
+      UPDATE productStatus
+      SET status = '철회'
+      WHERE product_id IN 
+          (SELECT product_id 
+          FROM 
+              (SELECT product_id 
+              FROM products p 
+                  LEFT JOIN users u ON p.nickname = u.nickname 
+              WHERE u.user_id = ${userId}) p)`;
+
+    await transaction.request().query`
+      DELETE
+      FROM users
+      WHERE user_id = ${userId}`;
+
+    await transaction.commit();
+  } catch (err) {
+    if (transaction && transaction._acquiredConnection) {
+      await transaction.rollback();
+    }
+
+    throw err;
+  }
+};
+
 exports.checkIdDuplication = async function (id) {
   const pool = await poolPromise;
   const { recordset } =

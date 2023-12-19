@@ -15,6 +15,29 @@ exports.getUserPage = async function (req, res, next) {
   }
 };
 
+exports.updateUser = async function (req, res, next) {
+  try {
+    await userService.updateUser(req.body, req.user);
+    res.status(201).json({ message: "Successfully update user!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteUser = async function (req, res, next) {
+  try {
+    await userService.deleteUser(req.user);
+    req.logout(function (err) {
+      if (err) {
+        return next(new HttpError(500, "logout_error"));
+      }
+      return res.json({ message: "Successfully delete user!" });
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getUserSellPage = async function (req, res, next) {
   try {
     const user = await userService.getUser(req.user);

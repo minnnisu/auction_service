@@ -51,7 +51,7 @@ exports.getBidProductId = async function (productId, userId) {
       CONVERT(VARCHAR, DATEADD(HOUR, 9, b.created_at), 120) AS created_at,
       (SELECT 0) AS is_my_bid,
       (SELECT 0) AS editable
-    FROM bids b INNER JOIN users u ON b.user_id = u.user_id WHERE product_id = ${productId}
+    FROM bids b LEFT JOIN users u ON b.user_id = u.user_id WHERE product_id = ${productId}
     ORDER BY created_at DESC;`;
   }
 

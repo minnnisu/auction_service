@@ -15,6 +15,7 @@ const auctionApiRouter = require("./api/routes/apis/auctionRouter");
 const bidApiRouter = require("./api/routes/apis/bidRouter");
 const commentApiRouter = require("./api/routes/apis/commentRouter");
 const replyApiRouter = require("./api/routes/apis/replyRouter");
+const userApiRouter = require("./api/routes/apis/userRouter");
 
 const userRouter = require("./api/routes/pages/userRouter");
 const indexRouter = require("./api/routes/pages/indexRouter");
@@ -58,6 +59,7 @@ app.use("/api/auction/item", auctionApiRouter);
 app.use("/api/auction/item/bid", bidApiRouter);
 app.use("/api/auction/item/comment", commentApiRouter);
 app.use("/api/auction/item/comment/reply", replyApiRouter);
+app.use("/api/user", userApiRouter);
 
 app.use("/", indexRouter);
 app.use("/user", userRouter);

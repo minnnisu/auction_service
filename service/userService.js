@@ -1,7 +1,23 @@
 const HttpError = require("../error/HttpError");
 const userModel = require("../model/userModel");
+
 const PAGE_UNIT = 10; // 한 페이지 당 게시물 갯수
 const GROUP_UNIT = 10; // 그룹 당 페이지 갯수
+
+function checkPatterndValid(patternCheckList) {
+  for (let index = 0; index < patternCheckList.length; index++) {
+    const patternCheckItem = patternCheckList[index];
+
+    const pattern = patternCheckItem.pattern;
+    if (!pattern.test(patternCheckItem.target))
+      return {
+        isValid: false,
+        message: `not_match_${patternCheckItem.type}_condition_error`,
+      };
+  }
+
+  return { isValid: true, message: null };
+}
 
 function formatCreatedAt(time) {
   const postDate = new Date(time);
@@ -140,6 +156,47 @@ exports.getUser = async function (id) {
   };
 
   return fiteredUser;
+};
+
+exports.updateUser = async function (userUpdateInfo, userId) {
+  if (
+    userUpdateInfo.username === undefined ||
+    userUpdateInfo.nickname === undefined ||
+    userUpdateInfo.email === undefined ||
+    userUpdateInfo.telephone === undefined
+  ) {
+    throw new HttpError(400, "not_contain_nessary_body");
+  }
+
+  const { nickname, email, telephone } = userUpdateInfo;
+
+  if (await userModel.checkNicknameDuplication(nickname)) {
+    throw new HttpError(409, "nickname_duplication_error");
+  }
+
+  const patternCheckList = [
+    {
+      type: "email",
+      pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      target: email,
+    },
+    {
+      type: "telephone",
+      pattern: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
+      target: telephone,
+    },
+  ];
+
+  const { isValid, message } = checkPatterndValid(patternCheckList);
+  if (!isValid) {
+    throw new HttpError(422, message);
+  }
+
+  await userModel.updateUser(userUpdateInfo, userId);
+};
+
+exports.deleteUser = async function (userId) {
+  await userModel.deleteUser(userId);
 };
 
 exports.getUserSellPage = async function (query, userId) {
