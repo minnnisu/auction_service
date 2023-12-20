@@ -55,20 +55,34 @@ exports.updateUser = async function (userUpdateInfo, userId) {
   const transaction = await pool.transaction().begin();
 
   try {
-    await transaction.request().query`
+    if (username) {
+      await transaction.request().query`
       UPDATE users
       SET 
-        username = ${username},
-        email = ${email},
-        telephone = ${telephone}
+        username = ${username}
       WHERE user_id = ${userId}`;
-
-    await transaction.request().query`
+    }
+    if (nickname) {
+      await transaction.request().query`
       UPDATE userNickname
       SET 
         nickname = ${nickname}
       WHERE user_id = ${userId}`;
-
+    }
+    if (email) {
+      await transaction.request().query`
+      UPDATE users
+      SET 
+        email = ${email}
+      WHERE user_id = ${userId}`;
+    }
+    if (telephone) {
+      await transaction.request().query`
+      UPDATE users
+      SET 
+        telephone = ${telephone}
+      WHERE user_id = ${userId}`;
+    }
     await transaction.commit();
   } catch (err) {
     if (transaction && transaction._acquiredConnection) {

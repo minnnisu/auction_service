@@ -45,15 +45,10 @@ exports.getUserSellPage = async function (req, res, next) {
       req.query,
       req.user
     );
-    // res.render("popular_product_page", {
-    //   header: req.headerData,
-    //   metaData,
-    //   products,
-    // });
-    res.json({
+    res.render("user_sell", {
       header: req.headerData,
-      user,
       metaData,
+      user,
       products,
     });
   } catch (error) {
@@ -67,18 +62,15 @@ exports.getUserSellPage = async function (req, res, next) {
 
 exports.getUserBidPage = async function (req, res, next) {
   try {
+    const user = await userService.getUser(req.user);
     const { metaData, products } = await userService.getUserBidPage(
       req.query,
       req.user
     );
-    // res.render("popular_product_page", {
-    //   header: req.headerData,
-    //   metaData,
-    //   products,
-    // });
-    res.json({
+    res.render("user_bid", {
       header: req.headerData,
       metaData,
+      user,
       products,
     });
   } catch (error) {
@@ -92,18 +84,15 @@ exports.getUserBidPage = async function (req, res, next) {
 
 exports.getUserSuccessfulBidPage = async function (req, res, next) {
   try {
+    const user = await userService.getUser(req.user);
     const { metaData, products } = await userService.getUserSuccessfulBidPage(
       req.query,
       req.user
     );
-    // res.render("popular_product_page", {
-    //   header: req.headerData,
-    //   metaData,
-    //   products,
-    // });
-    res.json({
+    res.render("user_successful_bid", {
       header: req.headerData,
       metaData,
+      user,
       products,
     });
   } catch (error) {
@@ -117,19 +106,33 @@ exports.getUserSuccessfulBidPage = async function (req, res, next) {
 
 exports.getUserWishlistPage = async function (req, res, next) {
   try {
+    const user = await userService.getUser(req.user);
     const { metaData, products } = await userService.getUserWishlistPage(
       req.query,
       req.user
     );
-    // res.render("popular_product_page", {
-    //   header: req.headerData,
-    //   metaData,
-    //   products,
-    // });
-    res.json({
+    res.render("user_wishlist", {
       header: req.headerData,
       metaData,
+      user,
       products,
+    });
+  } catch (error) {
+    console.log(error);
+    if (error instanceof HttpError) {
+      return next(error);
+    }
+    return next(new HttpError(500, "server_error", { isShowErrPage: true }));
+  }
+};
+
+exports.getUserUpdatePage = async function (req, res, next) {
+  try {
+    const user = await userService.getUser(req.user);
+    res.render("user_update", {
+      header: req.headerData,
+      metaData,
+      user,
     });
   } catch (error) {
     console.log(error);
