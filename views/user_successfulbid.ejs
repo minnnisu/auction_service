@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <%- include('include/head') %>
+        <link rel="stylesheet" href="/css/my_page.css">
+        <link rel="stylesheet" href="/css/main.css">
+        <title>마이페이지</title>
+</head>
+
+<body>
+    <%- include('include/header') %>
+        <div class="user_info_container">
+            <div class="user_info">
+                <h2 class="user_info_nickname">
+                    닌텐도
+                    <span class="user_info_name">
+                        aba6523
+                    </span>
+                </h2>
+                <ul class="user_info_details">
+                    <li>
+                        aba2083@gmail.com
+                    </li>
+                    <li>
+                        010-2083-6523
+                    </li>
+                    <li>
+                        aba6523
+                    </li>
+                </ul>
+                <div class="user_info_avatar">
+                    <img class="avatar" src="http://localhost:8081/avatar/avatar.png" alt="아바타 이미지">
+                </div>
+            </div>
+            <div class="user_record">
+                <div class="user_menu_list">
+                    <ul>
+                        <li><a href="http://localhost:8081/user/sell">판매 내역</a></li>
+                        <li><a href="http://localhost:8081/user/bid">입찰 내역</a></li>
+                        <li><a class="active" href="http://localhost:8081/user/successfulbid">낙찰 내역</a></li>
+                        <li><a href="http://localhost:8081/user/wishlist">관심 상품</a></li>
+                        <li><a href="">회원 정보 수정</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <section class="article_list_paddingless">
+            <div class="card_container">
+                <% products.map((product)=> { %>
+                    <div class="card_wrap">
+                        <article class="card">
+                            <a class="card_link">
+                                <div class="card_photo">
+                                    <img src="<%= product.image_url %>" alt="<%= product.title %> 이미지">
+                                </div>
+                                <div class="card_desc">
+                                    <a class="card_title" href="auction/item/<%= product.product_id %>">
+                                        <%= product.title %>
+                                    </a>
+                                    <div class="card_row2">
+                                        <span class="card_current_price">
+                                            <%= product.current_price %>원
+                                        </span>
+                                    </div>
+                                    <div class="card_row3">
+                                        <span class="card_count">
+                                            관심 <%= product.like_count %>
+                                        </span>
+                                        <span class="card_bar">
+                                            |
+                                        </span>
+                                        <span class="card_created_at">
+                                            <%= product.created_at %>
+                                        </span>
+                                    </div>
+                                    <div class="card_row3">
+                                        <span class="card_termination_date">
+                                            마감 <%= product.termination_date %>
+                                        </span>
+                                    </div>
+                            </a>
+                        </article>
+                    </div>
+                    <% }) %>
+            </div>
+        </section>
+        <div class="pagination_container">
+            <a href="<%= metaData.url %><%=metaData.group.prevGroupPage %>" <% if (metaData.group.prevGroupPage===null)
+                { %>
+                class="prev_page disabled" onclick="return false;" <% } else { %> class="prev_page" <% } %>>
+                        이전
+            </a>
+            <% for (let page=metaData.page.startPage; page <=metaData.page.endPage; page++) { %>
+                <a href="<%= metaData.url %><%= page %>" <% if (metaData.page.currentPage===page) { %>
+                    class="current_page" <% } %>>
+                        <%= page %>
+                </a>
+                <% } %>
+                    <a href="<%= metaData.url %><%=metaData.group.nextGroupPage %>" <% if
+                        (metaData.group.nextGroupPage===null) { %> class="next_page disabled" onclick="return false;" <%
+                            } else { %> class="prev_page" <% } %>>
+                                다음
+                    </a>
+        </div>
+</body>
+
+</html>

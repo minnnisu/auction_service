@@ -45,14 +45,8 @@ exports.getUserSellPage = async function (req, res, next) {
       req.query,
       req.user
     );
-    // res.render("popular_product_page", {
-    //   header: req.headerData,
-    //   metaData,
-    //   products,
-    // });
-    res.json({
+    res.render("user_sell", {
       header: req.headerData,
-      user,
       metaData,
       products,
     });
@@ -71,12 +65,7 @@ exports.getUserBidPage = async function (req, res, next) {
       req.query,
       req.user
     );
-    // res.render("popular_product_page", {
-    //   header: req.headerData,
-    //   metaData,
-    //   products,
-    // });
-    res.json({
+    res.render("user_bid", {
       header: req.headerData,
       metaData,
       products,
@@ -96,12 +85,7 @@ exports.getUserSuccessfulBidPage = async function (req, res, next) {
       req.query,
       req.user
     );
-    // res.render("popular_product_page", {
-    //   header: req.headerData,
-    //   metaData,
-    //   products,
-    // });
-    res.json({
+    res.render("user_successfulbid", {
       header: req.headerData,
       metaData,
       products,
@@ -121,16 +105,12 @@ exports.getUserWishlistPage = async function (req, res, next) {
       req.query,
       req.user
     );
-    // res.render("popular_product_page", {
-    //   header: req.headerData,
-    //   metaData,
-    //   products,
-    // });
-    res.json({
+    res.render("user_wishlist", {
       header: req.headerData,
       metaData,
       products,
     });
+    
   } catch (error) {
     console.log(error);
     if (error instanceof HttpError) {
