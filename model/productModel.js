@@ -223,14 +223,12 @@ exports.getSearchPage = async function (filter, pageSize) {
 
   const offset = (filter.page - 1) * pageSize;
 
-  console.log(offset);
-
   const { recordset: totalProductCount } = await pool.query`
     SELECT
       COUNT(*) AS cnt
     FROM products p
     WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
-    UNION
+    INTERSECT
     SELECT
       COUNT(*) AS cnt
     FROM products p

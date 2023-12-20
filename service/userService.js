@@ -159,40 +159,44 @@ exports.getUser = async function (id) {
 };
 
 exports.updateUser = async function (userUpdateInfo, userId) {
-  if (
-    userUpdateInfo.username === undefined ||
-    userUpdateInfo.nickname === undefined ||
-    userUpdateInfo.email === undefined ||
-    userUpdateInfo.telephone === undefined
-  ) {
-    throw new HttpError(400, "not_contain_nessary_body");
+  const updateTarget = {};
+  if (userUpdateInfo.username !== undefined) {
+    updateTarget.username = userUpdateInfo.username;
   }
 
-  const { nickname, email, telephone } = userUpdateInfo;
-
-  if (await userModel.checkNicknameDuplication(nickname)) {
-    throw new HttpError(409, "nickname_duplication_error");
+  if (userUpdateInfo.nickname !== undefined) {
+    if (await userModel.checkNicknameDuplication(userUpdateInfo.nickname)) {
+      throw new HttpError(409, "nickname_duplication_error");
+    }
+    updateTarget.nickname = userUpdateInfo.nickname;
   }
 
-  const patternCheckList = [
-    {
+  const patternCheckList = [];
+
+  if (userUpdateInfo.email !== undefined) {
+    patternCheckList.push({
       type: "email",
       pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      target: email,
-    },
-    {
+      target: userUpdateInfo.email,
+    });
+    updateTarget.email = userUpdateInfo.email;
+  }
+
+  if (userUpdateInfo.telephone !== undefined) {
+    patternCheckList.push({
       type: "telephone",
       pattern: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
-      target: telephone,
-    },
-  ];
+      target: userUpdateInfo.telephone,
+    });
+    updateTarget.telephone = userUpdateInfo.telephone;
+  }
 
   const { isValid, message } = checkPatterndValid(patternCheckList);
   if (!isValid) {
     throw new HttpError(422, message);
   }
 
-  await userModel.updateUser(userUpdateInfo, userId);
+  await userModel.updateUser(updateTarget, userId);
 };
 
 exports.deleteUser = async function (userId) {

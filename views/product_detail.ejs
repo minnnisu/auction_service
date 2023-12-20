@@ -110,15 +110,19 @@
         <% if(product.productInfo.status === "진행중" && product.productInfo.nickname !== null && !product.productInfo.is_my_product) { %>
         <button class="bid" onclick="openBidSuggestModal()">입찰가 제안</button>
         <% } %>
-        <% if(product.productInfo.is_my_product){ %>
+        <% if(header.user.is_login_status) { %>
         <div class="dropdown" id="myDropdown">
           <span class="material-symbols-outlined more_btn" onclick="toggleDropdown(event)">
             more_vert
           </span>
           <div class="dropdown-content">
+            <% if(product.productInfo.is_my_product){ %>
             <div class="dropdown_item" onclick="editProduct()">수정</div>
             <div class="dropdown_item" onclick="deleteProduct()">삭제</div>
-            <div class="dropdown_item" onclick="addWishlist(this)">위시리스트 추가</div>
+            <% } %>
+            <% if(product.productInfo.nickname !== null ){ %>
+            <div id="wishlist-manage" class=" dropdown_item" onclick="addWishlist()"></div>
+            <% } %>
           </div>
         </div>
         <% } %>

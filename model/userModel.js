@@ -55,20 +55,34 @@ exports.updateUser = async function (userUpdateInfo, userId) {
   const transaction = await pool.transaction().begin();
 
   try {
-    await transaction.request().query`
+    if (username) {
+      await transaction.request().query`
       UPDATE users
       SET 
-        username = ${username},
-        email = ${email},
-        telephone = ${telephone}
+        username = ${username}
       WHERE user_id = ${userId}`;
-
-    await transaction.request().query`
+    }
+    if (nickname) {
+      await transaction.request().query`
       UPDATE userNickname
       SET 
         nickname = ${nickname}
       WHERE user_id = ${userId}`;
-
+    }
+    if (email) {
+      await transaction.request().query`
+      UPDATE users
+      SET 
+        email = ${email}
+      WHERE user_id = ${userId}`;
+    }
+    if (telephone) {
+      await transaction.request().query`
+      UPDATE users
+      SET 
+        telephone = ${telephone}
+      WHERE user_id = ${userId}`;
+    }
     await transaction.commit();
   } catch (err) {
     if (transaction && transaction._acquiredConnection) {
@@ -88,12 +102,13 @@ exports.deleteUser = async function (userId) {
       UPDATE productStatus
       SET status = '철회'
       WHERE product_id IN 
-          (SELECT product_id 
-          FROM 
-              (SELECT product_id 
-              FROM products p 
-                  LEFT JOIN userNickname un ON p.nickname = un.nickname 
-              WHERE un.user_id = ${userId}) p)`;
+        (SELECT product_id 
+        FROM 
+          (SELECT p.product_id 
+          FROM products p 
+            LEFT JOIN productStatus ps ON p.product_id = ps.product_id
+            LEFT JOIN userNickname un ON p.nickname = un.nickname 
+          WHERE un.user_id = ${userId} AND ps.status = '진행중') p)`;
 
     await transaction.request().query`
       DELETE
