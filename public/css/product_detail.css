@@ -13,7 +13,7 @@
   display: none;
   position: absolute;
   background-color: #fff;
-  min-width: 100px;
+  min-width: 140px;
   border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 1px 12px 0 rgba(0, 0, 0, 0.06);
   border-radius: 6px;
@@ -31,14 +31,6 @@
   display: block;
   cursor: pointer;
 }
-
-/* .dropdown-content a:hover {
-  background-color: #ddd;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-} */
 
 .modal {
   display: none;
@@ -236,35 +228,34 @@
 .product_container {
   width: 750px;
   margin: 0 auto;
-  margin-top: 40px;
 }
 
 .product_image_container {
   width: 950px;
   height: 550px;
   position: relative;
-  margin: 40px auto;
+  margin: 40px auto 0 auto;
   overflow: hidden;
 }
 
-.product_image_slider{
-  width:9000px;
+.product_image_slider {
+  width: 9000px;
   position: absolute;
   left: 0;
   top: 0;
   transition: left 0.4s ease-out;
 }
 
-.product_image_slider li:first-child{
+.product_image_slider li:first-child {
   margin-left: 100px;
 }
 
-.product_image_slider li:not(:last-child){
+.product_image_slider li:not(:last-child) {
   float: left;
   margin-right: 100px;
 }
 
-.product_image_slider li{
+.product_image_slider li {
   float: left;
 }
 
@@ -275,8 +266,8 @@
   border-radius: 10px;
 }
 
-.controller span{
-  position:absolute;
+.controller span {
+  position: absolute;
   background-color: transparent;
   color: black;
   text-align: center;
@@ -287,23 +278,23 @@
   cursor: pointer;
 }
 
-.controller span:hover{
+.controller span:hover {
   background-color: rgba(128, 128, 128, 0.11);
 }
 
-.prev{
+.prev {
   left: 10px;
 }
 
-.prev:hover{
+.prev:hover {
   transform: translateX(-10px);
 }
 
-.next{
+.next {
   right: 10px;
 }
 
-.next:hover{
+.next:hover {
   transform: translateX(10px);
 }
 

@@ -4,7 +4,6 @@ const indexService = require("../service/indexService");
 exports.getMainPage = async function (req, res, next) {
   try {
     const products = await indexService.getMainPage();
-    // return res.json({ header: req.headerData, products });
     return res.render("index", { header: req.headerData, products });
   } catch (error) {
     console.log(error);

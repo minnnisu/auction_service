@@ -4,21 +4,47 @@ exports.addNewUser = async function (userInfo) {
   const { id, hashedPassword, username, nickname, telephone, email } = userInfo;
 
   const pool = await poolPromise;
-  await pool.query`INSERT INTO users(user_id, password, username, nickname, telephone, email) VALUES
-                    (${id}, ${hashedPassword}, ${username}, ${nickname}, ${telephone}, ${email});`;
+  const transaction = await pool.transaction().begin();
+
+  try {
+    await transaction.request().query`
+      INSERT INTO users(user_id, password, username, telephone, email) VALUES
+      (${id}, ${hashedPassword}, ${username}, ${telephone}, ${email});`;
+
+    await transaction.request().query`
+      INSERT INTO userNickname(user_id, nickname) VALUES
+      (${id}, ${nickname});`;
+
+    await transaction.commit();
+  } catch (err) {
+    if (transaction && transaction._acquiredConnection) {
+      await transaction.rollback();
+    }
+
+    throw err;
+  }
 };
 
-exports.getUser = async function (id) {
+exports.getUser = async function (userId) {
   const pool = await poolPromise;
-  const { recordset } =
-    await pool.query`SELECT * FROM users WHERE user_id = ${id}`;
+  const { recordset } = await pool.query`
+                    SELECT 
+                      u.user_id, 
+                      u.password, 
+                      u.username, 
+                      un.nickname, 
+                      u.email, 
+                      u.telephone
+                    FROM users u 
+                      LEFT JOIN userNickname un ON u.user_id = un.user_id
+                    WHERE u.user_id = ${userId}`;
   return recordset;
 };
 
 exports.getNicknameByUserId = async function (userId) {
   const pool = await poolPromise;
   const { recordset } =
-    await pool.query`SELECT nickname FROM users WHERE user_id = ${userId}`;
+    await pool.query`SELECT nickname FROM userNickname WHERE user_id = ${userId}`;
   return recordset[0].nickname;
 };
 
@@ -26,14 +52,31 @@ exports.updateUser = async function (userUpdateInfo, userId) {
   const { username, nickname, email, telephone } = userUpdateInfo;
 
   const pool = await poolPromise;
-  await pool.query`
+  const transaction = await pool.transaction().begin();
+
+  try {
+    await transaction.request().query`
       UPDATE users
       SET 
         username = ${username},
-        nickname = ${nickname},
         email = ${email},
         telephone = ${telephone}
       WHERE user_id = ${userId}`;
+
+    await transaction.request().query`
+      UPDATE userNickname
+      SET 
+        nickname = ${nickname}
+      WHERE user_id = ${userId}`;
+
+    await transaction.commit();
+  } catch (err) {
+    if (transaction && transaction._acquiredConnection) {
+      await transaction.rollback();
+    }
+
+    throw err;
+  }
 };
 
 exports.deleteUser = async function (userId) {
@@ -49,8 +92,8 @@ exports.deleteUser = async function (userId) {
           FROM 
               (SELECT product_id 
               FROM products p 
-                  LEFT JOIN users u ON p.nickname = u.nickname 
-              WHERE u.user_id = ${userId}) p)`;
+                  LEFT JOIN userNickname un ON p.nickname = un.nickname 
+              WHERE un.user_id = ${userId}) p)`;
 
     await transaction.request().query`
       DELETE
@@ -81,7 +124,7 @@ exports.checkIdDuplication = async function (id) {
 exports.checkNicknameDuplication = async function (nickname) {
   const pool = await poolPromise;
   const { recordset } =
-    await pool.query`SELECT nickname FROM users WHERE nickname = ${nickname}`;
+    await pool.query`SELECT nickname FROM userNickname WHERE nickname = ${nickname}`;
 
   if (recordset.length > 0) {
     return true;
@@ -133,7 +176,7 @@ exports.getUserBidPage = async function (filter, pageSize, userId) {
     SELECT
       COUNT(*) AS cnt
     FROM 
-      (SELECT * FROM bids WHERE user_id = '7xi6qizi') b
+      (SELECT * FROM bids WHERE user_id = ${userId}) b
           LEFT JOIN products p ON b.product_id = p.product_id
           LEFT JOIN currentPriceView cp ON b.product_id = cp.product_id
           LEFT JOIN wishlistCountView wc ON b.product_id = wc.product_id`;

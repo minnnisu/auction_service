@@ -23,7 +23,7 @@ exports.getBidProductId = async function (productId, userId) {
     SELECT 
       b.bid_id,
       b.product_id,
-      u.nickname,
+      un.nickname,
       b.price,
       b.is_canceled,
       CONVERT(VARCHAR, DATEADD(HOUR, 9, b.created_at), 120) AS created_at,
@@ -36,8 +36,9 @@ exports.getBidProductId = async function (productId, userId) {
         ELSE 0
       END AS editable
     FROM bids b 
-        LEFT OUTER JOIN productStatus p ON b.product_id = p.product_id 
-        LEFT OUTER JOIN users u ON b.user_id = u.user_id 
+      LEFT OUTER JOIN productStatus p ON b.product_id = p.product_id 
+      LEFT OUTER JOIN users u ON b.user_id = u.user_id 
+      LEFT OUTER JOIN userNickname un ON b.user_id = un.user_id 
     WHERE b.product_id = ${productId}
     ORDER BY created_at DESC;`;
   } else {
@@ -45,13 +46,15 @@ exports.getBidProductId = async function (productId, userId) {
     SELECT 
       b.bid_id,
       b.product_id,
-      u.nickname,
+      un.nickname,
       b.price,
       b.is_canceled,
       CONVERT(VARCHAR, DATEADD(HOUR, 9, b.created_at), 120) AS created_at,
       (SELECT 0) AS is_my_bid,
       (SELECT 0) AS editable
-    FROM bids b LEFT JOIN users u ON b.user_id = u.user_id WHERE product_id = ${productId}
+    FROM bids b 
+      LEFT JOIN users u ON b.user_id = u.user_id WHERE product_id = ${productId}
+      LEFT OUTER JOIN userNickname un ON b.user_id = un.user_id 
     ORDER BY created_at DESC;`;
   }
 

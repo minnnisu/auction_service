@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
   <%- include('include/head') %>
@@ -8,18 +8,164 @@
 
 <body>
   <%- include('include/header') %>
-  <h1>Welcome to Your My Page</h1>
+  <link rel="stylesheet" href="/css/my_page.css">
+  <h1>마이페이지</h1>
 
-  <div>
-    <p>User ID: <%= user.userid %></p>
-    <p>Name: <%= user.username %></p>
-    <p>Nickname: <%= user.nickname %></p>
-    <p>Email: <%= user.email %></p>
-    <p>Telephone: <%= user.telephone %></p>
-  </div>
-  <div>
-    <a href="/user/orderList">예매내역</a>
-  </div>
+  <main>
+    <div class="my_page">
+      <div class="userinfo">
+        <div class="user-details">
+          <div class="avatar_wrapper">
+            <img class="avatar" src="http://localhost:8081/avatar/avatar.png" alt="아바타 이미지">
+          </div>
+          <div>
+            <p>이름: <%= user.username %></p>
+            <p>아이디: <%= user.userid %></p>
+          </div>
+        </div>
+        <p>이메일: <%= user.email %></p>
+        <p>전화번호: <%= user.telephone %></p>
+      </div>
+
+      <div class="menu">
+        <a>입찰내역</a>
+        <a>낙찰내역</a>
+        <a>판매내역</a>
+        <a>관심내역</a>
+      </div>
+
+      <section class="article_list">
+        <div class="card_container">
+          <!-- 9번 상품 -->
+
+          <div class="card_wrap">
+            <article class="card">
+              <a class="card_link">
+                <div class="card_photo">
+                  <img src="/images/1702812734947-524324153.jpg" alt="">
+                </div>
+                <div class="card_desc">
+                  <a class="card_title" href="">
+
+                    <>
+                  </a>
+                  <div class="card_row2">
+                    <span class="card_current_price">
+
+                      <>원
+                    </span>
+                  </div>
+                  <div class="card_row3">
+                    <span class="card_count">
+                      관심
+
+                      <>
+                    </span>
+                    <span class="card_bar">
+                      |
+                    </span>
+                    <span class="card_created_at">
+
+                      <>
+                    </span>
+                  </div>
+                  <div class="card_row3">
+                    <span class="card_termination_date">
+                      마감
+
+                      <>
+                    </span>
+                  </div>
+              </a>
+            </article>
+          </div>
+          <div class="card_wrap">
+            <article class="card">
+              <a class="card_link">
+                <div class="card_photo">
+                  <img src="/images/1702812734947-524324153.jpg" alt="">
+                </div>
+                <div class="card_desc">
+                  <a class="card_title" href="">
+
+                    <>
+                  </a>
+                  <div class="card_row2">
+                    <span class="card_current_price">
+
+                      <>원
+                    </span>
+                  </div>
+                  <div class="card_row3">
+                    <span class="card_count">
+                      관심
+
+                      <>
+                    </span>
+                    <span class="card_bar">
+                      |
+                    </span>
+                    <span class="card_created_at">
+
+                      <>
+                    </span>
+                  </div>
+                  <div class="card_row3">
+                    <span class="card_termination_date">
+                      마감
+
+                      <>
+                    </span>
+                  </div>
+              </a>
+            </article>
+          </div>
+          <div class="card_wrap">
+            <article class="card">
+              <a class="card_link">
+                <div class="card_photo">
+                  <img src="/images/1702812734947-524324153.jpg" alt="">
+                </div>
+                <div class="card_desc">
+                  <a class="card_title" href="">
+
+                    <>
+                  </a>
+                  <div class="card_row2">
+                    <span class="card_current_price">
+
+                      <>원
+                    </span>
+                  </div>
+                  <div class="card_row3">
+                    <span class="card_count">
+                      관심
+
+                      <>
+                    </span>
+                    <span class="card_bar">
+                      |
+                    </span>
+                    <span class="card_created_at">
+
+                      <>
+                    </span>
+                  </div>
+                  <div class="card_row3">
+                    <span class="card_termination_date">
+                      마감
+
+                      <>
+                    </span>
+                  </div>
+              </a>
+            </article>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </main>
 </body>
 
 </html>

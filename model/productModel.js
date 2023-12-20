@@ -164,7 +164,7 @@ exports.getDetailProductByProductId = async function (product_id, userId) {
           ELSE 'normal'
       END AS modify_status,
       CASE 
-        WHEN u.user_id = ${userId} THEN 1
+        WHEN un.user_id = ${userId} THEN 1
         ELSE 0
       END AS is_my_product,
       CASE 
@@ -172,7 +172,7 @@ exports.getDetailProductByProductId = async function (product_id, userId) {
           ELSE wc.like_count
       END AS like_count
     FROM products p 
-      LEFT JOIN users u ON p.nickname = u.nickname 
+      LEFT JOIN userNickname un ON p.nickname = un.nickname 
       LEFT JOIN currentPriceView cp ON p.product_id = cp.product_id
       LEFT JOIN wishlistCountView wc ON p.product_id = wc.product_id
     WHERE p.product_id = ${product_id}`;
@@ -201,7 +201,6 @@ exports.getDetailProductByProductId = async function (product_id, userId) {
       END AS like_count,
       (SELECT 0) AS is_my_product
     FROM products p 
-      LEFT JOIN users u ON p.nickname = u.nickname 
       LEFT JOIN currentPriceView cp ON p.product_id = cp.product_id
       LEFT JOIN wishlistCountView wc ON p.product_id = wc.product_id
     WHERE p.product_id = ${product_id}`;
@@ -230,7 +229,12 @@ exports.getSearchPage = async function (filter, pageSize) {
     SELECT
       COUNT(*) AS cnt
     FROM products p
-    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중') AND p.title LIKE ${`%${filter.query}%`}`;
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
+    UNION
+    SELECT
+      COUNT(*) AS cnt
+    FROM products p
+    WHERE p.title LIKE ${`%${filter.query}%`}`;
 
   const { recordset: products } = await pool.query`
     SELECT

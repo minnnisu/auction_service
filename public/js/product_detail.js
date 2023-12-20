@@ -827,3 +827,5 @@ async function deleteProduct() {
     return alert("예상치 못한 에러가 발생하였습니다.");
   }
 }
+
+function addWishlist(divItem) {}
