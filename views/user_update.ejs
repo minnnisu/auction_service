@@ -10,6 +10,29 @@
 </head>
 
 <body>
+    <!-- 탈퇴 전 경고 모달 -->
+    <div id="user_delete_modal" class="hidden">
+        <div id="modalContent">
+            <h2 class="delete_warning_big">회원 정보가 모두 삭제됩니다.</h2>
+            <p class="delete_warning_small">정말 탈퇴하시겠습니까?</p>
+            <div id="user_delete_modal_button">
+                <button class="user_delete_select" onclick="user_delete()">탈퇴</button>
+                <button class="user_delete_select" onclick="close_user_delete_modal()">닫기</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 탈퇴 완료 후 출력되는 모달 -->
+    <div id="delete_complete_modal" class="hidden">
+        <div id="modalContent">
+            <h2 class="delete_warning_big">회원 탈퇴가 완료되었습니다.</h2>
+            <p class="delete_warning_small">이용해주셔서 감사합니다.</p>
+            <div id="user_delete_modal_button">
+                <button class="user_delete_select" onclick="close_delete_complete_modal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
     <%- include('include/header') %>
         <div class="user_info_container">
             <div class="user_info">
@@ -75,7 +98,7 @@
                 </div>
                 <button class="submit_btn" onclick="user_update()">수정하기</button>
                 <div class="user_delete_wrap">
-                    <button class="user_delete">회원 탈퇴</button>
+                    <button class="user_delete_button" onclick="open_user_delete_modal()">회원 탈퇴</button>
                 </div>
             </div>
         </div>

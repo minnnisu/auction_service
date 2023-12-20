@@ -1,14 +1,47 @@
-const username = document.querySelector(".user_info_username").innerText;
-const nickname = document.querySelector(".user_info_nickname").innerText;
-const email = document.querySelector(".user_info_email").innerText;
-const telephone = document.querySelector(".user_info_telephone").innerText;
-
 let resultcheck = {
   username: false,
   nickname: false,
   email: false,
   telephone: false,
 };
+
+// 회원 탈퇴 경고 모달
+const user_delete_modal = document.getElementById("user_delete_modal");
+const user_delete_button = document.querySelector(".user_delete_button");
+
+function open_user_delete_modal() {
+  user_delete_modal.classList.remove("hidden");
+}
+
+function close_user_delete_modal() {
+  user_delete_modal.classList.add("hidden");
+}
+
+//회원 탈퇴 완료 모달
+const delete_complete_modal = document.getElementById("delete_complete_modal");
+
+function open_delete_complete_modal() {
+  delete_complete_modal.classList.remove("hidden");
+}
+
+function close_delete_complete_modal() {
+  delete_complete_modal.classList.add("hidden");
+  window.location.href="/";
+}
+
+
+//모달 외부 클릭 시 모달 닫기
+window.onclick = function (event) {
+  if (event.target === user_delete_modal) {
+    close_user_delete_modal();
+  }
+};
+
+window.onclick = function (event) {
+  if (event.target === delete_complete_modal) {
+    close_delete_complete_modal()
+  }
+}
 
 // 유효성 검사 실패
 function showError(input, message) {
@@ -106,48 +139,82 @@ function checkRequired(input) {
 
 // 회원정보 수정
 async function user_update() {
-console.log(email);
+  console.log(email);
 
-//   if (
-//     resultcheck.username == false ||
-//     resultcheck.nickname == false ||
-//     resultcheck.email == false ||
-//     resultcheck.telephone == false
-//   ) {
-//     return false;
-//   }
+  //   if (
+  //     resultcheck.username == false ||
+  //     resultcheck.nickname == false ||
+  //     resultcheck.email == false ||
+  //     resultcheck.telephone == false
+  //   ) {
+  //     return false;
+  //   }
 
-//   try {
-//     const response = await fetch("http://localhost:8081/api/user", {
-//       method: "PATCH",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         username: username.value,
-//         nickname: nickname.value,
-//         email: email.value,
-//         telephone: telephone.value,
-//       }),
-//     });
+  //   try {
+  //     const response = await fetch("http://localhost:8081/api/user", {
+  //       method: "PATCH",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         username: username.value,
+  //         nickname: nickname.value,
+  //         email: email.value,
+  //         telephone: telephone.value,
+  //       }),
+  //     });
 
-//     const data = await response.json();
-//     if (!response.ok) {
-//       return alert("서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
-//     }
-//     return alert ("회원정보가 수정되었습니다.");
-//   } catch (error) {
-//     return alert("알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-//   }
-// }
+  //     const data = await response.json();
+  //     if (!response.ok) {
+  //       return alert("서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+  //     }
+  //     return alert ("회원정보가 수정되었습니다.");
+  //   } catch (error) {
+  //     return alert("알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+  //   }
+  // }
 
-// form.addEventListener("submit", function (event) {
-//   event.preventDefault(); // submit시 자동 새로고침을 막음
+  // form.addEventListener("submit", function (event) {
+  //   event.preventDefault(); // submit시 자동 새로고침을 막음
 
-//   checkUsername(username);
-//   checkNickname();
-//   checkEmail(email);
-//   checkTelephone(telephone);
-//   user_update();
-// });
+  //   checkUsername(username);
+  //   checkNickname();
+  //   checkEmail(email);
+  //   checkTelephone(telephone);
+  //   user_update();
+  // });
 }
+
+  //회원 탈퇴
+async function user_delete() {
+    try {
+      const response = await fetch("http://localhost:8081/api/user", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        return alert("서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      }
+        close_user_delete_modal();
+        open_delete_complete_modal()
+      
+    } catch (error) {
+      return alert("알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    }
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault(); // submit시 자동 새로고침을 막음
+
+    checkUsername(username);
+    checkNickname();
+    checkEmail(email);
+    checkTelephone(telephone);
+    user_update();
+  });

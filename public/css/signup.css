@@ -219,3 +219,66 @@ table {
   background-color: #fa5858;
   border: 2px solid #fa5858;
 }
+
+/* 모달 CSS */
+#go_login_modal{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+#go_login_modal.hidden {
+  display: none;
+}
+
+#modalContent {
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 10px;
+  width: 250px;
+  height: 100px;
+  padding: 15px;
+}
+
+.go_login_big{
+  margin:0 auto;
+  font-size:18px;
+  font-weight: 600;
+  margin-bottom:5px;
+}
+
+.go_login_small{
+  margin:0 auto;
+  font-size:16px;
+  margin-bottom:20px;
+}
+
+.go_login_button{
+  cursor: pointer;
+  background-color: #f78181;
+  border: 2px solid #f78181;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px;
+  margin-left:5px;
+  margin-right:5px;
+  width: 100px;
+}
+
+.go_login_button:hover{
+  background-color: #fa5858;
+  border-color:#fa5858;
+}
+
+#go_login_modal_button{
+  display:flex;
+  justify-content: center;
+}

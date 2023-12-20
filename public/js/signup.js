@@ -253,8 +253,7 @@ async function signup() {
 
       return alert("서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
-    alert("회원가입에 성공하였습니다. 로그인 페이지로 이동합니다.");
-    return (window.location.href = "/login");
+    return open_go_login_modal();
   } catch (error) {
     return alert("알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
   }
@@ -272,3 +271,23 @@ form.addEventListener("submit", function (event) {
   checkTelephone(telephone);
   signup();
 });
+
+// 로그인 창 이동 모달
+const go_login_modal = document.getElementById("go_login_modal");
+
+function open_go_login_modal() {
+  go_login_modal.classList.remove("hidden");
+}
+
+function close_go_login_modal() {
+  go_login_modal.classList.add("hidden");
+  window.location.href="/login";
+}
+
+//모달 외부 클릭 시 모달 닫기
+window.onclick = function (event) {
+  if (event.target === go_login_modal) {
+    close_go_login_modal();
+  }
+};
+
