@@ -215,16 +215,18 @@ exports.getSearchPage = async function (query) {
     PAGE_UNIT
   );
 
-  const metaData = pagination(
-    totalProductCount[0].cnt,
-    PAGE_UNIT,
-    GROUP_UNIT,
-    Number(filter.page)
-  );
+  console.log(totalProductCount);
+
+  const tpc = totalProductCount.length < 1 ? 0 : totalProductCount[0].cnt;
+
+  const metaData = pagination(tpc, PAGE_UNIT, GROUP_UNIT, Number(filter.page));
 
   metaData.url = `http://localhost:8081/search/?query=${filter.query}&page=`;
 
   const filteredProducts = filterProduct(products);
+
+  console.log(metaData);
+
   return {
     metaData: { ...metaData, query: filter.query },
     products: filteredProducts,
