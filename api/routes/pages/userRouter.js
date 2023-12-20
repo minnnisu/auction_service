@@ -49,4 +49,13 @@ router.get(
   userController.getUserWishlistPage
 );
 
+router.get(
+  "/update",
+  authMiddleware.isLoginStatusClosure({
+    isShowErrPage: true,
+  }),
+  headerMiddleware.getHeaderData,
+  userController.getUserUpdatePage
+);
+
 module.exports = router;

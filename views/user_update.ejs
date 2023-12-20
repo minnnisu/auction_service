@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <%- include('include/head') %>
+        <link rel="stylesheet" href="/css/my_page.css">
+        <link rel="stylesheet" href="/css/user_update.css">
+        <link rel="stylesheet" href="/css/main.css">
+        <title>마이페이지</title>
+</head>
+
+<body>
+    <%- include('include/header') %>
+        <div class="user_info_container">
+            <div class="user_info">
+                <h2 id="user_info_nickname">
+                    <%= user.nickname %>
+                        <span id="user_info_id">
+                            <%= user.user_id %>
+                        </span>
+                </h2>
+                <ul class="user_info_details">
+                    <li id="user_info_email">
+                        <%= user.email %>
+                    </li>
+                    <li id="user_info_telephone">
+                        <%= user.telephone %>
+                    </li>
+                    <li id="user_info_username">
+                        <%= user.username %>
+                    </li>
+                </ul>
+                <div class="user_info_avatar">
+                    <img class="avatar" src="http://localhost:8081/avatar/avatar.png" alt="아바타 이미지">
+                </div>
+            </div>
+            <div class="user_record">
+                <div class="user_menu_list">
+                    <ul>
+                        <li><a href="http://localhost:8081/user/sell">판매 내역</a></li>
+                        <li><a href="http://localhost:8081/user/bid">입찰 내역</a></li>
+                        <li><a href="http://localhost:8081/user/successfulbid">낙찰 내역</a></li>
+                        <li><a href="http://localhost:8081/user/wishlist">관심 상품</a></li>
+                        <li><a href="http://localhost:8081/user/update" class="active">회원 정보 수정</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class='user_update_wrap'>
+                <div class='user_update_info'>
+                    <label for="username">이름</label>
+                    <input type="text" id="username" name="username" class='input_text' value="<%= user.username %>">
+                    </input>
+                    <div class="check_msg">Error Message</div>
+                </div>
+
+                <div class='user_update_info'>
+                    <label for="nickname">닉네임</label>
+                    <input type="text" id="nickname" name="nickname" class='input_text'
+                        value="<%= user.nickname %>"></input>
+                    <div class="check_msg">Error Message</div>
+                </div>
+
+                <div class='user_update_info'>
+                    <label for="email">이메일</label>
+                    <input type="text" id="email" name="email" class='input_text' value="<%= user.email %>"></input>
+                    <div class="check_msg">Error Message</div>
+                </div>
+
+                <div class='user_update_info'>
+                    <label for="telephone">전화번호</label>
+                    <input type="text" id="telephone" name="telephone" class='input_text'
+                        value="<%= user.telephone %>"></input>
+                    <div class="check_msg">Error Message</div>
+                </div>
+                <button class="submit_btn" onclick="user_update()">수정하기</button>
+                <div class="user_delete_wrap">
+                    <button class="user_delete">회원 탈퇴</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/user_update.js"></script>
+</body>
+
+</html>

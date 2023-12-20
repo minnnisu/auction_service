@@ -13,20 +13,20 @@
         <div class="user_info_container">
             <div class="user_info">
                 <h2 class="user_info_nickname">
-                    닌텐도
-                    <span class="user_info_name">
-                        aba6523
+                    <%= user.nickname %>
+                    <span class="user_info_id">
+                        <%= user.user_id %>
                     </span>
                 </h2>
                 <ul class="user_info_details">
                     <li>
-                        aba2083@gmail.com
+                        <%= user.email %>
                     </li>
                     <li>
-                        010-2083-6523
+                        <%= user.telephone %>
                     </li>
                     <li>
-                        aba6523
+                        <%= user.username %>
                     </li>
                 </ul>
                 <div class="user_info_avatar">
@@ -40,7 +40,7 @@
                         <li><a class="active" href="http://localhost:8081/user/bid">입찰 내역</a></li>
                         <li><a href="http://localhost:8081/user/successfulbid">낙찰 내역</a></li>
                         <li><a href="http://localhost:8081/user/wishlist">관심 상품</a></li>
-                        <li><a href="">회원 정보 수정</a></li>
+                        <li><a href="http://localhost:8081/user/update">회원 정보 수정</a></li>
                     </ul>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                                     <img src="<%= product.image_url %>" alt="<%= product.title %> 이미지">
                                 </div>
                                 <div class="card_desc">
-                                    <a class="card_title" href="auction/item/<%= product.product_id %>">
+                                    <a class="card_title" href="/auction/item/<%= product.product_id %>">
                                         <%= product.title %>
                                     </a>
                                     <div class="card_row2">

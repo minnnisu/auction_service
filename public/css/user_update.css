@@ -1,0 +1,88 @@
+.user_update_wrap {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .user_update_info {
+    margin: 0 auto;
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+    position: relative;
+  }
+  
+  .user_update_info.error input {
+    border-color: #e74c3c;
+  }
+  
+  .user_update_info.success input {
+    border-color: #2ecc71;
+  }
+  
+  .user_update_info label {
+    color: #2e2e2e;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .input_text {
+    border: 2px solid #f0f0f0;
+    border-radius: 4px;
+    display: block;
+    width: 347px;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .check_msg {
+    color: #e74c3c;
+    position: absolute;
+    font-size: 12px;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 5px;
+    visibility: hidden;
+  }
+  
+  .user_update_info.error .check_msg {
+    visibility: visible;
+  }
+  
+  .submit_btn {
+    cursor: pointer;
+    background-color: #f78181;
+    border: 2px solid #f78181;
+    border-radius: 4px;
+    color: #fff;
+    display: block;
+    font-size: 16px;
+    padding: 10px;
+    margin:0 auto;
+    margin-top: 20px;
+    width: 370px;
+  }
+  
+  .submit_btn:hover {
+    background-color: #fa5858;
+    border: 2px solid #fa5858;
+  }
+
+  .user_delete_wrap{
+    margin: 0 auto;
+    margin-top:30px;
+  }
+  
+  .user_delete{
+    border:2px solid #333;
+    border-radius: 10px;
+    color: #333;
+    font-size : 16px;
+    font-weight: 600;
+    background: none;
+  }
+  
+  .user_delete:hover{
+    border-color:#fa5858;
+    color: #fa5858;
+  }
