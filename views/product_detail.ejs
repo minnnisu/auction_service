@@ -107,11 +107,10 @@
         <span class="status">
           <%= product.productInfo.status %>
         </span>
-
-        <% if(product.productInfo.nickname !== null) { %>
-        <% if(product.productInfo.status === "진행중" && !product.productInfo.is_my_product) { %>
+        <% if(product.productInfo.status === "진행중" && product.productInfo.nickname !== null && !product.productInfo.is_my_product) { %>
         <button class="bid" onclick="openBidSuggestModal()">입찰가 제안</button>
         <% } %>
+        <% if(header.user.is_login_status) { %>
         <div class="dropdown" id="myDropdown">
           <span class="material-symbols-outlined more_btn" onclick="toggleDropdown(event)">
             more_vert
@@ -121,8 +120,8 @@
             <div class="dropdown_item" onclick="editProduct()">수정</div>
             <div class="dropdown_item" onclick="deleteProduct()">삭제</div>
             <% } %>
-            <% if(header.user.is_login_status){ %>
-            <div id="wishlist-manage" class="dropdown_item" onclick="addWishlist()"></div>
+            <% if(product.productInfo.nickname !== null ){ %>
+            <div id="wishlist-manage" class=" dropdown_item" onclick="addWishlist()"></div>
             <% } %>
           </div>
         </div>
