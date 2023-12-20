@@ -4,7 +4,6 @@ const commentModel = require("../model/commentModel");
 const productModel = require("../model/productModel");
 const productStatusModel = require("../model/productStatusModel");
 const productImageModel = require("../model/productImageModel");
-const wishlistModel = require("../model/wishlistModel");
 const userModel = require("../model/userModel");
 const bidModel = require("../model/bidModel");
 const scheduler = require("../schedule/scheduler");
@@ -356,19 +355,6 @@ exports.getProductEditPage = async function (productId, userId) {
   }
 
   return { product: productInfo[0] };
-};
-
-exports.toggleWishlist = async function (productId, userId) {
-  if (productId === undefined) {
-    throw new HttpError(400, "not_contain_nessary_params");
-  }
-
-  const wishlistItem = await wishlistModel.getWishlist(productId, userId);
-  if (wishlistItem.length > 0) {
-    await wishlistModel.deleteWishlist(productId, userId);
-  } else {
-    await wishlistModel.addWishlist(productId, userId);
-  }
 };
 
 exports.cancelAuction = async function (productId, userId) {

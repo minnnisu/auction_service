@@ -30,12 +30,6 @@ router.get("/:product_id/price", auctionController.getProductPrice);
 
 router.get("/:product_id/bid", auctionController.getProductBidList);
 
-router.post(
-  "/:product_id/wishlist",
-  authMiddleware.isLoginStatusClosure(),
-  auctionController.toggleWishlist
-);
-
 router.get(
   "/:product_id/images",
   authMiddleware.isLoginStatusClosure(),

@@ -1,8 +1,42 @@
 const PRODUCT_ID = window.location.pathname.split("/")[3];
 
-document.addEventListener("click", function (event) {
-  console.log("실행");
+window.onload = async function () {
+  try {
+    const response = await fetch(
+      `http://localhost:8081/api/wishlist/${PRODUCT_ID}/user`
+    );
 
+    if (response.ok) {
+      const data = await response.json();
+      const wishlistBtn = document.getElementById("wishlist-manage");
+      if (data.isWished) {
+        wishlistBtn.innerText = "위시리스트 삭제";
+      } else {
+        wishlistBtn.innerText = "위시리스트 추가";
+      }
+    }
+  } catch (error) {}
+};
+
+// 모달 외부를 클릭하면 모달이 닫히도록 설정
+window.onclick = function (event) {
+  const bidListModal = document.getElementById("bidListModal");
+  if (event.target === bidListModal) {
+    closeBidListModal();
+  }
+
+  const bidSuggestModal = document.getElementById("bidSuggestModal");
+  if (event.target === bidSuggestModal) {
+    closeBidSuggestModal();
+  }
+
+  const dropdownBtn = document.getElementById("productDropdownBtn");
+  if (event.target === dropdownBtn) {
+    toggleDropdown();
+  }
+};
+
+document.addEventListener("click", function (event) {
   const dropdownContent = document.querySelector(".dropdown-content");
 
   // 클릭된 요소가 드롭다운 버튼이 아니면 드롭다운을 닫음
@@ -14,7 +48,6 @@ document.addEventListener("click", function (event) {
 });
 
 function toggleDropdown(event) {
-  console.log("실행");
   const dropdownContent = document.querySelector(".dropdown-content");
 
   // 드롭다운이 열려있으면 닫고, 닫혀있으면 열기
@@ -129,24 +162,6 @@ function closeBidSuggestModal() {
   const bidSuggestModal = document.getElementById("bidSuggestModal");
   bidSuggestModal.style.display = "none";
 }
-
-// 모달 외부를 클릭하면 모달이 닫히도록 설정
-window.onclick = function (event) {
-  const bidListModal = document.getElementById("bidListModal");
-  if (event.target === bidListModal) {
-    closeBidListModal();
-  }
-
-  const bidSuggestModal = document.getElementById("bidSuggestModal");
-  if (event.target === bidSuggestModal) {
-    closeBidSuggestModal();
-  }
-
-  const dropdownBtn = document.getElementById("productDropdownBtn");
-  if (event.target === dropdownBtn) {
-    toggleDropdown();
-  }
-};
 
 async function cancelBid(btn) {
   try {
@@ -828,4 +843,40 @@ async function deleteProduct() {
   }
 }
 
-function addWishlist(divItem) {}
+async function addWishlist() {
+  try {
+    const response = await fetch(
+      `http://localhost:8081/api/wishlist/${PRODUCT_ID}`,
+      { method: "POST" }
+    );
+
+    if (!response.ok) {
+      if (data.message === "not_login_status_access_error") {
+        window.location.href = "/login";
+        return alert("로그인이 필요한 서비스입니다.");
+      }
+
+      if (data.message === "not_exist_product_error") {
+        window.location.href = "/";
+        return alert("존재하지 않는 상품입니다.");
+      }
+
+      if (data.message === "unable_to_restrict_wishlist_error") {
+        window.location.href = "/";
+        return alert("위시리스트에 추가가 불가능한 상품입니다.");
+      }
+    }
+
+    const data = await response.json();
+    const wishlistBtn = document.getElementById("wishlist-manage");
+    if (data.result === "add") {
+      wishlistBtn.innerText = "위시리스트 삭제";
+      return alert("위시리스트에서 추가하였습니다");
+    }
+
+    if (data.result === "delete") {
+      wishlistBtn.innerText = "위시리스트 추가";
+      return alert("위시리스트에서 삭제하였습니다");
+    }
+  } catch (error) {}
+}

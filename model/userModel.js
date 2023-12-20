@@ -88,12 +88,13 @@ exports.deleteUser = async function (userId) {
       UPDATE productStatus
       SET status = '철회'
       WHERE product_id IN 
-          (SELECT product_id 
-          FROM 
-              (SELECT product_id 
-              FROM products p 
-                  LEFT JOIN userNickname un ON p.nickname = un.nickname 
-              WHERE un.user_id = ${userId}) p)`;
+        (SELECT product_id 
+        FROM 
+          (SELECT p.product_id 
+          FROM products p 
+            LEFT JOIN productStatus ps ON p.product_id = ps.product_id
+            LEFT JOIN userNickname un ON p.nickname = un.nickname 
+          WHERE un.user_id = ${userId} AND ps.status = '진행중') p)`;
 
     await transaction.request().query`
       DELETE

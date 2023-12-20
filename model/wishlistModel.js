@@ -8,6 +8,7 @@ exports.getWishlist = async function (productId, userId) {
 };
 
 exports.addWishlist = async function (productId, userId) {
+  console.log(userId);
   const pool = await poolPromise;
   await pool.query`INSERT INTO wishlists (product_id, user_id) VALUES (${productId}, ${userId});`;
 };

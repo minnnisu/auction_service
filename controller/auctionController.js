@@ -66,15 +66,6 @@ exports.getProductBidList = async function (req, res, next) {
   }
 };
 
-exports.toggleWishlist = async function (req, res, next) {
-  try {
-    await auctionService.toggleWishlist(req.params.product_id, req.user);
-    res.status(201).json({ message: "Success!" });
-  } catch (error) {
-    next(error);
-  }
-};
-
 exports.getProductPrice = async function (req, res, next) {
   try {
     const price = await auctionService.getProductPrice(req.params.product_id);
