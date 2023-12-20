@@ -100,14 +100,14 @@
           <img class="avatar" src="http://localhost:8081/avatar/avatar.png" alt="아바타 이미지">
         </div>
         <span class="nickname">
-          <%= product.productInfo.nickname %>
+          <%= product.productInfo.nickname !== null ? product.productInfo.nickname : "알 수 없음" %>
         </span>
       </div>
       <div class="right_wrapper">
         <span class="status">
           <%= product.productInfo.status %>
         </span>
-        <% if(product.productInfo.status === "진행중") { %>
+        <% if(product.productInfo.status === "진행중" && product.productInfo.nickname !== null && !product.productInfo.is_my_product) { %>
         <button class="bid" onclick="openBidSuggestModal()">입찰가 제안</button>
         <% } %>
         <% if(product.productInfo.is_my_product){ %>
@@ -118,6 +118,7 @@
           <div class="dropdown-content">
             <div class="dropdown_item" onclick="editProduct()">수정</div>
             <div class="dropdown_item" onclick="deleteProduct()">삭제</div>
+            <div class="dropdown_item" onclick="addWishlist(this)">위시리스트 추가</div>
           </div>
         </div>
         <% } %>
@@ -180,7 +181,7 @@
           <div class="comment_item_header">
             <div class="comment_nickname_wrapper">
               <span class="comment_nickname">
-                <%= comment.nickname %>
+                <%= comment.nickname !== null ? comment.nickname : "알 수 없음" %>
               </span>
             </div>
             <div class="comment_timestamp_wrapper">

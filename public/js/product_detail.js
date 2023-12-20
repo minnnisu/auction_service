@@ -45,7 +45,8 @@ async function openBidListModal() {
 
       const nicknameDiv = document.createElement("div");
       nicknameDiv.className = "nickname";
-      nicknameDiv.textContent = bid.nickname;
+      nicknameDiv.textContent =
+        bid.nickname !== null ? bid.nickname : "알 수 없음";
 
       const priceDiv = document.createElement("div");
       priceDiv.className = "price";
@@ -287,7 +288,6 @@ next.addEventListener("click", function () {
     moveSlide(currentSlide + 1);
   }
 });
- 
 
 // comment
 
@@ -495,7 +495,9 @@ function getReplyItemHtml(replyItem) {
   <div id=r-${replyItem.reply_id} class="reply_item">
     <div class="reply_item_header">
       <div class="reply_nickname_wrapper">
-        <span class="reply_nickname">${replyItem.nickname}</span>
+        <span class="reply_nickname">${
+          replyItem.nickname !== null ? replyItem.nickname : "알 수 없음"
+        }</span>
       </div>
       <div class="reply_timestamp_wrapper">
         <span class="reply_timestamp">
@@ -825,3 +827,5 @@ async function deleteProduct() {
     return alert("예상치 못한 에러가 발생하였습니다.");
   }
 }
+
+function addWishlist(divItem) {}

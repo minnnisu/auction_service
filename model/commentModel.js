@@ -35,11 +35,11 @@ exports.getDetailCommentByProductId = async function (productId, userId) {
             ELSE 'normal'
         END AS modify_status,
         CASE 
-            WHEN u.user_id = ${userId} THEN 1
+            WHEN un.user_id = ${userId} THEN 1
             ELSE 0
         END AS is_my_comment,
         is_deleted
-      FROM comments c INNER JOIN users u ON c.nickname = u.nickname
+      FROM comments c LEFT JOIN userNickname un ON c.nickname = un.nickname
       WHERE c.product_id = ${productId};`;
   } else {
     result = await pool.query`

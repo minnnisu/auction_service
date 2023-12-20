@@ -40,11 +40,11 @@ exports.getDetailRepliesByCommentId = async function (commentId, userId) {
           ELSE 'normal'
       END AS modify_status,
       CASE 
-            WHEN u.user_id = ${userId} THEN 1
+            WHEN un.user_id = ${userId} THEN 1
             ELSE 0
       END AS is_my_reply,
       is_deleted
-    FROM replies r INNER JOIN users u ON r.nickname = u.nickname
+    FROM replies r LEFT JOIN userNickname un ON r.nickname = un.nickname
     WHERE r.comment_id = ${commentId};`;
   } else {
     result = await pool.query`

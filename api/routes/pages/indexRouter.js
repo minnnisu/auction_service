@@ -5,6 +5,7 @@ const authMiddleware = require("../../middleware/authMiddleware");
 const headerMiddleware = require("../../middleware/headerMiddleware");
 
 router.get("/", headerMiddleware.getHeaderData, indexController.getMainPage);
+
 router.get(
   "/popular",
   headerMiddleware.getHeaderData,

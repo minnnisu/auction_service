@@ -10,7 +10,43 @@ router.get(
     isShowErrPage: true,
   }),
   headerMiddleware.getHeaderData,
-  userController.getUser
+  userController.getUserPage
+);
+
+router.get(
+  "/sell",
+  authMiddleware.isLoginStatusClosure({
+    isShowErrPage: true,
+  }),
+  headerMiddleware.getHeaderData,
+  userController.getUserSellPage
+);
+
+router.get(
+  "/bid",
+  authMiddleware.isLoginStatusClosure({
+    isShowErrPage: true,
+  }),
+  headerMiddleware.getHeaderData,
+  userController.getUserBidPage
+);
+
+router.get(
+  "/successfulBid",
+  authMiddleware.isLoginStatusClosure({
+    isShowErrPage: true,
+  }),
+  headerMiddleware.getHeaderData,
+  userController.getUserSuccessfulBidPage
+);
+
+router.get(
+  "/wishlist",
+  authMiddleware.isLoginStatusClosure({
+    isShowErrPage: true,
+  }),
+  headerMiddleware.getHeaderData,
+  userController.getUserWishlistPage
 );
 
 module.exports = router;
