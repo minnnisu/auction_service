@@ -83,8 +83,6 @@ video {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
 }
 
@@ -158,7 +156,7 @@ table {
   margin-left: 20px;
   width: 100px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: large;
   color: #333;
   text-decoration: none;
@@ -183,6 +181,11 @@ table {
   background-color: white;
 }
 
+.search_button:hover {
+  color: #fa5858;
+  border-color:#fa5858;
+}
+
 .search_input {
   width: 250px;
   padding: 10px;
@@ -193,4 +196,24 @@ table {
   outline: none;
   background-color: #f2f3f6;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#logout_button{
+  color: #333;
+  border: solid 1px ;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  width: 70px;
+  height: 30px;
+  margin-left:15px;
+  display: flex;
+  justify-content: center; /*수평 가운데 정렬*/
+  align-items: center; /*수직 가운데 정렬*/
+  background-color: white;
+}
+
+#logout_button:hover{
+  color:#fa5858;
+  border-color: #fa5858;
 }
