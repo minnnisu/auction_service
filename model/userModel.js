@@ -210,7 +210,7 @@ exports.getUserBidPage = async function (filter, pageSize, userId) {
       ELSE wc.like_count
       END AS like_count    
     FROM 
-      (SELECT * FROM bids WHERE user_id = ${userId}) b
+      (SELECT DISTINCT product_id FROM bids WHERE user_id = ${userId}) b
           LEFT JOIN products p ON b.product_id = p.product_id
           LEFT JOIN currentPriceView cp ON b.product_id = cp.product_id
           LEFT JOIN wishlistCountView wc ON b.product_id = wc.product_id
@@ -234,6 +234,8 @@ exports.getUserSuccessfulBidPage = async function (filter, pageSize, userId) {
           LEFT JOIN products p ON sb.product_id = p.product_id
           LEFT JOIN currentPriceView cp ON sb.product_id = cp.product_id
           LEFT JOIN wishlistCountView wc ON sb.product_id = wc.product_id`;
+
+  console.log(totalProductCount);
 
   const { recordset: products } = await pool.query`
     SELECT

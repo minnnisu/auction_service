@@ -257,7 +257,7 @@ exports.getUserBidPage = async function (query, userId) {
   }
 
   // totalProductCount - 전체 게시물 갯수
-  const { totalProductCount, products } = await userModel.getUserSellPage(
+  const { totalProductCount, products } = await userModel.getUserBidPage(
     filter,
     PAGE_UNIT,
     userId
