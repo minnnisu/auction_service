@@ -131,24 +131,6 @@ exports.getUserUpdatePage = async function (req, res, next) {
     const user = await userService.getUser(req.user);
     res.render("user_update", {
       header: req.headerData,
-      metaData,
-      user,
-    });
-  } catch (error) {
-    console.log(error);
-    if (error instanceof HttpError) {
-      return next(error);
-    }
-    return next(new HttpError(500, "server_error", { isShowErrPage: true }));
-  }
-};
-
-exports.getUserUpdatePage = async function (req, res, next) {
-  try {
-    const user = await userService.getUser(req.user);
-    res.render("user_update", {
-      header: req.headerData,
-      metaData,
       user,
     });
   } catch (error) {

@@ -10,7 +10,7 @@
   margin-bottom: 40px;
 }
 
-.user_info_nickname {
+#user_info_nickname {
     text-align: left;
     font-size: 22px;
     font-weight: 600;
@@ -20,7 +20,7 @@
     margin-left: 80px;
 }
 
-.user_info_name {
+#user_info_id {
   font-size: 16px;
   font-weight: 400;
   margin-left: 5px;
@@ -85,3 +85,6 @@
     color: #fa5858;
     font-weight: 600;
 }
+
+
+

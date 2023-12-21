@@ -4,6 +4,7 @@
 <head>
   <%- include('include/head') %>
     <link rel="stylesheet" href="/css/signup.css">
+    <link rel="stylesheet" href="/css/header.css">
     <title>회원가입</title>
 </head>
 
@@ -12,6 +13,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
+
+    <!-- 로그인 페이지 이동 모달 -->
+    <div id="go_login_modal" class="hidden">
+      <div id="modalContent">
+        <h2 class="go_login_big">회원 가입이 완료되었습니다.</h2>
+        <p class="go_login_small">로그인 페이지로 이동합니다.</p>
+        <div id="go_login_modal_button">
+          <button class="go_login_button" onclick="close_go_login_modal()">이동</button>
+        </div>
+      </div>
+    </div>
+
     <div class="signup_body">
       <img src="/logo/logo.png" class="signup_logo"></img>
       <div class="signup">
