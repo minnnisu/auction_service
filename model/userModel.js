@@ -235,8 +235,6 @@ exports.getUserSuccessfulBidPage = async function (filter, pageSize, userId) {
           LEFT JOIN currentPriceView cp ON sb.product_id = cp.product_id
           LEFT JOIN wishlistCountView wc ON sb.product_id = wc.product_id`;
 
-  console.log(totalProductCount);
-
   const { recordset: products } = await pool.query`
     SELECT
       p.product_id, 
