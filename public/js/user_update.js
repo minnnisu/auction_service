@@ -1,10 +1,3 @@
-let resultcheck = {
-  username: false,
-  nickname: false,
-  email: false,
-  telephone: false,
-};
-
 // 회원 탈퇴 경고 모달
 const user_delete_modal = document.getElementById("user_delete_modal");
 const user_delete_button = document.querySelector(".user_delete_button");
@@ -41,92 +34,6 @@ window.onclick = function (event) {
     close_delete_complete_modal();
   }
 };
-
-// 유효성 검사 실패
-function showError(input, message) {
-  const formControl = input.parentElement;
-  formControl.className = "signup_info error";
-  const check_msg = formControl.querySelector(".check_msg");
-  check_msg.innerText = message;
-  resultcheck[input.name] = false;
-}
-
-// 이메일 유효성 체크
-function checkEmail(emailInput) {
-  if (!checkRequired(emailInput)) {
-    return false;
-  }
-  const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-  if (!re.test(emailInput.value.trim())) {
-    showError(emailInput, "유효하지 않은 이메일입니다.");
-    return false;
-  }
-}
-
-// 전화번호 유효성 체크
-function checkTelephone(telephoneInput) {
-  if (!checkRequired(telephoneInput)) {
-    return false;
-  }
-  const re = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
-
-  if (!re.test(telephoneInput.value.trim())) {
-    showError(telephoneInput, "유효하지 않은 전화번호입니다.");
-    return false;
-  }
-}
-
-function checkUsername(usernameInput) {
-  if (!checkRequired(usernameInput)) {
-    return false;
-  }
-}
-
-// 닉네임 유효성 체크
-async function checkNickname(nicknameInput) {
-  if (!checkRequired(nicknameInput)) {
-    return false;
-  }
-  try {
-    const response = await fetch(
-      "http://localhost:8081/api/auth/local/nickname/check",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nickname: nicknameInput.value,
-        }),
-      }
-    );
-
-    const data = await response.json();
-    if (!response.ok) {
-      if (data.message === "not_logout_status_access_error") {
-        alert("로그인을 한 상태에서는 닉네임 중복확인을 할 수 없습니다.");
-      }
-
-      if (data.message === "nickname_duplication_error") {
-        showError(nickname, "중복된 닉네임입니다.");
-      }
-      return false;
-    }
-  } catch (error) {
-    alert("예기치 못한 에러가 발생하였습니다. 잠시 후 다시 시도해주세요");
-
-    return false;
-  }
-}
-
-// 필수 입력 항목 체크
-function checkRequired(input) {
-  if (input.value.trim() !== "") {
-    showError(input, "필수 입력 항목입니다.");
-    return false;
-  }
-}
 
 // 회원정보 수정
 async function user_update() {
