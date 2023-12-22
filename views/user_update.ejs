@@ -2,108 +2,73 @@
 <html lang="ko">
 
 <head>
-    <%- include('include/head') %>
-        <link rel="stylesheet" href="/css/my_page.css">
-        <link rel="stylesheet" href="/css/user_update.css">
-        <link rel="stylesheet" href="/css/main.css">
-        <title>마이페이지</title>
+  <%- include('include/head') %>
+  <link rel="stylesheet" href="/css/my_page_user_info.css">
+  <link rel="stylesheet" href="/css/user_update.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <title>마이페이지</title>
 </head>
 
 <body>
-    <!-- 탈퇴 전 경고 모달 -->
-    <div id="user_delete_modal" class="hidden">
-        <div id="modalContent">
-            <h2 class="delete_warning_big">회원 정보가 모두 삭제됩니다.</h2>
-            <p class="delete_warning_small">정말 탈퇴하시겠습니까?</p>
-            <div id="user_delete_modal_button">
-                <button class="user_delete_select" onclick="user_delete()">탈퇴</button>
-                <button class="user_delete_select" onclick="close_user_delete_modal()">닫기</button>
-            </div>
-        </div>
+  <!-- 탈퇴 전 경고 모달 -->
+  <div id="user_delete_modal" class="hidden">
+    <div id="modalContent">
+      <h2 class="delete_warning_big">회원 정보가 모두 삭제됩니다.</h2>
+      <p class="delete_warning_small">정말 탈퇴하시겠습니까?</p>
+      <div id="user_delete_modal_button">
+        <button class="user_delete_select" onclick="user_delete()">탈퇴</button>
+        <button class="user_delete_select" onclick="close_user_delete_modal()">닫기</button>
+      </div>
     </div>
-    
-    <!-- 탈퇴 완료 후 출력되는 모달 -->
-    <div id="delete_complete_modal" class="hidden">
-        <div id="modalContent">
-            <h2 class="delete_warning_big">회원 탈퇴가 완료되었습니다.</h2>
-            <p class="delete_warning_small">이용해주셔서 감사합니다.</p>
-            <div id="user_delete_modal_button">
-                <button class="user_delete_select" onclick="close_delete_complete_modal()">닫기</button>
-            </div>
-        </div>
+  </div>
+
+  <!-- 탈퇴 완료 후 출력되는 모달 -->
+  <div id="delete_complete_modal" class="hidden">
+    <div id="modalContent">
+      <h2 class="delete_warning_big">회원 탈퇴가 완료되었습니다.</h2>
+      <p class="delete_warning_small">이용해주셔서 감사합니다.</p>
+      <div id="user_delete_modal_button">
+        <button class="user_delete_select" onclick="close_delete_complete_modal()">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <%- include('include/header') %>
+  <%- include('include/my_page_user_info') %>
+  <div class='user_update_wrap'>
+    <div class='user_update_info'>
+      <label for="username">이름</label>
+      <input type="text" id="username" name="username" class='input_text' value="<%= user.username %>">
+      </input>
+      <div class="check_msg">Error Message</div>
     </div>
 
-    <%- include('include/header') %>
-        <div class="user_info_container">
-            <div class="user_info">
-                <h2 id="user_info_nickname">
-                    <%= user.nickname %>
-                        <span id="user_info_id">
-                            <%= user.user_id %>
-                        </span>
-                </h2>
-                <ul class="user_info_details">
-                    <li id="user_info_email">
-                        <%= user.email %>
-                    </li>
-                    <li id="user_info_telephone">
-                        <%= user.telephone %>
-                    </li>
-                    <li id="user_info_username">
-                        <%= user.username %>
-                    </li>
-                </ul>
-                <div class="user_info_avatar">
-                    <img class="avatar" src="http://localhost:8081/avatar/avatar.png" alt="아바타 이미지">
-                </div>
-            </div>
-            <div class="user_record">
-                <div class="user_menu_list">
-                    <ul>
-                        <li><a href="http://localhost:8081/user/sell">판매 내역</a></li>
-                        <li><a href="http://localhost:8081/user/bid">입찰 내역</a></li>
-                        <li><a href="http://localhost:8081/user/successfulbid">낙찰 내역</a></li>
-                        <li><a href="http://localhost:8081/user/wishlist">관심 상품</a></li>
-                        <li><a href="http://localhost:8081/user/update" class="active">회원 정보 수정</a></li>
-                    </ul>
-                </div>
-            </div>
+    <div class='user_update_info'>
+      <label for="nickname">닉네임</label>
+      <input type="text" id="nickname" name="nickname" class='input_text' value="<%= user.nickname %>"></input>
+      <div class="check_msg">Error Message</div>
+    </div>
 
-            <div class='user_update_wrap'>
-                <div class='user_update_info'>
-                    <label for="username">이름</label>
-                    <input type="text" id="username" name="username" class='input_text' value="<%= user.username %>">
-                    </input>
-                    <div class="check_msg">Error Message</div>
-                </div>
+    <div class='user_update_info'>
+      <label for="email">이메일</label>
+      <input type="text" id="email" name="email" class='input_text' value="<%= user.email %>"></input>
+      <div class="check_msg">Error Message</div>
+    </div>
 
-                <div class='user_update_info'>
-                    <label for="nickname">닉네임</label>
-                    <input type="text" id="nickname" name="nickname" class='input_text'
-                        value="<%= user.nickname %>"></input>
-                    <div class="check_msg">Error Message</div>
-                </div>
+    <div class='user_update_info'>
+      <label for="telephone">전화번호</label>
+      <input type="text" id="telephone" name="telephone" class='input_text' value="<%= user.telephone %>"></input>
+      <div class="check_msg">Error Message</div>
+    </div>
+    <button class="submit_btn" onclick="user_update()">수정하기</button>
+    <div class="user_delete_wrap">
+      <button class="user_delete_button" onclick="open_user_delete_modal()">회원 탈퇴</button>
+    </div>
+  </div>
+  </div>
 
-                <div class='user_update_info'>
-                    <label for="email">이메일</label>
-                    <input type="text" id="email" name="email" class='input_text' value="<%= user.email %>"></input>
-                    <div class="check_msg">Error Message</div>
-                </div>
-
-                <div class='user_update_info'>
-                    <label for="telephone">전화번호</label>
-                    <input type="text" id="telephone" name="telephone" class='input_text'
-                        value="<%= user.telephone %>"></input>
-                    <div class="check_msg">Error Message</div>
-                </div>
-                <button class="submit_btn" onclick="user_update()">수정하기</button>
-                <div class="user_delete_wrap">
-                    <button class="user_delete_button" onclick="open_user_delete_modal()">회원 탈퇴</button>
-                </div>
-            </div>
-        </div>
-
-        <script src="/js/user_update.js"></script>
+  <script src="/js/user_update.js"></script>
+  <script src="/js/my_page_user_info.js"></script>
 </body>
 
 </html>

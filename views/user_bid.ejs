@@ -3,48 +3,14 @@
 
 <head>
   <%- include('include/head') %>
-  <link rel="stylesheet" href="/css/my_page.css">
+  <link rel="stylesheet" href="/css/my_page_user_info.css">
   <link rel="stylesheet" href="/css/main.css">
   <title>마이페이지</title>
 </head>
 
 <body>
   <%- include('include/header') %>
-  <div class="user_info_container">
-    <div class="user_info">
-      <h2 id="user_info_nickname">
-        <%= user.nickname %>
-        <span id="user_info_id">
-          <%= user.user_id %>
-        </span>
-      </h2>
-      <ul class="user_info_details">
-        <li>
-          <%= user.email %>
-        </li>
-        <li>
-          <%= user.telephone %>
-        </li>
-        <li>
-          <%= user.username %>
-        </li>
-      </ul>
-      <div class="user_info_avatar">
-        <img class="avatar" src="http://localhost:8081/avatar/avatar.png" alt="아바타 이미지">
-      </div>
-    </div>
-    <div class="user_record">
-      <div class="user_menu_list">
-        <ul>
-          <li><a href="http://localhost:8081/user/sell">판매 내역</a></li>
-          <li><a class="active" href="http://localhost:8081/user/bid">입찰 내역</a></li>
-          <li><a href="http://localhost:8081/user/successfulbid">낙찰 내역</a></li>
-          <li><a href="http://localhost:8081/user/wishlist">관심 상품</a></li>
-          <li><a href="http://localhost:8081/user/update">회원 정보 수정</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <%- include('include/my_page_user_info') %>
   <section class="article_list_paddingless">
     <div class="card_container">
       <% products.map((product)=> { %>
@@ -86,21 +52,22 @@
     </div>
   </section>
   <div class="pagination_container">
-    <a href="<%= metaData.url %><%=metaData.group.prevGroupPage %>" <% if (metaData.group.prevGroupPage===null)
-                { %> class="prev_page disabled" onclick="return false;" <% } else { %> class="prev_page" <% } %>>
+    <a href="<%= metaData.url %><%=metaData.group.prevGroupPage %>" <% if (metaData.group.prevGroupPage===null) { %> class="prev_page disabled" onclick="return false;" <% } else { %> class="prev_page" <% } %>>
       이전
     </a>
     <% for (let page=metaData.page.startPage; page <=metaData.page.endPage; page++) { %>
-    <a href="<%= metaData.url %><%= page %>" <% if (metaData.page.currentPage===page) { %> class="current_page" <% } %>>
+    <a href="<%= metaData.url %><%= page %>" <% if (metaData.page.currentPage===page) { %> class="current_page" <%
+              } %>>
       <%= page %>
     </a>
     <% } %>
-    <a href="<%= metaData.url %><%=metaData.group.nextGroupPage %>" <% if
-                        (metaData.group.nextGroupPage===null) { %> class="next_page disabled" onclick="return false;" <%
-                            } else { %> class="prev_page" <% } %>>
+    <a href="<%= metaData.url %><%=metaData.group.nextGroupPage %>" <% if (metaData.group.nextGroupPage===null)
+              { %> class="next_page disabled" onclick="return false;" <% } else { %> class="prev_page" <% } %>>
       다음
     </a>
   </div>
+  <script src="/js/my_page_user_info.js"></script>
 </body>
+
 
 </html>

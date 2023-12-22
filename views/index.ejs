@@ -3,122 +3,123 @@
 
 <head>
   <%- include('include/head') %>
-    <link rel="stylesheet" href="/css/main.css">
-    <title>메인페이지</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <title>메인페이지</title>
 </head>
 
 <body>
   <%- include('include/header') %>
-    <!-- 바디 -->
-    <main>
-      <!-- 배너 -->
-      <div id="banner">
-        <div id="banner_content">
-          <h1 class="bigText">믿을 수 있는<br>중고 경매 플랫폼</h1>
-          <span class="smallText">사과마켓과 함께<br>안전하고 상쾌한 거래 되세요.</span>
-          <div class="cover_img">
-            <span class="img_frame">
-              <img class="bannerimg" src="/banner/bannerimg.png">
-            </span>
-          </div>
+  <!-- 바디 -->
+  <main>
+    <!-- 배너 -->
+    <div id="banner">
+      <div id="banner_content">
+        <h1 class="bigText">믿을 수 있는<br>중고 경매 플랫폼</h1>
+        <span class="smallText">사과마켓과 함께<br>안전하고 상쾌한 거래 되세요.</span>
+        <div class="cover_img">
+          <span class="img_frame">
+            <img class="bannerimg" src="/banner/bannerimg.png">
+          </span>
         </div>
       </div>
+    </div>
 
-      <!-- 인기 상품 -->
-      <section class="article_list">
-        <h1 class="article_list_title"> 인기 상품 </h1>
-        <div class="card_container">
-          <% products.popularProducts.map((product)=> { %>
-            <div class="card_wrap">
-              <article class="card">
-                <a class="card_link">
-                  <div class="card_photo">
-                    <img src="<%= product.image_url %>" alt="<%= product.title %> 이미지">
-                  </div>
-                  <div class="card_desc">
-                    <a class="card_title" href="auction/item/<%= product.product_id %>">
-                      <%= product.title %>
-                    </a>
-                    <div class="card_row2">
-                      <span class="card_current_price">
-                        <%= product.current_price %>원
-                      </span>
-                    </div>
-                    <div class="card_row3">
-                      <span class="card_count">
-                        관심 <%= product.like_count %>
-                      </span>
-                      <span class="card_bar">
-                        |
-                      </span>
-                      <span class="card_created_at">
-                        <%= product.created_at %>
-                      </span>
-                    </div>
-                    <div class="card_row3">
-                      <span class="card_termination_date">
-                        마감 <%= product.termination_date %>
-                      </span>
-                    </div>
+    <!-- 인기 상품 -->
+    <section class="article_list">
+      <h1 class="article_list_title"> 인기 상품 </h1>
+      <div class="card_container">
+        <% products.popularProducts.map((product)=> { %>
+        <div class="card_wrap">
+          <article class="card">
+            <a class="card_link">
+              <div class="card_photo">
+                <img src="<%= product.image_url %>" alt="<%= product.title %> 이미지">
+              </div>
+              <div class="card_desc">
+                <a class="card_title" href="auction/item/<%= product.product_id %>">
+                  <%= product.title %>
                 </a>
-              </article>
-            </div>
-            <% }) %>
+                <div class="card_row2">
+                  <span class="card_current_price">
+                    <%= product.current_price %>원
+                  </span>
+                </div>
+                <div class="card_row3">
+                  <span class="card_count">
+                    관심 <%= product.like_count %>
+                  </span>
+                  <span class="card_bar">
+                    |
+                  </span>
+                  <span class="card_created_at">
+                    <%= product.created_at %>
+                  </span>
+                </div>
+                <div class="card_row3">
+                  <span class="card_termination_date">
+                    마감 <%= product.termination_date %>
+                  </span>
+                </div>
+            </a>
+          </article>
         </div>
-      </section>
-      <div class="article_list_more"> 
-        <a class="article_list_more_text" href="http://localhost:8081/popular">인기상품 더 보기</a>
+        <% }) %>
       </div>
-      
-      <!-- 최신 상품 -->
-      <section class="article_list">
-        <div>
-          <h1 class="article_list_title"> 최신 상품 </h1>
-        </div>
-        <div class="card_container">
-          <% products.latestProducts.map((product)=> { %>
-            <div class="card_wrap">
-              <article class="card">
-                <a class="card_link">
-                  <div class="card_photo">
-                    <img src="<%= product.image_url %>" alt="<%= product.title %> 이미지">
-                  </div>
-                  <div class="card_desc">
-                    <a class="card_title" href="auction/item/<%= product.product_id %>">
-                      <%= product.title %>
-                    </a>
-                    <div class="card_row2">
-                      <span class="card_current_price">
-                        <%= product.current_price %>원
-                      </span>
-                    </div>
-                    <div class="card_row3">
-                      <span class="card_count">
-                        관심 <%= product.like_count %>
-                      </span>
-                      <span class="card_bar">
-                        |
-                      </span>
-                      <span class="card_created_at">
-                        <%= product.created_at %>
-                      </span>
-                    </div>
-                    <div class="card_row3">
-                      <span class="card_termination_date">
-                        마감 <%= product.termination_date %>
-                      </span>
-                    </div>
+    </section>
+    <div class="article_list_more">
+      <a class="article_list_more_text" href="http://localhost:8081/popular">인기상품 더 보기</a>
+    </div>
+
+    <!-- 최신 상품 -->
+    <section class="article_list">
+      <div>
+        <h1 class="article_list_title"> 최신 상품 </h1>
+      </div>
+      <div class="card_container">
+        <% products.latestProducts.map((product)=> { %>
+        <div class="card_wrap">
+          <article class="card">
+            <a class="card_link">
+              <div class="card_photo">
+                <img src="<%= product.image_url %>" alt="<%= product.title %> 이미지">
+              </div>
+              <div class="card_desc">
+                <a class="card_title" href="auction/item/<%= product.product_id %>">
+                  <%= product.title %>
                 </a>
-              </article>
-            </div>
-            <% }) %>
+                <div class="card_row2">
+                  <span class="card_current_price">
+                    <%= product.current_price %>원
+                  </span>
+                </div>
+                <div class="card_row3">
+                  <span class="card_count">
+                    관심 <%= product.like_count %>
+                  </span>
+                  <span class="card_bar">
+                    |
+                  </span>
+                  <span class="card_created_at">
+                    <%= product.created_at %>
+                  </span>
+                </div>
+                <div class="card_row3">
+                  <span class="card_termination_date">
+                    마감 <%= product.termination_date %>
+                  </span>
+                </div>
+            </a>
+          </article>
         </div>
-      </section>
-      <div class="article_list_more"> 
-        <a class="article_list_more_text" href="http://localhost:8081/latest">최신상품 더 보기</a>
+        <% }) %>
       </div>
-    </main>
-    <script src="/js/index.js"></script>
+    </section>
+    <div class="article_list_more">
+      <a class="article_list_more_text" href="http://localhost:8081/latest">최신상품 더 보기</a>
+    </div>
+  </main>
+  <%- include('include/footer') %>
+  <script src="/js/index.js"></script>
 </body>
 
 </html>

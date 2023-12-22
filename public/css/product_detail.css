@@ -360,7 +360,7 @@
 
 .right_wrapper .bid {
   margin: 0 10px;
-  width: 80px;
+  display: inline-block;
   height: 25px;
   background-color: #fff;
   color: #353535;

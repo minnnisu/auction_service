@@ -1,0 +1,90 @@
+.user_info_container {
+  display: flex;
+  justify-content: center;
+}
+
+.user_info_wrapper {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.user_info {
+  position: relative;
+  margin: 0 auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+#user_info_nickname {
+  text-align: left;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  margin-bottom: 10px;
+  vertical-align: middle;
+  margin-left: 80px;
+}
+
+#user_info_id {
+  font-size: 16px;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+.user_info_details {
+  list-style-type: none;
+  margin: 10px 0;
+  margin-left: 80px;
+}
+
+.user_info_details li {
+  display: inline-block;
+  margin-right: 20px;
+  font-size: 15px;
+  letter-spacing: -0.6px;
+  color: #868e96;
+}
+
+.user_info_avatar {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.avatar {
+  width: 58px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.user_record {
+  margin: 0 auto;
+}
+
+.user_menu_list_wapper {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.user_menu_list_wapper .user_menu_list {
+  list-style-type: none;
+  padding-bottom: 10px;
+}
+
+.user_menu_list_wapper .user_menu_list .user_menu_tap {
+  display: inline-block;
+  font-size: 17px;
+}
+
+.user_menu_list_wapper .user_menu_list .user_menu_tap a {
+  color: #868e96;
+  text-decoration: none;
+  padding: 8px 20px;
+}
+
+.user_menu_list_wapper .user_menu_list .user_menu_tap .active {
+  border-bottom: 3px solid #fa5858;
+  color: #fa5858;
+  font-weight: 600;
+}

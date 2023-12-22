@@ -157,7 +157,7 @@ table {
   width: 100px;
   font-style: normal;
   font-weight: 500;
-  font-size: large;
+  font-size: 16px;
   color: #333;
   text-decoration: none;
 }
@@ -172,18 +172,18 @@ table {
   border-radius: 0.3rem;
   font-size: 1rem;
   font-weight: 600;
-  width: 90px;
   height: 40px;
   margin: 10px;
   display: flex;
   justify-content: center; /*수평 가운데 정렬*/
   align-items: center; /*수직 가운데 정렬*/
   background-color: white;
+  padding: 0 20px;
 }
 
 .search_button:hover {
   color: #fa5858;
-  border-color:#fa5858;
+  border-color: #fa5858;
 }
 
 .search_input {
@@ -198,22 +198,22 @@ table {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-#logout_button{
+#logout_button {
   color: #333;
-  border: solid 1px ;
+  border: solid 1px;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
   width: 70px;
   height: 30px;
-  margin-left:15px;
+  margin-left: 15px;
   display: flex;
   justify-content: center; /*수평 가운데 정렬*/
   align-items: center; /*수직 가운데 정렬*/
   background-color: white;
 }
 
-#logout_button:hover{
-  color:#fa5858;
+#logout_button:hover {
+  color: #fa5858;
   border-color: #fa5858;
 }
