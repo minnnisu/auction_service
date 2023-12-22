@@ -202,7 +202,6 @@ exports.getSearchPage = async function (query) {
   }
 
   const filter = { ...query };
-  console.log(`query: ${query.query}`);
 
   if (query.page) {
     filter["page"] = query.page;
@@ -215,11 +214,12 @@ exports.getSearchPage = async function (query) {
     PAGE_UNIT
   );
 
-  console.log(totalProductCount);
-
-  const tpc = totalProductCount.length < 1 ? 0 : totalProductCount[0].cnt;
-
-  const metaData = pagination(tpc, PAGE_UNIT, GROUP_UNIT, Number(filter.page));
+  const metaData = pagination(
+    totalProductCount[0].cnt,
+    PAGE_UNIT,
+    GROUP_UNIT,
+    Number(filter.page)
+  );
 
   metaData.url = `http://localhost:8081/search/?query=${filter.query}&page=`;
 

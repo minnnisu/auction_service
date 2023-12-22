@@ -227,12 +227,7 @@ exports.getSearchPage = async function (filter, pageSize) {
     SELECT
       COUNT(*) AS cnt
     FROM products p
-    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
-    INTERSECT
-    SELECT
-      COUNT(*) AS cnt
-    FROM products p
-    WHERE p.title LIKE ${`%${filter.query}%`}`;
+    WHERE product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중') AND p.title LIKE ${`%${filter.query}%`}`;
 
   const { recordset: products } = await pool.query`
     SELECT
