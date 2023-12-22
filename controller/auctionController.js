@@ -40,7 +40,6 @@ exports.getProductPage = async function (req, res, next) {
       req.user
     );
 
-    console.log(productPost);
     res.render("product_detail", {
       header: req.headerData,
       ...productPost,

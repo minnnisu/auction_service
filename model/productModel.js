@@ -1,4 +1,5 @@
 const { poolPromise } = require("./index");
+const { PAGE_UNIT } = require("../module/pagination");
 
 exports.getMainPage = async function () {
   const pool = await poolPromise;
@@ -45,10 +46,10 @@ exports.getMainPage = async function () {
   return { latestProducts, popularProducts };
 };
 
-exports.getPopularPage = async function (filter, pageSize) {
+exports.getPopularPage = async function (filter) {
   const pool = await poolPromise;
 
-  const offset = (filter.page - 1) * pageSize;
+  const offset = (filter.page - 1) * PAGE_UNIT;
 
   const { recordset: totalProductCount } = await pool.query`
     SELECT
@@ -75,15 +76,15 @@ exports.getPopularPage = async function (filter, pageSize) {
     WHERE p.product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
     ORDER BY like_count DESC
     OFFSET ${offset} ROWS
-    FETCH NEXT ${pageSize} ROWS ONLY;`;
+    FETCH NEXT ${PAGE_UNIT} ROWS ONLY;`;
 
   return { totalProductCount, products };
 };
 
-exports.getLatestPage = async function (filter, pageSize) {
+exports.getLatestPage = async function (filter) {
   const pool = await poolPromise;
 
-  const offset = (filter.page - 1) * pageSize;
+  const offset = (filter.page - 1) * PAGE_UNIT;
 
   const { recordset: totalProductCount } = await pool.query`
   SELECT
@@ -110,7 +111,7 @@ exports.getLatestPage = async function (filter, pageSize) {
     WHERE p.product_id IN (SELECT product_id FROM productStatus WHERE status = '진행중')
     ORDER BY created_at DESC
     OFFSET ${offset} ROWS
-    FETCH NEXT ${pageSize} ROWS ONLY;
+    FETCH NEXT ${PAGE_UNIT} ROWS ONLY;
   `;
 
   return { totalProductCount, products };
@@ -218,10 +219,10 @@ exports.deleteProductByProductId = async function (productId) {
   return recordset;
 };
 
-exports.getSearchPage = async function (filter, pageSize) {
+exports.getSearchPage = async function (filter) {
   const pool = await poolPromise;
 
-  const offset = (filter.page - 1) * pageSize;
+  const offset = (filter.page - 1) * PAGE_UNIT;
 
   const { recordset: totalProductCount } = await pool.query`
     SELECT
@@ -249,7 +250,7 @@ exports.getSearchPage = async function (filter, pageSize) {
       AND p.title LIKE ${`%${filter.query}%`} 
     ORDER BY like_count DESC
     OFFSET ${offset} ROWS
-    FETCH NEXT ${pageSize} ROWS ONLY;
+    FETCH NEXT ${PAGE_UNIT} ROWS ONLY;
   `;
 
   return { totalProductCount, products };

@@ -1,21 +1,7 @@
 const userModel = require("../model/userModel");
 const bcrypt = require("bcrypt");
 const HttpError = require("../error/HttpError");
-
-function checkPatterndValid(patternCheckList) {
-  for (let index = 0; index < patternCheckList.length; index++) {
-    const patternCheckItem = patternCheckList[index];
-
-    const pattern = patternCheckItem.pattern;
-    if (!pattern.test(patternCheckItem.target))
-      return {
-        isValid: false,
-        message: `not_match_${patternCheckItem.type}_condition_error`,
-      };
-  }
-
-  return { isValid: true, message: null };
-}
+const authModule = require("../module/auth");
 
 exports.signup = async function (userInfo) {
   if (
@@ -48,24 +34,11 @@ exports.signup = async function (userInfo) {
   }
 
   const patternCheckList = [
-    {
-      type: "password",
-      pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      target: password,
-    },
-    {
-      type: "email",
-      pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      target: email,
-    },
-    {
-      type: "telephone",
-      pattern: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
-      target: telephone,
-    },
+    { type: "password", value: password },
+    { type: "email", value: email },
+    { type: "telephone", value: telephone },
   ];
-
-  const { isValid, message } = checkPatterndValid(patternCheckList);
+  const { isValid, message } = authModule.checkPatterndValid(patternCheckList);
   if (!isValid) {
     throw new HttpError(422, message);
   }

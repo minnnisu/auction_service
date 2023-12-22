@@ -1,4 +1,5 @@
 const { poolPromise } = require("./index");
+const { PAGE_UNIT } = require("../module/pagination");
 
 exports.addNewUser = async function (userInfo) {
   const { id, hashedPassword, username, nickname, telephone, email } = userInfo;
@@ -147,10 +148,10 @@ exports.checkNicknameDuplication = async function (nickname) {
   return false;
 };
 
-exports.getUserSellPage = async function (filter, pageSize, nickname) {
+exports.getUserSellPage = async function (filter, nickname) {
   const pool = await poolPromise;
 
-  const offset = (filter.page - 1) * pageSize;
+  const offset = (filter.page - 1) * PAGE_UNIT;
 
   const { recordset: totalProductCount } = await pool.query`
     SELECT
@@ -177,15 +178,15 @@ exports.getUserSellPage = async function (filter, pageSize, nickname) {
       LEFT JOIN wishlistCountView wc ON p.product_id = wc.product_id
     ORDER BY p.created_at DESC
     OFFSET ${offset} ROWS
-    FETCH NEXT ${pageSize} ROWS ONLY;`;
+    FETCH NEXT ${PAGE_UNIT} ROWS ONLY;`;
 
   return { totalProductCount, products };
 };
 
-exports.getUserBidPage = async function (filter, pageSize, userId) {
+exports.getUserBidPage = async function (filter, userId) {
   const pool = await poolPromise;
 
-  const offset = (filter.page - 1) * pageSize;
+  const offset = (filter.page - 1) * PAGE_UNIT;
 
   const { recordset: totalProductCount } = await pool.query`
     SELECT
@@ -216,15 +217,15 @@ exports.getUserBidPage = async function (filter, pageSize, userId) {
           LEFT JOIN wishlistCountView wc ON b.product_id = wc.product_id
     ORDER BY p.created_at DESC 
     OFFSET ${offset} ROWS
-    FETCH NEXT ${pageSize} ROWS ONLY;`;
+    FETCH NEXT ${PAGE_UNIT} ROWS ONLY;`;
 
   return { totalProductCount, products };
 };
 
-exports.getUserSuccessfulBidPage = async function (filter, pageSize, userId) {
+exports.getUserSuccessfulBidPage = async function (filter, userId) {
   const pool = await poolPromise;
 
-  const offset = (filter.page - 1) * pageSize;
+  const offset = (filter.page - 1) * PAGE_UNIT;
 
   const { recordset: totalProductCount } = await pool.query`
     SELECT
@@ -255,15 +256,15 @@ exports.getUserSuccessfulBidPage = async function (filter, pageSize, userId) {
           LEFT JOIN wishlistCountView wc ON sb.product_id = wc.product_id
     ORDER BY p.created_at DESC 
     OFFSET ${offset} ROWS
-    FETCH NEXT ${pageSize} ROWS ONLY;`;
+    FETCH NEXT ${PAGE_UNIT} ROWS ONLY;`;
 
   return { totalProductCount, products };
 };
 
-exports.getUserWishlistPage = async function (filter, pageSize, userId) {
+exports.getUserWishlistPage = async function (filter, userId) {
   const pool = await poolPromise;
 
-  const offset = (filter.page - 1) * pageSize;
+  const offset = (filter.page - 1) * PAGE_UNIT;
 
   const { recordset: totalProductCount } = await pool.query`
     SELECT
@@ -293,7 +294,7 @@ exports.getUserWishlistPage = async function (filter, pageSize, userId) {
       LEFT JOIN wishlistCountView wc ON wl.product_id = wc.product_id
     ORDER BY p.created_at DESC
     OFFSET ${offset} ROWS
-    FETCH NEXT ${pageSize} ROWS ONLY;`;
+    FETCH NEXT ${PAGE_UNIT} ROWS ONLY;`;
 
   return { totalProductCount, products };
 };

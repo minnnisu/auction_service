@@ -3,84 +3,79 @@
 
 <head>
   <%- include('include/head') %>
-    <link rel="stylesheet" href="/css/signup.css">
-    <link rel="stylesheet" href="/css/header.css">
-    <title>회원가입</title>
+  <link rel="stylesheet" href="/css/signup.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <title>회원가입</title>
 </head>
 
 <body>
   <%- include('include/header') %>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
 
-    <!-- 로그인 페이지 이동 모달 -->
-    <div id="go_login_modal" class="hidden">
-      <div id="modalContent">
-        <h2 class="go_login_big">회원 가입이 완료되었습니다.</h2>
-        <p class="go_login_small">로그인 페이지로 이동합니다.</p>
-        <div id="go_login_modal_button">
-          <button class="go_login_button" onclick="close_go_login_modal()">이동</button>
+  <!-- 로그인 페이지 이동 모달 -->
+  <div id="go_login_modal" class="hidden">
+    <div id="modalContent">
+      <h2 class="go_login_big">회원 가입이 완료되었습니다.</h2>
+      <p class="go_login_small">로그인 페이지로 이동합니다.</p>
+      <div id="go_login_modal_button">
+        <button class="go_login_button" onclick="close_go_login_modal()">이동</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="signup_body">
+    <img src="/logo/logo.png" class="signup_logo" />
+    <div class="signup">
+      <form class='signup_wrap' id="form" action="/api/auth/signup" method="post">
+        <h1 class='signup_title'>회원가입</h1>
+        <div class='signup_info'>
+          <label for="id">아이디</label>
+          <input type="text" id="id" name="username" placeholder='아이디를 입력하세요.' class='input_text' />
+          <div class="check_msg">Error Message</div>
         </div>
-      </div>
+
+        <div class='signup_info'>
+          <label for="password">비밀번호</label>
+          <input type="password" id="password" name="password" placeholder='비밀번호를 입력하세요. 영문 + 특수문자 조합입니다.' class='input_text' autocomplete="on" />
+          <div class="check_msg">Error Message</div>
+        </div>
+
+        <div class='signup_info'>
+          <label for="checkedPassword">비밀번호 확인</label>
+          <input type="password" id="checkedPassword" name="checkedPassword" placeholder='비밀번호를 다시 입력하세요.' class='input_text' autocomplete="on" />
+          <div class="check_msg">Error Message</div>
+        </div>
+
+        <div class='signup_info'>
+          <label for="username">이름</label>
+          <input type="text" id="username" name="name" placeholder='이름을 입력하세요.' class='input_text' />
+          <div class="check_msg">Error Message</div>
+        </div>
+
+        <div class='signup_info'>
+          <label for="nickname">닉네임</label>
+          <input type="text" id="nickname" name="nickname" placeholder='닉네임을 입력하세요.' class='input_text' />
+          <div class="check_msg">Error Message</div>
+        </div>
+
+        <div class='signup_info'>
+          <label for="email">이메일</label>
+          <input type="text" id="email" name="email" placeholder='이메일을 입력하세요.' class='input_text' />
+          <div class="check_msg">Error Message</div>
+        </div>
+
+        <div class='signup_info'>
+          <label for="telephone">전화번호</label>
+          <input type="text" id="telephone" name="telephone" placeholder='전화번호를 입력하세요. -를 포함하여야 합니다.' class='input_text' />
+          <div class="check_msg">Error Message</div>
+        </div>
+        <button class="submit_btn" onclick="submit">가입하기</button>
+      </form>
     </div>
-
-    <div class="signup_body">
-      <img src="/logo/logo.png" class="signup_logo"></img>
-      <div class="signup">
-        <form class='signup_wrap' id="form" action="/api/auth/signup" method="post">
-          <h1 class='signup_title'>회원가입</h1>
-
-          <div class='signup_info'>
-            <label for="id">아이디</label>
-            <input type="text" id="id" name="id" placeholder='아이디를 입력하세요.' class='input_text'></input>
-            <div class="check_msg">Error Message</div>
-          </div>
-
-          <div class='signup_info'>
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" placeholder='비밀번호를 입력하세요. 영문 + 특수문자 조합입니다.'
-              class='input_text'></input>
-            <div class="check_msg">Error Message</div>
-          </div>
-
-          <div class='signup_info'>
-            <label for="checkedPassword">비밀번호 확인</label>
-            <input type="password" id="checkedPassword" name="checkedPassword" placeholder='비밀번호를 다시 입력하세요.'
-              class='input_text'></input>
-            <div class="check_msg">Error Message</div>
-          </div>
-
-          <div class='signup_info'>
-            <label for="username">이름</label>
-            <input type="text" id="username" name="username" placeholder='이름을 입력하세요.' class='input_text'></input>
-            <div class="check_msg">Error Message</div>
-          </div>
-
-          <div class='signup_info'>
-            <label for="nickname">닉네임</label>
-            <input type="text" id="nickname" name="nickname" placeholder='닉네임을 입력하세요.' class='input_text'></input>
-            <div class="check_msg">Error Message</div>
-          </div>
-
-          <div class='signup_info'>
-            <label for="email">이메일</label>
-            <input type="text" id="email" name="email" placeholder='이메일을 입력하세요.' class='input_text'></input>
-            <div class="check_msg">Error Message</div>
-          </div>
-
-          <div class='signup_info'>
-            <label for="telephone">전화번호</label>
-            <input type="text" id="telephone" name="telephone" placeholder='전화번호를 입력하세요. -를 포함하여야 합니다.'
-              class='input_text'></input>
-            <div class="check_msg">Error Message</div>
-          </div>
-
-          <button class="submit_btn" onclick="submit">가입하기</button>
-        </form>
-      </div>
-    </div>
-    <script src="/js/signup.js"></script>
+  </div>
+  <script src="/js/signup.js"></script>
 </body>
 
 </html>

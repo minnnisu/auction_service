@@ -5,15 +5,6 @@ const authMiddleware = require("../../middleware/authMiddleware");
 const headerMiddleware = require("../../middleware/headerMiddleware");
 
 router.get(
-  "/profile",
-  authMiddleware.isLoginStatusClosure({
-    isShowErrPage: true,
-  }),
-  headerMiddleware.getHeaderData,
-  userController.getUserPage
-);
-
-router.get(
   "/sell",
   authMiddleware.isLoginStatusClosure({
     isShowErrPage: true,

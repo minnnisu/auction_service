@@ -7,10 +7,10 @@ const email = document.getElementById("email");
 const telephone = document.getElementById("telephone");
 const form = document.getElementById("form");
 let resultcheck = {
-  id: false,
+  username: false,
   password: false,
   checkedPassword: false,
-  username: false,
+  name: false,
   nickname: false,
   email: false,
   telephone: false,
@@ -101,6 +101,7 @@ async function checkId() {
   if (!checkRequired(id)) {
     return false;
   }
+
   try {
     const response = await fetch(
       // 데이터를 가져오겠다는 뜻
@@ -195,6 +196,8 @@ function checkRequired(input) {
 
 // 가입
 async function signup() {
+  console.log(resultcheck);
+
   if (
     resultcheck.id == false ||
     resultcheck.password == false ||
@@ -281,7 +284,7 @@ function open_go_login_modal() {
 
 function close_go_login_modal() {
   go_login_modal.classList.add("hidden");
-  window.location.href="/login";
+  window.location.href = "/login";
 }
 
 //모달 외부 클릭 시 모달 닫기
@@ -290,4 +293,3 @@ window.onclick = function (event) {
     close_go_login_modal();
   }
 };
-

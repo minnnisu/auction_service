@@ -37,50 +37,59 @@ window.onclick = function (event) {
 
 // 회원정보 수정
 async function user_update() {
-  const targetUpdate = {};
   let isModified = false;
-  const originalUsername =
-    document.getElementById("user_info_username").innerText;
-  const originalNickname = document
-    .getElementById("user_info_nickname")
-    .innerText.split(" ")[0];
-  const originalEmail = document.getElementById("user_info_email").innerText;
-  const originalTelephone = document.getElementById(
-    "user_info_telephone"
-  ).innerText;
-
-  const usernameUpdateTarget = document.getElementById("username").value.trim();
-  const nicknameUpdateTarget = document.getElementById("nickname").value.trim();
-  const emailUpdateTarget = document.getElementById("email").value.trim();
-  const telephoneUpdateTarget = document
-    .getElementById("telephone")
-    .value.trim();
-
-  if (usernameUpdateTarget !== originalUsername) {
-    targetUpdate.username = usernameUpdateTarget;
-    isModified = true;
-  }
-
-  if (nicknameUpdateTarget !== originalNickname) {
-    targetUpdate.nickname = nicknameUpdateTarget;
-    isModified = true;
-  }
-
-  if (emailUpdateTarget !== originalEmail) {
-    targetUpdate.email = emailUpdateTarget;
-    isModified = true;
-  }
-
-  if (telephoneUpdateTarget !== originalTelephone) {
-    targetUpdate.telephone = telephoneUpdateTarget;
-    isModified = true;
-  }
-
-  if (!isModified) {
-    return alert("수정사항이 없습니다.");
-  }
+  const targetUpdate = {};
 
   try {
+    const UserDataResponse = await fetch("http://localhost:8081/api/user");
+    if (!UserDataResponse.ok) {
+      throw new Error();
+    }
+
+    const originalUserData = await UserDataResponse.json();
+
+    const {
+      username: originalUsername,
+      nickname: originalNickname,
+      email: originalEmail,
+      telephone: originalTelephone,
+    } = originalUserData.user;
+
+    const usernameUpdateTarget = document
+      .getElementById("username")
+      .value.trim();
+    const nicknameUpdateTarget = document
+      .getElementById("nickname")
+      .value.trim();
+    const emailUpdateTarget = document.getElementById("email").value.trim();
+    const telephoneUpdateTarget = document
+      .getElementById("telephone")
+      .value.trim();
+
+    if (usernameUpdateTarget !== originalUsername) {
+      targetUpdate.username = usernameUpdateTarget;
+      isModified = true;
+    }
+
+    if (nicknameUpdateTarget !== originalNickname) {
+      targetUpdate.nickname = nicknameUpdateTarget;
+      isModified = true;
+    }
+
+    if (emailUpdateTarget !== originalEmail) {
+      targetUpdate.email = emailUpdateTarget;
+      isModified = true;
+    }
+
+    if (telephoneUpdateTarget !== originalTelephone) {
+      targetUpdate.telephone = telephoneUpdateTarget;
+      isModified = true;
+    }
+
+    if (!isModified) {
+      return alert("수정사항이 없습니다.");
+    }
+
     const response = await fetch("http://localhost:8081/api/user", {
       method: "PATCH",
       headers: {
@@ -110,6 +119,7 @@ async function user_update() {
     window.location.reload();
     return alert("회원정보가 수정되었습니다.");
   } catch (error) {
+    console.log(error);
     return alert("예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
   }
 }
