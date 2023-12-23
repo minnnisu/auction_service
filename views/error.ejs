@@ -4,14 +4,25 @@
 <head>
   <%- include('include/head') %>
   <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/error.css">
   <title>에러페이지</title>
 </head>
 
 <body>
   <%- include('include/header') %>
   <main>
-    <h1>에러페이지</h1>
-    <div><%= err_msg %>[<%= err_code %>]</div>
+    <main>
+      <div class="section">
+        <img class="logo" src="/logo/logo_2.png" alt="사과 마켓 로고">
+        <h3 class="title">오류가 발생했어요</h3>
+        <div class="message">
+          <p class="message_row"><%= err_msg %></p>
+        </div>
+        <div class="go_home">
+          <a href="/">홈으로 이동</a>
+        </div>
+      </div>
+    </main>
   </main>
   <%- include('include/footer') %>
 
