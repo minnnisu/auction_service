@@ -2,42 +2,42 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/login.css">
   <%- include('include/head') %>
   <title>Login</title>
 </head>
 
 <body>
   <%- include('include/header') %>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/login.css">
+  <main>
+    <div class="login_body">
+      <img src=/logo/logo.png class="login_logo" />
+      <div class="login">
+        <div class="login_wrap">
+          <h1 class="login_title">로그인</h1>
+          <div class="login_info_wrapper">
+            <form>
+              <div class="login_info">
+                <label for="id">아이디</label>
+                <input type="text" id="username" name="username" placeholder='아이디를 입력하세요.' class="input_text" />
+              </div>
 
-  <!-- 로그인 페이지 -->
-  <div class="login_body">
-    <img src=/logo/logo.png class="login_logo" />
-    <div class="login">
-      <div class="login_wrap">
-        <h1 class="login_title">로그인</h1>
-        <div class="login_info_wrapper">
-          <form>
-            <div class="login_info">
-              <label for="id">아이디</label>
-              <input type="text" id="username" name="username" placeholder='아이디를 입력하세요.' class="input_text" />
+              <div class="login_info">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder='비밀번호를 입력하세요.' class="input_text" autocomplete="on" />
+              </div>
+            </form>
+            <div class="error_info">
+              <div class="check_msg">Error Message</div>
             </div>
-
-            <div class="login_info">
-              <label for="password">비밀번호</label>
-              <input type="password" id="password" name="password" placeholder='비밀번호를 입력하세요.' class="input_text" autocomplete="on" />
-            </div>
-          </form>
-          <div class="error_info">
-            <div class="check_msg">Error Message</div>
           </div>
+          <button class="login_btn" onclick="login()">로그인</button>
         </div>
-        <button class="login_btn" onclick="login()">로그인</button>
       </div>
     </div>
-  </div>
+  </main>
   <%- include('include/footer') %>
   <script src="/js/login.js"></script>
 </body>

@@ -11,9 +11,7 @@
 
 <body>
   <%- include('include/header') %>
-  <!-- 바디 -->
   <main>
-    <!-- 본문 -->
     <section class="article_list">
       <h1 class="search_title">'<%= metaData.query %>' 관련 상품입니다</h1>
       <h1 class="search_index">총 <%= metaData.totalProductCount %>개의 결과가 검색되었습니다.</h1>
@@ -56,8 +54,9 @@
         <% }) %>
       </div>
     </section>
-    <%- include('include/pagination') %>
   </main>
+  <%- include('include/pagination') %>
+  <%- include('include/footer') %>
   <script src="/js/index.js"></script>
 </body>
 

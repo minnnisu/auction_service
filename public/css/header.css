@@ -123,6 +123,10 @@ table {
   border-spacing: 0;
 }
 
+main {
+  min-height: calc(100vh - 64px - 169px);
+}
+
 /* 코드 시작 */
 
 #header {

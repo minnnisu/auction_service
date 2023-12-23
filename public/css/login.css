@@ -1,12 +1,13 @@
-.login_body {
+main {
   background-color: #f9fafb;
-  font-family: "Open Sans", sans-serif;
+}
+
+.login_body {
+  padding-top: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 64px - 169px);
-  margin: 0;
 }
 
 .login_logo {
@@ -27,7 +28,7 @@
 }
 
 .login_title {
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 600;
   text-align: center;
   margin: 0 0 20px;
@@ -44,11 +45,13 @@
 }
 
 .login_info {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   position: relative;
 }
 
 .login_info label {
+  font-size: 14px;
+  margin-bottom: 5px;
   color: #2e2e2e;
   display: block;
 }

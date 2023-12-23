@@ -34,39 +34,41 @@
   </div>
 
   <%- include('include/header') %>
-  <%- include('include/my_page_user_info') %>
-  <div class='user_update_wrap'>
-    <div class='user_update_info'>
-      <label for="username">이름</label>
-      <input type="text" id="username" name="username" class='input_text' value="<%= user.username %>">
-      </input>
-      <div class="check_msg">Error Message</div>
-    </div>
+  <main>
+    <%- include('include/my_page_user_info') %>
+    <div class='user_update_wrap'>
+      <div class='user_update_info'>
+        <label for="username">이름</label>
+        <input type="text" id="username" name="username" class='input_text' value="<%= user.username %>" />
 
-    <div class='user_update_info'>
-      <label for="nickname">닉네임</label>
-      <input type="text" id="nickname" name="nickname" class='input_text' value="<%= user.nickname %>"></input>
-      <div class="check_msg">Error Message</div>
-    </div>
+        <div class="check_msg">Error Message</div>
+      </div>
 
-    <div class='user_update_info'>
-      <label for="email">이메일</label>
-      <input type="text" id="email" name="email" class='input_text' value="<%= user.email %>"></input>
-      <div class="check_msg">Error Message</div>
-    </div>
+      <div class='user_update_info'>
+        <label for="nickname">닉네임</label>
+        <input type="text" id="nickname" name="nickname" class='input_text' value="<%= user.nickname %>" />
+        <div class="check_msg">Error Message</div>
+      </div>
 
-    <div class='user_update_info'>
-      <label for="telephone">전화번호</label>
-      <input type="text" id="telephone" name="telephone" class='input_text' value="<%= user.telephone %>"></input>
-      <div class="check_msg">Error Message</div>
-    </div>
-    <button class="submit_btn" onclick="user_update()">수정하기</button>
-    <div class="user_delete_wrap">
-      <button class="user_delete_button" onclick="open_user_delete_modal()">회원 탈퇴</button>
-    </div>
-  </div>
-  </div>
+      <div class='user_update_info'>
+        <label for="email">이메일</label>
+        <input type="text" id="email" name="email" class='input_text' value="<%= user.email %>" />
+        <div class="check_msg">Error Message</div>
+      </div>
 
+      <div class='user_update_info'>
+        <label for="telephone">전화번호</label>
+        <input type="text" id="telephone" name="telephone" class='input_text' value="<%= user.telephone %>" />
+        <div class="check_msg">Error Message</div>
+      </div>
+      <button class="submit_btn" onclick="user_update()">수정하기</button>
+      <div class="user_delete_wrap">
+        <button class="user_delete_button" onclick="open_user_delete_modal()">회원 탈퇴</button>
+      </div>
+    </div>
+    </div>
+  </main>
+  <%- include('include/footer') %>
   <script src="/js/user_update.js"></script>
   <script src="/js/my_page_user_info.js"></script>
 </body>

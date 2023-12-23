@@ -3,36 +3,35 @@
 
 <head>
   <%- include('include/head') %>
-    <link rel="stylesheet" href="/css/product_register.css">
-    <title>상품등록</title>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <style>
-      .material-symbols-outlined {
-        color: #5a5a5a;
-        font-variation-settings:
-          'FILL' 1,
-          'wght' 400,
-          'GRAD' 0,
-          'opsz' 24
-      }
+  <link rel="stylesheet" href="/css/product_register.css">
+  <title>상품등록</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <style>
+    .material-symbols-outlined {
+      color: #5a5a5a;
+      font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
 
-      .delete_btn.material-symbols-outlined {
-        color: #5a5a5a;
-        font-size: 1rem;
-        font-variation-settings:
-          'FILL' 1,
-          'wght' 400,
-          'GRAD' 0,
-          'opsz' 24
-      }
-    </style>
+    .delete_btn.material-symbols-outlined {
+      color: #5a5a5a;
+      font-size: 1rem;
+      font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
 </head>
 
 <body>
   <%- include('include/header') %>
+  <main>
     <div class="product_register_container">
       <div class="container header_container">
         <div class="header_title">매물 등록</div>
@@ -80,9 +79,9 @@
         <button class="submit_btn" onclick="registerProduct()">등록</button>
       </div>
     </div>
-
-
-    <script src="/js/product_register.js"></script>
+  </main>
+  <%- include('include/footer') %>
+  <script src="/js/product_register.js"></script>
 </body>
 
 </html>

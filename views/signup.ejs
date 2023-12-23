@@ -3,6 +3,8 @@
 
 <head>
   <%- include('include/head') %>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/signup.css">
   <link rel="stylesheet" href="/css/header.css">
   <title>회원가입</title>
@@ -10,10 +12,6 @@
 
 <body>
   <%- include('include/header') %>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
-
   <!-- 로그인 페이지 이동 모달 -->
   <div id="go_login_modal" class="hidden">
     <div id="modalContent">
@@ -75,6 +73,7 @@
       </form>
     </div>
   </div>
+  <%- include('include/footer') %>
   <script src="/js/signup.js"></script>
 </body>
 

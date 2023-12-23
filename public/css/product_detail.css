@@ -449,10 +449,9 @@
   margin-top: 15px;
 }
 
-/*  */
-
 .comment_container {
   color: #212529;
+  margin-bottom: 50px;
 }
 .comment_container .comment_header {
   margin-bottom: 20px;

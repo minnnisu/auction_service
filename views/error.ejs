@@ -9,8 +9,12 @@
 
 <body>
   <%- include('include/header') %>
-  <h1>에러페이지</h1>
-  <div><%= err_msg %>[<%= err_code %>]</div>
+  <main>
+    <h1>에러페이지</h1>
+    <div><%= err_msg %>[<%= err_code %>]</div>
+  </main>
+  <%- include('include/footer') %>
+
 </body>
 
 </html>
