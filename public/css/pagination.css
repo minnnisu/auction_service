@@ -1,0 +1,35 @@
+.page {
+  color: #212121;
+  text-decoration: none;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.pagination_container {
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.pagination_container a {
+  color: #333;
+  text-decoration: none;
+  margin: 5px;
+}
+
+.pagination_container a.current_page {
+  color: #fa5858;
+}
+
+.prev_page.disabled,
+.next_page.disabled {
+  pointer-events: none; /* This makes the link unclickable */
+  color: rgb(
+    132,
+    132,
+    132
+  ); /* You can use any color to indicate it's disabled */
+  text-decoration: none; /* Optionally remove underline */
+}

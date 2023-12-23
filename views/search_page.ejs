@@ -5,6 +5,7 @@
   <%- include('include/head') %>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/searchPage.css">
+  <link rel="stylesheet" href="/css/pagination.css">
   <title>메인페이지</title>
 </head>
 
@@ -55,21 +56,7 @@
         <% }) %>
       </div>
     </section>
-    <div class="pagination_container">
-      <a href="<%= metaData.url %><%=metaData.group.prevGroupPage %>" <% if (metaData.group.prevGroupPage===null) { %> class="prev_page disabled" onclick="return false;" <% } else { %> class="prev_page" <% } %>>
-        이전
-      </a>
-      <% for (let page=metaData.page.startPage; page <=metaData.page.endPage; page++) { %>
-      <a href="<%= metaData.url %><%= page %>" <% if (metaData.page.currentPage===page) { %> class="current_page" <%
-              } %>>
-        <%= page %>
-      </a>
-      <% } %>
-      <a href="<%= metaData.url %><%=metaData.group.nextGroupPage %>" <% if (metaData.group.nextGroupPage===null)
-              { %> class="next_page disabled" onclick="return false;" <% } else { %> class="prev_page" <% } %>>
-        다음
-      </a>
-    </div>
+    <%- include('include/pagination') %>
   </main>
   <script src="/js/index.js"></script>
 </body>
