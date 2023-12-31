@@ -352,7 +352,7 @@ exports.getProductBidList = async function (productId, userId) {
 
   const filteredBidList = bidList.map((bid) => ({
     ...bid,
-    price: formatCurrentPrice(bid.price),
+    price: formatter.formatCurrentPrice(bid.price),
   }));
 
   return { topBidId, bidList: filteredBidList };
